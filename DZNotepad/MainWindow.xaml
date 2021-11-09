@@ -1,0 +1,213 @@
+﻿<Window x:Class="DZNotepad.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:DZNotepad"
+        xmlns:uc="clr-namespace:DZNotepad.UserElements"
+        xmlns:lvc="clr-namespace:LiveCharts.Wpf;assembly=LiveCharts.Wpf"
+        mc:Ignorable="d"
+        Title="Блокнот" Height="450" Width="800" Closed="Window_Closed" Closing="Window_Closing" Activated="Window_Activated" MinWidth="800" MinHeight="450">
+    <Window.Resources>
+        <Style x:Key="AnyStyle">
+            <Setter Property="Control.Background" Value="White" />
+            <Setter Property="Control.Foreground" Value="Black" />
+        </Style>
+        <Style x:Key="AnyStyleButton">
+            <Setter Property="Control.Background" Value="#FFDDDDDD" />
+            <Setter Property="Control.Foreground" Value="Black" />
+        </Style>
+        <Style x:Key="ComboBoxTest2" TargetType="{x:Type ComboBox}">
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="ComboBox">
+                        <Grid>
+                            <ToggleButton Style="{DynamicResource AnyStyleButton}" Grid.Column="2" Focusable="false" IsChecked="{Binding Path=IsDropDownOpen,Mode=TwoWay,RelativeSource={RelativeSource TemplatedParent}}" >
+                                <ToggleButton.Template>
+                                    <ControlTemplate>
+                                        <Grid>
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="5*" />
+                                                <ColumnDefinition Width="*" />
+                                            </Grid.ColumnDefinitions>
+                                            <Border x:Name="Border" Grid.ColumnSpan="2" CornerRadius="5" Background="Beige" BorderBrush="#FFACACAC" BorderThickness="1" />
+                                            <Border Grid.Column="0" CornerRadius="5,0,0,5" Margin="1" Style="{DynamicResource AnyStyle}" BorderBrush="#FFACACAC" BorderThickness="0,0,1,0" />
+                                            <Path x:Name="Arrow" Grid.Column="1" Fill="Orange" HorizontalAlignment="Center" VerticalAlignment="Center" Data="M 0 0 L 4 4 L 8 0 Z"/>
+                                        </Grid>
+                                        <ControlTemplate.Triggers>
+                                            <Trigger Property="ToggleButton.IsMouseOver" Value="true">
+                                                <Setter TargetName="Border" Property="Background" Value="Green" />
+                                            </Trigger>
+                                            <Trigger Property="ToggleButton.IsChecked" Value="true">
+                                                <Setter TargetName="Border" Property="Background" Value="Green" />
+                                            </Trigger>
+                                        </ControlTemplate.Triggers>
+                                    </ControlTemplate>
+                                </ToggleButton.Template>
+                            </ToggleButton>
+                            <ContentPresenter Style="{DynamicResource AnyStyle}" Name="ContentSite" IsHitTestVisible="False"  Content="{TemplateBinding SelectionBoxItem}" ContentTemplate="{TemplateBinding SelectionBoxItemTemplate}" ContentTemplateSelector="{TemplateBinding ItemTemplateSelector}" Margin="3"  />
+                            <TextBox x:Name="PART_EditableTextBox" Visibility="Hidden" IsReadOnly="{TemplateBinding IsReadOnly}" Style="{DynamicResource AnyStyleButton}"/>
+                            <Popup Name="Popup" Placement="Bottom" IsOpen="{TemplateBinding IsDropDownOpen}" AllowsTransparency="True"  Focusable="False" PopupAnimation="Slide">
+                                <Grid Style="{DynamicResource AnyStyleButton}" Name="DropDown" SnapsToDevicePixels="True" MinWidth="{TemplateBinding ActualWidth}" MaxHeight="{TemplateBinding MaxDropDownHeight}">
+                                    <Border x:Name="DropDownBorder" Style="{DynamicResource AnyStyleButton}" />
+                                    <ScrollViewer SnapsToDevicePixels="True">
+                                        <StackPanel IsItemsHost="True" />
+                                    </ScrollViewer>
+                                </Grid>
+                            </Popup>
+                        </Grid>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+            <Style.Triggers>
+            </Style.Triggers>
+        </Style>
+    </Window.Resources>
+    <Window.CommandBindings>
+        <CommandBinding x:Name="newFileCommand" Command="New" Executed="newFileCommand_Executed"  />
+        <CommandBinding x:Name="openFileCommand" Command="Open" Executed="openFile_Executed" />
+        <CommandBinding x:Name="saveFileCommand" Command="Save" Executed="saveFile_Executed" />
+        <CommandBinding x:Name="saveAsFileCommand" Command="SaveAs" Executed="saveAsFile_Executed" />
+        <CommandBinding x:Name="closeFileCommand" Command="Close" Executed="closeFileCommand_Executed" />
+        <CommandBinding x:Name="exitCommand" Command="local:WindowCommands.Exit" Executed="exitCommand_Executed"  />
+        <CommandBinding x:Name="findCommand" Command="Find" Executed="findCommand_Executed" />
+        <CommandBinding x:Name="replaceCommand" Command="Replace" Executed="replaceCommand_Executed"/>
+    </Window.CommandBindings>
+    <Window.InputBindings>
+        <KeyBinding Key="N" Modifiers="Control" Command="New"/>
+        <KeyBinding Key="O" Modifiers="Control" Command="Open"/>
+        <KeyBinding Key="S" Modifiers="Control" Command="Save"/>
+        <KeyBinding Key="F" Modifiers="Control" Command="Find"/>
+        <KeyBinding Key="W" Modifiers="Control" Command="Close"/>
+        <KeyBinding Key="Q" Modifiers="Control" Command="local:WindowCommands.Exit"/>
+        <KeyBinding Key="R" Modifiers="Control" Command="Replace"/>
+        <KeyBinding Key="S" Modifiers="Control+Alt" Command="SaveAs"/>
+    </Window.InputBindings>
+    <Grid>
+        <DockPanel LastChildFill="True" Style="{DynamicResource AnyStyle}">
+            <Border DockPanel.Dock="Top" BorderBrush="#FFACACAC" BorderThickness="0 0 0 1">
+                <Menu Height="18" Style="{DynamicResource AnyStyle}">
+                    <MenuItem Header="_Файл">
+                        <MenuItem Foreground="Black" Header="_Новый файл" Command="New" InputGestureText="Ctrl+N"/>
+                        <MenuItem Foreground="Black" Header="_Открыть" Command="Open" InputGestureText="Ctrl+O"/>
+                        <MenuItem Foreground="Black" Header="_Сохранить" Command="Save" InputGestureText="Ctrl+S"/>
+                        <MenuItem Foreground="Black" Header="_Сохранить как..." Command="SaveAs" InputGestureText="Ctrl+Alt+S"/>
+                        <MenuItem Foreground="Black" Header="_Сохранить всё" Click="SaveAll_Click" />
+                        <MenuItem Foreground="Black" Header="_Закрыть" Command="Close" InputGestureText="Ctrl+W"/>
+                        <MenuItem Foreground="Black" Header="_Закрыть все" Click="closeAll_Click"/>
+                        <MenuItem Foreground="Black" Header="_Выйти" Command="local:WindowCommands.Exit" InputGestureText="Ctrl+Q"/>
+                    </MenuItem>
+                    <MenuItem Header="_Правка">
+                        <MenuItem Foreground="Black" x:Name="copyItem" Header="_Копировать" Command="Copy" InputGestureText="Ctrl+C" Click="copyItem_Click" />
+                        <MenuItem Foreground="Black" x:Name="pasteItem" Header="_Вставить" Command="Paste" InputGestureText="Ctrl+V" Click="pasteItem_Click" />
+                        <MenuItem Foreground="Black" x:Name="cutItem" Header="_Вырезать" Command="Cut" InputGestureText="Ctrl+X" Click="cutItem_Click"  />
+                        <MenuItem Foreground="Black" Header="_Найти" Command="Find" InputGestureText="Ctrl+F"/>
+                        <MenuItem Foreground="Black" Header="_Заменить" Command="Replace" InputGestureText="Ctrl+R" />
+                        <MenuItem Foreground="Black" Header="Изменить размер шрифта">
+                            <MenuItem Header="2" Click="changeSize_Click" />
+                            <MenuItem Header="4" Click="changeSize_Click" />
+                            <MenuItem Header="8" Click="changeSize_Click" />
+                            <MenuItem Header="12" Click="changeSize_Click" />
+                            <MenuItem Header="16" Click="changeSize_Click" />
+                            <MenuItem Header="20" Click="changeSize_Click" />
+                            <MenuItem Header="24" Click="changeSize_Click" />
+                            <MenuItem Header="28" Click="changeSize_Click" />
+                            <MenuItem Header="32" Click="changeSize_Click" />
+                        </MenuItem>
+                    </MenuItem>
+                    <MenuItem Header="_Вид">
+                        <MenuItem Foreground="Black" x:Name="stateLineItem" Header="_Строка состояния" IsCheckable="True" Click="stateLineItem_Click" />
+                        <MenuItem Foreground="Black" x:Name="translateItem" Header="_Перевод" IsCheckable="True" Click="translateItem_Click"/>
+                        <MenuItem Foreground="Black" x:Name="performanceItem" Header="_Диспетчер приложения" IsCheckable="True" Click="performanceItem_Click"/>
+                        <MenuItem Foreground="Black" Header="_Стиль">
+                            <MenuItem x:Name="lightStyleItem" Header="Светлый" Click="lightStyleItem_Click"/>
+                            <MenuItem x:Name="darkStyleItem" Header="Тёмный" Click="darkStyleItem_Click"/>
+                            <MenuItem x:Name="grayStyleItem" Header="Серый" Click="grayStyleItem_Click"/>
+                        </MenuItem>
+                    </MenuItem>
+                    <MenuItem Header="_Справка">
+                        <MenuItem Foreground="Black" Header="_Помощь"/>
+                        <MenuItem Foreground="Black" x:Name="aboutProgram" Header="_О программе" Click="aboutProgram_Click"/>
+                    </MenuItem>
+                </Menu>
+            </Border>
+            <Border x:Name="performanceWindow" Height="0" DockPanel.Dock="Bottom" BorderBrush="#FFACACAC" BorderThickness="1">
+                <Grid Style="{DynamicResource AnyStyle}">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="3*"/>
+                        <ColumnDefinition Width="1*"/>
+                    </Grid.ColumnDefinitions>
+                    <lvc:CartesianChart Grid.Column="0" x:Name="PerformanceChart" Height="170" Margin="10,0,10,0" Background="Transparent">
+                        <lvc:CartesianChart.Series>
+                            <lvc:LineSeries Title="CPU" Values="{Binding CPUUsage}" LineSmoothness="1" StrokeThickness="2" 
+                                DataLabels="False" FontSize="20" Foreground="#6B303030"
+                                Stroke="#FF990000" Fill="Transparent" PointGeometrySize="0"/>
+                            <lvc:LineSeries ScalesYAt="2" Title="Memory" Values="{Binding MemoryUsage}" LineSmoothness="1" StrokeThickness="2" 
+                                DataLabels="False" FontSize="20" Foreground="#6B303030"
+                                Stroke="#FF008CCD" Fill="Transparent" PointGeometrySize="0"/>
+                            <lvc:LineSeries ScalesYAt="1" Title="IO" Values="{Binding NetworkUsage}" LineSmoothness="1" StrokeThickness="2" 
+                                DataLabels="False" FontSize="20" Foreground="#6B303030"
+                                Stroke="#FF2F00CD" Fill="Transparent" PointGeometrySize="0"/>
+                        </lvc:CartesianChart.Series>
+                        <lvc:CartesianChart.AxisX>
+                            <lvc:Axis Title="Time" MinValue="0" MaxValue="120" Foreground="Black" FontSize="14" IsEnabled="False" ShowLabels="False"/>
+                        </lvc:CartesianChart.AxisX>
+                        <lvc:CartesianChart.AxisY>
+                            <lvc:Axis Title="CPU %" MinValue="0" MaxValue="100" Foreground="#FF990000" FontSize="14">
+                                <lvc:Axis.Separator>
+                                    <lvc:Separator StrokeThickness="0.5" Stroke="DarkGray" StrokeDashArray="8" Step="10" />
+                                </lvc:Axis.Separator>
+                            </lvc:Axis>
+                            <lvc:Axis Title="IO MB" Position="RightTop" MinValue="0" MaxValue="5" Foreground="#FF2F00CD" FontSize="14">
+                                <lvc:Axis.Separator>
+                                    <lvc:Separator StrokeThickness="0" Stroke="DarkGray" StrokeDashArray="8" Step="0.5" />
+                                </lvc:Axis.Separator>
+                            </lvc:Axis>
+                            <lvc:Axis Title="RAM MB" Position="RightTop" MinValue="0" MaxValue="500" Foreground="#FF008CCD" FontSize="14">
+                                <lvc:Axis.Separator>
+                                    <lvc:Separator StrokeThickness="0" Stroke="DarkGray" StrokeDashArray="8" Step="50" />
+                                </lvc:Axis.Separator>
+                            </lvc:Axis>
+                        </lvc:CartesianChart.AxisY>
+                    </lvc:CartesianChart>
+                    <StackPanel Grid.Column="1" HorizontalAlignment="Center" VerticalAlignment="Center">
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="Линия" Foreground="#FF990000" />
+                            <TextBlock Text=" - % использования CPU" />
+                        </StackPanel>
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="Линия" Foreground="#FF008CCD" />
+                            <TextBlock Text=" - MB использования RAM" />
+                        </StackPanel>
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="Линия" Foreground="#FF2F00CD" />
+                            <TextBlock Text=" - MB использования IO" />
+                        </StackPanel>
+                    </StackPanel>
+                </Grid>
+            </Border>
+            <Border DockPanel.Dock="Bottom" Margin="18 0 18 0" x:Name="stateLine"  Visibility="Hidden" BorderBrush="#FFACACAC" BorderThickness="1">
+                <StackPanel VerticalAlignment="Bottom" Height="18" Orientation="Horizontal" Style="{DynamicResource AnyStyle}" FlowDirection="RightToLeft">
+                    <TextBlock Style="{DynamicResource AnyStyle}" x:Name="lineCount"  Text="0" Padding="5,0,0,0"/>
+                    <Label Style="{DynamicResource AnyStyle}" Content="Строк" Padding="2,0,5,0"/>
+                    <TextBlock Style="{DynamicResource AnyStyle}" x:Name="charCount" Text="0"/>
+                    <Label Style="{DynamicResource AnyStyle}" Content="Символов" Padding="2,0,5,0"/>
+                    <TextBlock Style="{DynamicResource AnyStyle}" x:Name="lineCurrent" Text="0"/>
+                    <Label Style="{DynamicResource AnyStyle}" Content="Строка" Padding="2,0,5,0"/>
+                    <TextBlock Style="{DynamicResource AnyStyle}" x:Name="charCurrent" Text="0"/>
+                    <Label Style="{DynamicResource AnyStyle}" Content="Позиция" Padding="2,0,5,0"/>
+                </StackPanel>
+            </Border>
+            <Border x:Name="translateWindow" Margin="0 0 18 0" Width="0" DockPanel.Dock="Right" BorderBrush="#FFACACAC" BorderThickness="1">
+                <Grid Style="{DynamicResource AnyStyle}">
+                    <TextBlock Text="Перевод" Padding="60 0 60 0"/>
+                    <Label Style="{DynamicResource AnyStyle}" Content="Авто-перевод" HorizontalAlignment="Left" VerticalAlignment="Top" Padding="4,1,1,3" Height="24" Width="100" Margin="10,21,0,0"/>
+                    <uc:ToggleSlider x:Name="autoTranslateState" CheckedChange="autoSlider_CheckedChange"  Width="40" Height="20" HorizontalAlignment="Right" Margin="0,20,10,0" VerticalAlignment="Top"/>
+                    <ComboBox Style="{DynamicResource ComboBoxTest2}" x:Name="languagesCombo" HorizontalAlignment="Center" VerticalAlignment="Top" Width="120" SelectionChanged="languagesCombo_SelectionChanged" Margin="0,45,0,0"/>
+                    <Button Style="{DynamicResource AnyStyleButton}" x:Name="translateManual" Content="Перевести текст" HorizontalAlignment="Center" VerticalAlignment="Top" Click="translateManual_Click" Margin="0,72,0,0"/>
+                </Grid>
+            </Border>
+            <TabControl x:Name="tabsContainer" Margin="18 0 0 0" SelectionChanged="tabsContainer_SelectionChanged" Padding="0,0,0,0" Style="{DynamicResource AnyStyle}"/>
+        </DockPanel>
+    </Grid>
+</Window>

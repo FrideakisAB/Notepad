@@ -1,0 +1,35 @@
+﻿<Window x:Class="DZNotepad.ReplaceWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:DZNotepad"
+        mc:Ignorable="d"
+        Title="Замена" Height="230" Width="230" ResizeMode="NoResize" Closing="Window_Closing">
+    <Window.Resources>
+        <Style x:Key="AnyStyle">
+            <Setter Property="Control.Background" Value="White" />
+            <Setter Property="Control.Foreground" Value="Black" />
+        </Style>
+        <Style x:Key="AnyStyleButton">
+            <Setter Property="Control.Background" Value="#FFDDDDDD" />
+            <Setter Property="Control.Foreground" Value="Black" />
+        </Style>
+    </Window.Resources>
+    <Grid Style="{DynamicResource AnyStyle}">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="40*"/>
+            <RowDefinition Height="40*"/>
+            <RowDefinition Height="40*"/>
+            <RowDefinition Height="40*"/>
+            <RowDefinition Height="40*"/>
+        </Grid.RowDefinitions>
+        <Label Style="{DynamicResource AnyStyle}" Content="Искомая подстрока" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+        <Label Style="{DynamicResource AnyStyle}" Content="Замена на" HorizontalAlignment="Center" Grid.Row="2" VerticalAlignment="Center"/>
+        <TextBox Style="{DynamicResource AnyStyle}" x:Name="findetText" HorizontalAlignment="Center" Grid.Row="1" Text="" TextWrapping="Wrap" VerticalAlignment="Center" Width="150"/>
+        <TextBox Style="{DynamicResource AnyStyle}" x:Name="replaceText" HorizontalAlignment="Center" Grid.Row="3" Text="" TextWrapping="Wrap" VerticalAlignment="Center" Width="150"/>
+        <StackPanel Grid.Row="4" Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center">
+            <Button Style="{DynamicResource AnyStyleButton}" x:Name="replace" Padding="2" Content="Заменить" HorizontalAlignment="Center" VerticalAlignment="Center" Click="replace_Click" />
+        </StackPanel>
+    </Grid>
+</Window>
