@@ -290,7 +290,9 @@ namespace DZNotepad.UserElements
                 {
                     MessageBox.Show("Файл был удалён", "Файл", MessageBoxButton.OK, MessageBoxImage.Information);
                     isEditable = true;
+                    fileName = "";
                     parentTab.SetHeader(header + "*");
+                    header = "Без имени";
                 }
                 else if (File.GetLastWriteTime(fileName) > lastWriteAcces)
                 {
@@ -306,6 +308,8 @@ namespace DZNotepad.UserElements
                         isEditable = true;
                         parentTab.SetHeader(header + "*");
                     }
+
+                    lastWriteAcces = File.GetLastWriteTime(fileName);
                 }
             }
             updateState();
