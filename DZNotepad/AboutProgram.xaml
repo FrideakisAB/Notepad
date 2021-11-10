@@ -7,8 +7,8 @@
         mc:Ignorable="d"
         Title="О программе" Height="198" Width="306" SizeToContent="Manual" ResizeMode="NoResize">
     <Grid Background="#FF0CF60C">
-        <Label Content="Автор: Романов Владислав Александрович" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="10,0,0,0"/>
-        <Label Content="Контактная почта: reterdastion@gmail.com" HorizontalAlignment="Left" Margin="10,26,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.529,0.587"/>
-        <Image HorizontalAlignment="Center" Height="100" Margin="0,57,0,0" VerticalAlignment="Top" Width="100" Source="/gears.png"/>
+        <Label Content="Авторы:" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="10,0,0,0"/>
+        <Label Content="Контактная почта: reterdastion@gmail.com" HorizontalAlignment="Left" Margin="10,31,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.529,0.587"/>
+        <Image HorizontalAlignment="Center" Height="100" Margin="0,62,0,0" VerticalAlignment="Top" Width="100" Source="/gears.png"/>
     </Grid>
 </Window>

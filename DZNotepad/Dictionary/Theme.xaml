@@ -1,0 +1,47 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:System="clr-namespace:System;assembly=mscorlib"
+                    xmlns:Media="clr-namespace:System.Windows.Media;assembly=PresentationCore">
+    <SolidColorBrush x:Key="anyBackgroundVal">White</SolidColorBrush>
+    <SolidColorBrush x:Key="anyForegroundVal">Black</SolidColorBrush>
+    <FontFamily x:Key="anyFontFamilyVal">Segoe UI</FontFamily>
+    <System:Double x:Key="anyFontSizeVal">12</System:Double>
+    <FontStyle x:Key="anyFontStyleVal">Normal</FontStyle>
+    <FontWeight x:Key="anyFontWeightVal">Normal</FontWeight>
+
+    <SolidColorBrush x:Key="anyButtonBackgroundVal">#FFDDDDDD</SolidColorBrush>
+    <SolidColorBrush x:Key="anyButtonForegroundVal">Black</SolidColorBrush>
+    <SolidColorBrush x:Key="anyButtonBorderBrushVal">Black</SolidColorBrush>
+    <SolidColorBrush x:Key="anyButtonMouseOverVal">White</SolidColorBrush>
+    <SolidColorBrush x:Key="anyButtonPressedVal">Blue</SolidColorBrush>
+    <CornerRadius x:Key="anyButtonCornerVal">0</CornerRadius>
+    <FontFamily x:Key="anyButtonFontFamilyVal">Segoe UI</FontFamily>
+    <System:Double x:Key="anyButtonFontSizeVal">12</System:Double>
+    <FontStyle x:Key="anyButtonFontStyleVal">Normal</FontStyle>
+    <FontWeight x:Key="anyButtonFontWeightVal">Normal</FontWeight>
+
+    <SolidColorBrush x:Key="anyTabItemBackgroundVal">White</SolidColorBrush>
+    <SolidColorBrush x:Key="anyTabItemForegroundVal">Black</SolidColorBrush>
+    <SolidColorBrush x:Key="anyTabItemBorderBrushVal">Black</SolidColorBrush>
+    <CornerRadius x:Key="anyTabItemCornerVal">0</CornerRadius>
+    <FontFamily x:Key="anyTabItemFontFamilyVal">Segoe UI</FontFamily>
+    <System:Double x:Key="anyTabItemFontSizeVal">12</System:Double>
+    <FontStyle x:Key="anyTabItemFontStyleVal">Normal</FontStyle>
+    <FontWeight x:Key="anyTabItemFontWeightVal">Normal</FontWeight>
+
+    <SolidColorBrush x:Key="anyComboBackgroundVal">White</SolidColorBrush>
+    <SolidColorBrush x:Key="anyComboForegroundVal">Black</SolidColorBrush>
+    <SolidColorBrush x:Key="anyComboBorderBrushVal">Black</SolidColorBrush>
+    <SolidColorBrush x:Key="anyComboArrowVal">Orange</SolidColorBrush>
+    <SolidColorBrush x:Key="anyComboMouseOverVal">White</SolidColorBrush>
+    <SolidColorBrush x:Key="anyComboPressedVal">Blue</SolidColorBrush>
+    <SolidColorBrush x:Key="anyComboUnpressedVal">Red</SolidColorBrush>
+    <SolidColorBrush x:Key="anyComboPopupBackVal">White</SolidColorBrush>
+    <SolidColorBrush x:Key="anyComboPopupBorderVal">Blue</SolidColorBrush>
+    <CornerRadius x:Key="anyComboCornerVal">5</CornerRadius>
+    <CornerRadius x:Key="anyComboCornerArrowVal">5,0,0,5</CornerRadius>
+    <FontFamily x:Key="anyComboFontFamilyVal">Segoe UI</FontFamily>
+    <System:Double x:Key="anyComboFontSizeVal">12</System:Double>
+    <FontStyle x:Key="anyComboFontStyleVal">Normal</FontStyle>
+    <FontWeight x:Key="anyComboFontWeightVal">Normal</FontWeight>
+</ResourceDictionary>

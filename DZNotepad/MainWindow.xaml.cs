@@ -65,10 +65,11 @@ namespace DZNotepad
             if (string.IsNullOrWhiteSpace(path))
             {
                 CloseableTab item = new CloseableTab();
-                item.SetStyle(this.Resources["AnyStyle"] as Style);
+                item.SetStyle(this.Resources["AnyStyleTabItem"] as Style);
                 tabsContainer.Items.Add(item);
                 EditableFile editableFile = new EditableFile(item, fileInfoBlock, translateInfoBlock);
                 item.Content = editableFile;
+                tabsContainer.SelectedItem = item;
             }
             else
             {
@@ -83,7 +84,7 @@ namespace DZNotepad
                 if (targetTab == null)
                 {
                     CloseableTab item = new CloseableTab();
-                    item.SetStyle(this.Resources["AnyStyle"] as Style);
+                    item.SetStyle(this.Resources["AnyStyleTabItem"] as Style);
                     tabsContainer.Items.Add(item);
                     EditableFile editableFile = new EditableFile(item, fileInfoBlock, translateInfoBlock, path);
                     item.Content = editableFile;
@@ -169,27 +170,13 @@ namespace DZNotepad
 
         private void findCommand_Executed(object sender, ExecutedRoutedEventArgs e)
         {
-            if (findWindow != null)
-                findWindow.Close();
-
-            findWindow = new FindWindow(((EditableFile)(tabsContainer.SelectedItem as CloseableTab).Content), this);
             findWindow.Owner = this;
-            findWindow.SetStyle(this.Resources["AnyStyle"] as Style, this.Resources["AnyStyleButton"] as Style);
-            findWindow.FontFamily = this.FontFamily;
-            findWindow.FontSize = this.FontSize;
             findWindow.Show();
         }
 
         private void replaceCommand_Executed(object sender, ExecutedRoutedEventArgs e)
         {
-            if (replaceWindow != null)
-                replaceWindow.Close();
-            
-            replaceWindow = new ReplaceWindow(((EditableFile)(tabsContainer.SelectedItem as CloseableTab).Content));
             replaceWindow.Owner = this;
-            replaceWindow.SetStyle(this.Resources["AnyStyle"] as Style, this.Resources["AnyStyleButton"] as Style);
-            replaceWindow.FontFamily = this.FontFamily;
-            replaceWindow.FontSize = this.FontSize;
             replaceWindow.Show();
         }
 
@@ -217,10 +204,8 @@ namespace DZNotepad
                 tabsContainer.SelectedItem = tabsContainer.Items.GetItemAt(0);
             }
 
-            if (findWindow != null)
-                findWindow.ChangeEditableFile(((EditableFile)(tabsContainer.SelectedItem as CloseableTab).Content));
-            if (replaceWindow != null)
-                replaceWindow.ChangeEditableFile(((EditableFile)(tabsContainer.SelectedItem as CloseableTab).Content));
+            findWindow?.ChangeEditableFile(((EditableFile)(tabsContainer.SelectedItem as CloseableTab).Content));
+            replaceWindow?.ChangeEditableFile(((EditableFile)(tabsContainer.SelectedItem as CloseableTab).Content));
 
             ((EditableFile)(tabsContainer.SelectedItem as CloseableTab)?.Content)?.OnActivated();
 
@@ -368,132 +353,6 @@ namespace DZNotepad
             {
                 this.Height -= 170;
                 performanceWindow.Height = 0;
-            }
-        }
-
-        private void lightStyleItem_Click(object sender, RoutedEventArgs e)
-        {
-            Style style = new Style();
-            style.Setters.Add(new Setter { Property = Control.BackgroundProperty, Value = new SolidColorBrush(Colors.White) });
-            style.Setters.Add(new Setter { Property = Control.ForegroundProperty, Value = new SolidColorBrush(Colors.Black) });
-
-            this.Resources["AnyStyle"] = style;
-
-            Style styleButton = new Style();
-            styleButton.Setters.Add(new Setter { Property = Control.BackgroundProperty, Value = new SolidColorBrush(Color.FromRgb(221, 221, 221)) });
-            styleButton.Setters.Add(new Setter { Property = Control.ForegroundProperty, Value = new SolidColorBrush(Colors.Black) });
-
-            this.Resources["AnyStyleButton"] = styleButton;
-
-            findWindow?.SetStyle(this.Resources["AnyStyle"] as Style, this.Resources["AnyStyleButton"] as Style);
-            replaceWindow?.SetStyle(this.Resources["AnyStyle"] as Style, this.Resources["AnyStyleButton"] as Style);
-
-            foreach (var tab in tabsContainer.Items)
-            {
-                var closeableTab = tab as CloseableTab;
-                if (closeableTab != null)
-                {
-                    closeableTab.SetStyle(style);
-                    EditableFile editableFile = (EditableFile)(closeableTab?.Content);
-                    editableFile?.OnStyleChange(styleButton);
-                }
-            }
-
-            this.FontFamily = new FontFamily("Segoe UI");
-            this.FontSize = 12;
-            if (findWindow != null)
-            {
-                findWindow.FontFamily = this.FontFamily;
-                findWindow.FontSize = this.FontSize;
-            }
-            if (replaceWindow != null)
-            {
-                replaceWindow.FontFamily = this.FontFamily;
-                replaceWindow.FontSize = this.FontSize;
-            }
-        }
-
-        private void darkStyleItem_Click(object sender, RoutedEventArgs e)
-        {
-            Style style = new Style();
-            style.Setters.Add(new Setter { Property = Control.BackgroundProperty, Value = new SolidColorBrush(Colors.Black) });
-            style.Setters.Add(new Setter { Property = Control.ForegroundProperty, Value = new SolidColorBrush(Colors.White) });
-
-            this.Resources["AnyStyle"] = style;
-
-            Style styleButton = new Style();
-            styleButton.Setters.Add(new Setter { Property = Control.BackgroundProperty, Value = new SolidColorBrush(Color.FromRgb(25, 22, 22)) });
-            styleButton.Setters.Add(new Setter { Property = Control.ForegroundProperty, Value = new SolidColorBrush(Color.FromRgb(220, 168, 28)) });
-
-            this.Resources["AnyStyleButton"] = styleButton;
-
-            findWindow?.SetStyle(this.Resources["AnyStyle"] as Style, this.Resources["AnyStyleButton"] as Style);
-            replaceWindow?.SetStyle(this.Resources["AnyStyle"] as Style, this.Resources["AnyStyleButton"] as Style);
-
-            foreach (var tab in tabsContainer.Items)
-            {
-                var closeableTab = tab as CloseableTab;
-                if (closeableTab != null)
-                {
-                    closeableTab.SetStyle(style);
-                    EditableFile editableFile = (EditableFile)(closeableTab?.Content);
-                    editableFile?.OnStyleChange(styleButton);
-                }
-            }
-
-            this.FontFamily = new FontFamily("Arial");
-            this.FontSize = 13;
-            if (findWindow != null)
-            {
-                findWindow.FontFamily = this.FontFamily;
-                findWindow.FontSize = this.FontSize;
-            }
-            if (replaceWindow != null)
-            {
-                replaceWindow.FontFamily = this.FontFamily;
-                replaceWindow.FontSize = this.FontSize;
-            }
-        }
-
-        private void grayStyleItem_Click(object sender, RoutedEventArgs e)
-        {
-            Style style = new Style();
-            style.Setters.Add(new Setter { Property = Control.BackgroundProperty, Value = new SolidColorBrush(Colors.Gray) });
-            style.Setters.Add(new Setter { Property = Control.ForegroundProperty, Value = new SolidColorBrush(Colors.Black) });
-
-            this.Resources["AnyStyle"] = style;
-
-            Style styleButton = new Style();
-            styleButton.Setters.Add(new Setter { Property = Control.BackgroundProperty, Value = new SolidColorBrush(Colors.DarkGray) });
-            styleButton.Setters.Add(new Setter { Property = Control.ForegroundProperty, Value = new SolidColorBrush(Colors.Black) });
-
-            this.Resources["AnyStyleButton"] = styleButton;
-
-            findWindow?.SetStyle(this.Resources["AnyStyle"] as Style, this.Resources["AnyStyleButton"] as Style);
-            replaceWindow?.SetStyle(this.Resources["AnyStyle"] as Style, this.Resources["AnyStyleButton"] as Style);
-
-            foreach (var tab in tabsContainer.Items)
-            {
-                var closeableTab = tab as CloseableTab;
-                if (closeableTab != null)
-                {
-                    closeableTab.SetStyle(style);
-                    EditableFile editableFile = (EditableFile)(closeableTab?.Content);
-                    editableFile?.OnStyleChange(styleButton);
-                }
-            }
-
-            this.FontFamily = new FontFamily("Comic Sans MS");
-            this.FontSize = 14;
-            if (findWindow != null)
-            {
-                findWindow.FontFamily = this.FontFamily;
-                findWindow.FontSize = this.FontSize;
-            }
-            if (replaceWindow != null)
-            {
-                replaceWindow.FontFamily = this.FontFamily;
-                replaceWindow.FontSize = this.FontSize;
             }
         }
 

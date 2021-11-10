@@ -7,14 +7,12 @@
         mc:Ignorable="d"
         Title="Замена" Height="230" Width="230" ResizeMode="NoResize" Closing="Window_Closing">
     <Window.Resources>
-        <Style x:Key="AnyStyle">
-            <Setter Property="Control.Background" Value="White" />
-            <Setter Property="Control.Foreground" Value="Black" />
-        </Style>
-        <Style x:Key="AnyStyleButton">
-            <Setter Property="Control.Background" Value="#FFDDDDDD" />
-            <Setter Property="Control.Foreground" Value="Black" />
-        </Style>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="Dictionary/Theme.xaml"/>
+                <ResourceDictionary Source="Dictionary/AnyStyle.xaml"/>
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
     </Window.Resources>
     <Grid Style="{DynamicResource AnyStyle}">
         <Grid.RowDefinitions>

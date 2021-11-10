@@ -9,59 +9,12 @@
         mc:Ignorable="d"
         Title="Блокнот" Height="450" Width="800" Closed="Window_Closed" Closing="Window_Closing" Activated="Window_Activated" MinWidth="800" MinHeight="450">
     <Window.Resources>
-        <Style x:Key="AnyStyle">
-            <Setter Property="Control.Background" Value="White" />
-            <Setter Property="Control.Foreground" Value="Black" />
-        </Style>
-        <Style x:Key="AnyStyleButton">
-            <Setter Property="Control.Background" Value="#FFDDDDDD" />
-            <Setter Property="Control.Foreground" Value="Black" />
-        </Style>
-        <Style x:Key="ComboBoxTest2" TargetType="{x:Type ComboBox}">
-            <Setter Property="Template">
-                <Setter.Value>
-                    <ControlTemplate TargetType="ComboBox">
-                        <Grid>
-                            <ToggleButton Style="{DynamicResource AnyStyleButton}" Grid.Column="2" Focusable="false" IsChecked="{Binding Path=IsDropDownOpen,Mode=TwoWay,RelativeSource={RelativeSource TemplatedParent}}" >
-                                <ToggleButton.Template>
-                                    <ControlTemplate>
-                                        <Grid>
-                                            <Grid.ColumnDefinitions>
-                                                <ColumnDefinition Width="5*" />
-                                                <ColumnDefinition Width="*" />
-                                            </Grid.ColumnDefinitions>
-                                            <Border x:Name="Border" Grid.ColumnSpan="2" CornerRadius="5" Background="Beige" BorderBrush="#FFACACAC" BorderThickness="1" />
-                                            <Border Grid.Column="0" CornerRadius="5,0,0,5" Margin="1" Style="{DynamicResource AnyStyle}" BorderBrush="#FFACACAC" BorderThickness="0,0,1,0" />
-                                            <Path x:Name="Arrow" Grid.Column="1" Fill="Orange" HorizontalAlignment="Center" VerticalAlignment="Center" Data="M 0 0 L 4 4 L 8 0 Z"/>
-                                        </Grid>
-                                        <ControlTemplate.Triggers>
-                                            <Trigger Property="ToggleButton.IsMouseOver" Value="true">
-                                                <Setter TargetName="Border" Property="Background" Value="Green" />
-                                            </Trigger>
-                                            <Trigger Property="ToggleButton.IsChecked" Value="true">
-                                                <Setter TargetName="Border" Property="Background" Value="Green" />
-                                            </Trigger>
-                                        </ControlTemplate.Triggers>
-                                    </ControlTemplate>
-                                </ToggleButton.Template>
-                            </ToggleButton>
-                            <ContentPresenter Style="{DynamicResource AnyStyle}" Name="ContentSite" IsHitTestVisible="False"  Content="{TemplateBinding SelectionBoxItem}" ContentTemplate="{TemplateBinding SelectionBoxItemTemplate}" ContentTemplateSelector="{TemplateBinding ItemTemplateSelector}" Margin="3"  />
-                            <TextBox x:Name="PART_EditableTextBox" Visibility="Hidden" IsReadOnly="{TemplateBinding IsReadOnly}" Style="{DynamicResource AnyStyleButton}"/>
-                            <Popup Name="Popup" Placement="Bottom" IsOpen="{TemplateBinding IsDropDownOpen}" AllowsTransparency="True"  Focusable="False" PopupAnimation="Slide">
-                                <Grid Style="{DynamicResource AnyStyleButton}" Name="DropDown" SnapsToDevicePixels="True" MinWidth="{TemplateBinding ActualWidth}" MaxHeight="{TemplateBinding MaxDropDownHeight}">
-                                    <Border x:Name="DropDownBorder" Style="{DynamicResource AnyStyleButton}" />
-                                    <ScrollViewer SnapsToDevicePixels="True">
-                                        <StackPanel IsItemsHost="True" />
-                                    </ScrollViewer>
-                                </Grid>
-                            </Popup>
-                        </Grid>
-                    </ControlTemplate>
-                </Setter.Value>
-            </Setter>
-            <Style.Triggers>
-            </Style.Triggers>
-        </Style>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="Dictionary/Theme.xaml"/>
+                <ResourceDictionary Source="Dictionary/AnyStyle.xaml"/>
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
     </Window.Resources>
     <Window.CommandBindings>
         <CommandBinding x:Name="newFileCommand" Command="New" Executed="newFileCommand_Executed"  />
@@ -119,11 +72,7 @@
                         <MenuItem Foreground="Black" x:Name="stateLineItem" Header="_Строка состояния" IsCheckable="True" Click="stateLineItem_Click" />
                         <MenuItem Foreground="Black" x:Name="translateItem" Header="_Перевод" IsCheckable="True" Click="translateItem_Click"/>
                         <MenuItem Foreground="Black" x:Name="performanceItem" Header="_Диспетчер приложения" IsCheckable="True" Click="performanceItem_Click"/>
-                        <MenuItem Foreground="Black" Header="_Стиль">
-                            <MenuItem x:Name="lightStyleItem" Header="Светлый" Click="lightStyleItem_Click"/>
-                            <MenuItem x:Name="darkStyleItem" Header="Тёмный" Click="darkStyleItem_Click"/>
-                            <MenuItem x:Name="grayStyleItem" Header="Серый" Click="grayStyleItem_Click"/>
-                        </MenuItem>
+                        <MenuItem Foreground="Black" Header="_Стиль"/>
                     </MenuItem>
                     <MenuItem Header="_Справка">
                         <MenuItem Foreground="Black" Header="_Помощь"/>
@@ -203,7 +152,7 @@
                     <TextBlock Text="Перевод" Padding="60 0 60 0"/>
                     <Label Style="{DynamicResource AnyStyle}" Content="Авто-перевод" HorizontalAlignment="Left" VerticalAlignment="Top" Padding="4,1,1,3" Height="24" Width="100" Margin="10,21,0,0"/>
                     <uc:ToggleSlider x:Name="autoTranslateState" CheckedChange="autoSlider_CheckedChange"  Width="40" Height="20" HorizontalAlignment="Right" Margin="0,20,10,0" VerticalAlignment="Top"/>
-                    <ComboBox Style="{DynamicResource ComboBoxTest2}" x:Name="languagesCombo" HorizontalAlignment="Center" VerticalAlignment="Top" Width="120" SelectionChanged="languagesCombo_SelectionChanged" Margin="0,45,0,0"/>
+                    <ComboBox Style="{DynamicResource AnyStyleComboBox}" x:Name="languagesCombo" HorizontalAlignment="Center" VerticalAlignment="Top" Width="120" SelectionChanged="languagesCombo_SelectionChanged" Margin="0,45,0,0"/>
                     <Button Style="{DynamicResource AnyStyleButton}" x:Name="translateManual" Content="Перевести текст" HorizontalAlignment="Center" VerticalAlignment="Top" Click="translateManual_Click" Margin="0,72,0,0"/>
                 </Grid>
             </Border>

@@ -15,13 +15,10 @@ namespace DZNotepad
         public CloseableTab()
         {
             var dockPanel = new DockPanel();
-            dockPanel.Margin = new Thickness(-7, -3, -7, -4);
             headerElement = new TextBlock { Text = "" };
-            headerElement.Margin = new Thickness(3, 2, 2, 2);
             dockPanel.Children.Add(headerElement);
 
             var closeButton = new TabCloseButton();
-            closeButton.Margin = new Thickness(2, 2, 2, 2);
             closeButton.Click +=
                 (sender, e) =>
                 {
@@ -46,7 +43,8 @@ namespace DZNotepad
 
         public void SetStyle(Style style)
         {
-            (Header as DockPanel).Style = style;
+            // (Header as DockPanel).Style = style;
+            this.Style = style;
         }
     }
 }

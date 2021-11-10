@@ -31,12 +31,6 @@ namespace DZNotepad
             editableFile = file;
         }
 
-        public void SetStyle(Style anyStyle, Style anyStyleButton)
-        {
-            this.Resources["AnyStyle"] = anyStyle;
-            this.Resources["AnyStyleButton"] = anyStyleButton;
-        }
-
         private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
         {
             findetText.Text = string.Empty;
