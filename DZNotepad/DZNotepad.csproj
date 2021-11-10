@@ -25,6 +25,7 @@
 
   <ItemGroup>
     <PackageReference Include="LiveCharts.Wpf" Version="0.9.7" />
+    <PackageReference Include="Microsoft.Data.Sqlite" Version="6.0.0" />
   </ItemGroup>
 
   <ItemGroup>
