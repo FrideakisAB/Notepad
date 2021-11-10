@@ -23,8 +23,6 @@ namespace DZNotepad
         /// <param name="commandStr">Строка содержащая SQL-запрос</param>
         public static void Command(string commandStr)
         {
-            connection?.Close();
-            connection = null;
             SqliteCommand command = new SqliteCommand();
             command.Connection = Get();
             command.CommandText = commandStr;
@@ -38,8 +36,6 @@ namespace DZNotepad
         /// <returns>Результат выполнения запроса</returns>
         public static object? CommandScalar(string commandStr)
         {
-            connection?.Close();
-            connection = null;
             SqliteCommand command = new SqliteCommand();
             command.Connection = Get();
             command.CommandText = commandStr;
