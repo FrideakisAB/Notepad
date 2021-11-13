@@ -14,7 +14,7 @@
                     <TextBlock FontWeight="Bold" Text="1. Работа в меню - Файл">
                         <TextBlock.ToolTip>
                             <StackPanel>
-                                <Image Width="300" Height="250" Stretch="None" Source="/1.png" />
+                                <Image Width="300" Height="250" Stretch="None" Source="/Icons/Меню - Файл.png"/>
                             </StackPanel>
                         </TextBlock.ToolTip>
                     </TextBlock>
@@ -29,7 +29,7 @@
                         <TextBlock FontWeight="Bold" Text="2. Работа в меню - Правка">
                             <TextBlock.ToolTip>
                                 <StackPanel>
-                                <Image Width="350" Height="200" Stretch="None" Source="/2.png"/>
+                                <Image Width="350" Height="200" Stretch="None" Source="/Icons/Меню - Правка.png" />
                                 </StackPanel>
                             </TextBlock.ToolTip>
                         </TextBlock>
@@ -42,7 +42,7 @@
                         <TextBlock FontWeight="Bold" Text="3. Работа в меню - Вид">
                             <TextBlock.ToolTip>
                                 <StackPanel>
-                                <Image Width="350" Height="150" Stretch="None" Source="/3.png" />
+                                <Image Width="350" Height="150" Stretch="None" Source="/Icons/Меню - Вид.png"  />
                                 </StackPanel>
                             </TextBlock.ToolTip>
                         </TextBlock>
@@ -53,7 +53,7 @@
                         <TextBlock FontWeight="Bold" Text="4. Работа в меню - Справка">
                             <TextBlock.ToolTip>
                                 <StackPanel>
-                                <Image Width="300" Height="150" Stretch="None" Source="/4.png"/>
+                                <Image Width="300" Height="150" Stretch="None" Source="/Icons/Меню - Справка.png" />
                                 </StackPanel>
                             </TextBlock.ToolTip>
                         </TextBlock>

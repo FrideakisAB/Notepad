@@ -366,10 +366,16 @@ namespace DZNotepad
             }
         }
 
+        private void styleItem_Click(object sender, RoutedEventArgs e)
+        {
+            SelectStyle selectStyle = new SelectStyle();
+            selectStyle.Show();  
+        }
+
         private void WindowHelp_Click(object sender, RoutedEventArgs e)
         {
-            WindowHelp windowhelp = new WindowHelp();
-            windowhelp.Show();
+            WindowHelp windowHelp = new WindowHelp();
+            windowHelp.Show();
         }
     }
 

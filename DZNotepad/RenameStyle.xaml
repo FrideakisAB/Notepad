@@ -1,0 +1,30 @@
+﻿<Window x:Class="DZNotepad.RenameStyle"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:DZNotepad"
+        mc:Ignorable="d"
+        Title="" Height="160" Width="230" ResizeMode="NoResize" WindowStyle="None" WindowStartupLocation="CenterScreen">
+    <Window.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="Dictionary/Theme.xaml"/>
+                <ResourceDictionary Source="Dictionary/AnyStyle.xaml"/>
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </Window.Resources>
+    <Grid Style="{DynamicResource AnyStyle}">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="40*"/>
+            <RowDefinition Height="40*"/>
+            <RowDefinition Height="60*"/>
+        </Grid.RowDefinitions>
+        <Label Style="{DynamicResource AnyStyle}" Content="Введите новое название" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+        <TextBox Style="{DynamicResource AnyStyle}" x:Name="NnameStyle" HorizontalAlignment="Center" Grid.Row="1" Text="" TextWrapping="Wrap" VerticalAlignment="Center" Width="150" Margin="0,0,0,11"/>
+        <StackPanel Grid.Row="2" Orientation="Vertical" HorizontalAlignment="Center" VerticalAlignment="Center" Style="{DynamicResource AnyStyle}" Margin="0,0,0,5">
+            <Button Style="{DynamicResource AnyStyleButton}" x:Name="applyRename" Padding="2" Content="Сохранить" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0,0,0,10" Click="saveNstyle_Click" Cursor="Hand"/>
+            <Button Style="{DynamicResource AnyStyleButton}" x:Name="CancelRename" Padding="2" Content="Отменить" RenderTransformOrigin="0.677,-1.965" Click="CancelRename_Click"/>
+        </StackPanel>
+    </Grid>
+</Window>

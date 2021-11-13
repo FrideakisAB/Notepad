@@ -1,0 +1,35 @@
+﻿<UserControl x:Class="DZNotepad.UserElements.StyleItem"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:DZNotepad.UserElements"  
+             mc:Ignorable="d" 
+             d:DesignHeight="30" d:DesignWidth="100">
+    <Border BorderThickness="0,1,0,1" Background="{Binding Background}">
+        <Grid HorizontalAlignment="Stretch">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="65*"/>
+                <ColumnDefinition Width="35*"/>
+            </Grid.ColumnDefinitions>
+            <TextBlock Grid.Column="0" Padding="4,2,0,0" Text="{Binding Text}" x:Name="NameStyle"/>
+            <StackPanel Grid.Column="1" HorizontalAlignment="Right" VerticalAlignment="Top" Orientation="Horizontal">
+                <Button Height="10" Width="8" BorderThickness="0" x:Name="DropItem" Click="DropItem_Click">
+                    <Button.Background>
+                        <ImageBrush Stretch="Fill" ImageSource="/Icons/iconTrashcan.png"/>
+                    </Button.Background>
+                </Button>
+                <Button Height="10" Width="8" BorderThickness="0" x:Name="SetStyle" Click="SetStyle_Click">
+                    <Button.Background>
+                        <ImageBrush Stretch="Fill" ImageSource="/Icons/iconCheck.png"/>
+                    </Button.Background>
+                </Button>
+                <Button Height="10" Width="8" BorderThickness="0" x:Name="RenameItem">
+                    <Button.Background>
+                        <ImageBrush Stretch="Fill" ImageSource="/Icons/iconRename.png"/>
+                    </Button.Background>
+                </Button>
+            </StackPanel>
+        </Grid>
+    </Border>
+</UserControl>

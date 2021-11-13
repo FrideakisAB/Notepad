@@ -72,10 +72,10 @@
                         <MenuItem Foreground="Black" x:Name="stateLineItem" Header="_Строка состояния" IsCheckable="True" Click="stateLineItem_Click" />
                         <MenuItem Foreground="Black" x:Name="translateItem" Header="_Перевод" IsCheckable="True" Click="translateItem_Click"/>
                         <MenuItem Foreground="Black" x:Name="performanceItem" Header="_Диспетчер приложения" IsCheckable="True" Click="performanceItem_Click"/>
-                        <MenuItem Foreground="Black" Header="_Стиль"/>
+                        <MenuItem Foreground="Black" Header="_Стиль" x:Name="styleItem" Click="styleItem_Click"/>
                     </MenuItem>
                     <MenuItem Header="_Справка">
-                        <MenuItem Foreground="Black" x:Name="WindowHelp" Header="_Помощь" Click="WindowHelp_Click"/>
+                        <MenuItem Foreground="Black" Header="_Помощь" x:Name="WindowHelp" Click="WindowHelp_Click"/>
                         <MenuItem Foreground="Black" x:Name="aboutProgram" Header="_О программе" Click="aboutProgram_Click"/>
                     </MenuItem>
                 </Menu>
