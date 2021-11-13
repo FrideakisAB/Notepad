@@ -14,17 +14,17 @@
             </Grid.ColumnDefinitions>
             <TextBlock Grid.Column="0" Padding="4,2,0,0" Text="{Binding Text}" x:Name="NameStyle"/>
             <StackPanel Grid.Column="1" HorizontalAlignment="Right" VerticalAlignment="Top" Orientation="Horizontal">
-                <Button Height="10" Width="8" BorderThickness="0" x:Name="DropItem" Click="DropItem_Click">
+                <Button Height="15" Width="11" BorderThickness="0" x:Name="DropItem" Click="DropItem_Click">
                     <Button.Background>
                         <ImageBrush Stretch="Fill" ImageSource="/Icons/iconTrashcan.png"/>
                     </Button.Background>
                 </Button>
-                <Button Height="10" Width="8" BorderThickness="0" x:Name="SetStyle" Click="SetStyle_Click">
+                <Button Height="15" Width="11" BorderThickness="0" x:Name="SetStyle" Click="SetStyle_Click">
                     <Button.Background>
                         <ImageBrush Stretch="Fill" ImageSource="/Icons/iconCheck.png"/>
                     </Button.Background>
                 </Button>
-                <Button Height="10" Width="8" BorderThickness="0" x:Name="RenameItem">
+                <Button Height="15" Width="11" BorderThickness="0" x:Name="RenameItem" Click="RenameItem_Click">
                     <Button.Background>
                         <ImageBrush Stretch="Fill" ImageSource="/Icons/iconRename.png"/>
                     </Button.Background>

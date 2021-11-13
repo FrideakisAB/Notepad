@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:DZNotepad"
         mc:Ignorable="d"
-        Title="" Height="160" Width="230" ResizeMode="NoResize" WindowStyle="None" WindowStartupLocation="CenterScreen">
+        Title="" Height="160" Width="230" ResizeMode="NoResize" WindowStyle="ToolWindow" WindowStartupLocation="CenterScreen">
     <Window.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
@@ -16,15 +16,15 @@
     </Window.Resources>
     <Grid Style="{DynamicResource AnyStyle}">
         <Grid.RowDefinitions>
-            <RowDefinition Height="40*"/>
-            <RowDefinition Height="40*"/>
-            <RowDefinition Height="60*"/>
+            <RowDefinition Height="41*"/>
+            <RowDefinition Height="26*"/>
+            <RowDefinition Height="77*"/>
         </Grid.RowDefinitions>
-        <Label Style="{DynamicResource AnyStyle}" Content="Введите новое название" HorizontalAlignment="Center" VerticalAlignment="Center"/>
-        <TextBox Style="{DynamicResource AnyStyle}" x:Name="NnameStyle" HorizontalAlignment="Center" Grid.Row="1" Text="" TextWrapping="Wrap" VerticalAlignment="Center" Width="150" Margin="0,0,0,11"/>
-        <StackPanel Grid.Row="2" Orientation="Vertical" HorizontalAlignment="Center" VerticalAlignment="Center" Style="{DynamicResource AnyStyle}" Margin="0,0,0,5">
+        <Label Style="{DynamicResource AnyStyle}" Content="Введите новое название" HorizontalAlignment="Center" VerticalAlignment="Center" Height="25" Width="146"/>
+        <TextBox Style="{DynamicResource AnyStyle}" x:Name="NnameStyle" HorizontalAlignment="Center" Grid.Row="1" Text="" TextWrapping="Wrap" VerticalAlignment="Center" Width="150" Height="18"/>
+        <StackPanel Grid.Row="2" Orientation="Vertical" HorizontalAlignment="Center" VerticalAlignment="Center" Style="{DynamicResource AnyStyle}" Height="50" Width="62">
             <Button Style="{DynamicResource AnyStyleButton}" x:Name="applyRename" Padding="2" Content="Сохранить" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0,0,0,10" Click="saveNstyle_Click" Cursor="Hand"/>
-            <Button Style="{DynamicResource AnyStyleButton}" x:Name="CancelRename" Padding="2" Content="Отменить" RenderTransformOrigin="0.677,-1.965" Click="CancelRename_Click"/>
+            <Button Style="{DynamicResource AnyStyleButton}" x:Name="CancelRename" Padding="2" Content="Отменить" RenderTransformOrigin="0.677,-1.965" Click="CancelRename_Click" Margin="0,0,0,0"/>
         </StackPanel>
     </Grid>
 </Window>

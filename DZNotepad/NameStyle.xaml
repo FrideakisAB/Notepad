@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:DZNotepad"
         mc:Ignorable="d"
-        Title="" Height="160" Width="230" ResizeMode="NoResize" WindowStyle="ThreeDBorderWindow" WindowStartupLocation="CenterScreen">
+        Title="" Height="160" Width="230" ResizeMode="NoResize" WindowStyle="ToolWindow" WindowStartupLocation="CenterScreen">
     <Window.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
@@ -22,9 +22,9 @@
         </Grid.RowDefinitions>
         <Label Style="{DynamicResource AnyStyle}" Content="Введите название стиля" HorizontalAlignment="Center" VerticalAlignment="Center" Height="25" Width="142"/>
         <TextBox Style="{DynamicResource AnyStyle}" x:Name="nameStyle" HorizontalAlignment="Center" Grid.Row="1" Text="" TextWrapping="Wrap" VerticalAlignment="Center" Width="150" Height="18"/>
-        <StackPanel Grid.Row="2" Orientation="Vertical" HorizontalAlignment="Center" VerticalAlignment="Center" Style="{DynamicResource AnyStyle}" Height="55" Width="62">
-            <Button Style="{DynamicResource AnyStyleButton}" x:Name="saveStyle" Padding="2" Content="Сохранить" HorizontalAlignment="Center" Margin="0,0,0,10" Cursor="Hand" Click="saveStyle_Click"/>
-            <Button Style="{DynamicResource AnyStyleButton}" x:Name="CanpelCall" Padding="2" Content="Отменить" HorizontalAlignment="Stretch" Margin="0,0,0,5" Click="CanpelCall_Click" Cursor="Hand"/>
+        <StackPanel Grid.Row="2" Orientation="Vertical" Style="{DynamicResource AnyStyle}" VerticalAlignment="Center" HorizontalAlignment="Center">
+            <Button Style="{DynamicResource AnyStyleButton}" x:Name="saveStyle" Padding="2" Content="Сохранить" HorizontalAlignment="Center"  Cursor="Hand" Click="saveStyle_Click" Margin="0,0,0,10"/>
+            <Button Style="{DynamicResource AnyStyleButton}" x:Name="CanpelCall" Padding="2" Content="Отменить" HorizontalAlignment="Stretch" Click="CanpelCall_Click" Cursor="Hand"/>
         </StackPanel>
     </Grid>
 </Window>

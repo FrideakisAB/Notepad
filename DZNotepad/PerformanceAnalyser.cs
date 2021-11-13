@@ -27,34 +27,6 @@ namespace DZNotepad
             this.memoryUsage = memoryUsage;
             this.networkUsage = networkUsage;
 
-            setupCounters();
-
-            updateThread = new Thread(new ThreadStart(updateCounter));
-            updateThread.Start();
-        }
-
-        private void updateCounter()
-        {
-            while (activeThread)
-            {
-                try
-                {
-                    insertBack(cpuUsage, Math.Round(cpuCounter.NextValue() / Environment.ProcessorCount, 2));
-                    insertBack(memoryUsage, Math.Round(ramCounter.NextValue() / 1024 / 1024, 2));
-                    insertBack(networkUsage, Math.Round(ioCounter.NextValue() / 1024 / 1024, 2));
-                    chart.Update();
-                }
-                catch (InvalidOperationException)
-                {
-                    setupCounters();
-                }
-
-                Thread.Sleep(500);
-            }
-        }
-
-        private void setupCounters()
-        {
             Process process = Process.GetCurrentProcess();
             string name = string.Empty;
             foreach (var instance in new PerformanceCounterCategory("Process").GetInstanceNames())
@@ -79,6 +51,22 @@ namespace DZNotepad
             cpuCounter.NextValue();
             ramCounter.NextValue();
             ioCounter.NextValue();
+
+            updateThread = new Thread(new ThreadStart(updateCounter));
+            updateThread.Start();
+        }
+
+        private void updateCounter()
+        {
+            while (activeThread)
+            {
+                insertBack(cpuUsage, Math.Round(cpuCounter.NextValue() / Environment.ProcessorCount, 2));
+                insertBack(memoryUsage, Math.Round(ramCounter.NextValue() / 1024 / 1024, 2));
+                insertBack(networkUsage, Math.Round(ioCounter.NextValue() / 1024 / 1024, 2));
+                chart.Update();
+
+                Thread.Sleep(500);
+            }
         }
 
         private void insertBack(ChartValues<double> values, double value)

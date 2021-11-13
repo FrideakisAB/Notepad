@@ -136,15 +136,17 @@
                 </Grid>
             </Border>
             <Border DockPanel.Dock="Bottom" Margin="18 0 18 0" x:Name="stateLine"  Visibility="Hidden" BorderBrush="#FFACACAC" BorderThickness="1">
-                <StackPanel VerticalAlignment="Bottom" Height="18" Orientation="Horizontal" Style="{DynamicResource AnyStyle}" FlowDirection="RightToLeft">
-                    <TextBlock Style="{DynamicResource AnyStyle}" x:Name="lineCount"  Text="0" Padding="5,0,0,0"/>
-                    <Label Style="{DynamicResource AnyStyle}" Content="Строк" Padding="2,0,5,0"/>
+                <StackPanel VerticalAlignment="Center" Height="18" Orientation="Horizontal" Style="{DynamicResource AnyStyle}" FlowDirection="RightToLeft" HorizontalAlignment="Center">
+                    <TextBlock Style="{DynamicResource AnyStyle}" x:Name="Code"  Text="0" Padding="5,0,0,0"/>
+                    <Label Style="{DynamicResource AnyStyle}" Content=":Кодировка |" Padding="2,0,5,0"/>
+                    <TextBlock Style="{DynamicResource AnyStyle}" x:Name="lineCount"  Text="0" Padding="0,0,0,0"/>
+                    <Label Style="{DynamicResource AnyStyle}" Content=":Строк |" Padding="2,0,5,0"/>
                     <TextBlock Style="{DynamicResource AnyStyle}" x:Name="charCount" Text="0"/>
-                    <Label Style="{DynamicResource AnyStyle}" Content="Символов" Padding="2,0,5,0"/>
+                    <Label Style="{DynamicResource AnyStyle}" Content=":Символов |" Padding="2,0,5,0"/>
                     <TextBlock Style="{DynamicResource AnyStyle}" x:Name="lineCurrent" Text="0"/>
-                    <Label Style="{DynamicResource AnyStyle}" Content="Строка" Padding="2,0,5,0"/>
+                    <Label Style="{DynamicResource AnyStyle}" Content=":Строка |" Padding="2,0,5,0"/>
                     <TextBlock Style="{DynamicResource AnyStyle}" x:Name="charCurrent" Text="0"/>
-                    <Label Style="{DynamicResource AnyStyle}" Content="Позиция" Padding="2,0,5,0"/>
+                    <Label Style="{DynamicResource AnyStyle}" Content=":Позиция" Padding="2,0,5,0"/>
                 </StackPanel>
             </Border>
             <Border x:Name="translateWindow" Margin="0 0 18 0" Width="0" DockPanel.Dock="Right" BorderBrush="#FFACACAC" BorderThickness="1">

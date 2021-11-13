@@ -19,6 +19,13 @@ namespace DZNotepad
     /// </summary>
     public partial class SelectStyle : Window
     {
+        public object Item
+        {
+            get
+            {
+               return (StyleItem)StyleList.SelectedItem;
+            }
+        }
         public SelectStyle()
         {
             InitializeComponent();
@@ -31,12 +38,19 @@ namespace DZNotepad
 
         private void DropItem_Click(object sender, RoutedEventArgs e)
         {
-            var result = MessageBox.Show("Вы хотите удалить стиль " + (StyleList.SelectedItem as StyleItem).Text, "Удаление " + (StyleList.SelectedItem as StyleItem).Text, MessageBoxButton.YesNo, MessageBoxImage.Question);
-            if (result == MessageBoxResult.Yes)
+            if (StyleList.SelectedItem != null)
             {
-                StyleList.Items.Remove(StyleList.SelectedItem);
-                //TODO: БД удаление
+                var result = MessageBox.Show("Вы хотите удалить стиль " + (StyleList.SelectedItem as StyleItem).Text, "Удаление " + (StyleList.SelectedItem as StyleItem).Text, MessageBoxButton.YesNo, MessageBoxImage.Question);
+                if (result == MessageBoxResult.Yes)
+                {
+                    StyleList.Items.Remove(StyleList.SelectedItem);
+                    //TODO: БД удаление
+                }
             }
+            else 
+            {
+                MessageBox.Show("Выберите стиль для удаления!");
+            }        
         }
 
         private void AddItem_Click(object sender, RoutedEventArgs e)

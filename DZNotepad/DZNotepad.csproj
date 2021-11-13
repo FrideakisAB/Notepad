@@ -16,7 +16,6 @@
     <None Remove="Icons\Меню - Правка.png" />
     <None Remove="Icons\Меню - Справка.png" />
     <None Remove="Icons\Меню - Файл.png" />
-    <None Remove="SQLScripts\DBUp.sql" />
   </ItemGroup>
 
   <ItemGroup>
@@ -33,7 +32,7 @@
 
   <ItemGroup>
     <PackageReference Include="LiveCharts.Wpf" Version="0.9.7" />
-    <PackageReference Include="Microsoft.Data.Sqlite" Version="5.0.12" />
+    <PackageReference Include="Microsoft.Data.Sqlite" Version="6.0.0" />
   </ItemGroup>
 
   <ItemGroup>
@@ -54,7 +53,6 @@
     <Resource Include="Icons\Меню - Правка.png" />
     <Resource Include="Icons\Меню - Справка.png" />
     <Resource Include="Icons\Меню - Файл.png" />
-    <EmbeddedResource Include="SQLScripts\DBUp.sql" />
   </ItemGroup>
 
 </Project>
