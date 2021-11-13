@@ -365,6 +365,12 @@ namespace DZNotepad
                     ((EditableFile)closeableTab.Content).OnSave();
             }
         }
+
+        private void WindowHelp_Click(object sender, RoutedEventArgs e)
+        {
+            WindowHelp windowhelp = new WindowHelp();
+            windowhelp.Show();
+        }
     }
 
     public class WindowCommands

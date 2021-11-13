@@ -75,7 +75,7 @@
                         <MenuItem Foreground="Black" Header="_Стиль"/>
                     </MenuItem>
                     <MenuItem Header="_Справка">
-                        <MenuItem Foreground="Black" Header="_Помощь"/>
+                        <MenuItem Foreground="Black" x:Name="WindowHelp" Header="_Помощь" Click="WindowHelp_Click"/>
                         <MenuItem Foreground="Black" x:Name="aboutProgram" Header="_О программе" Click="aboutProgram_Click"/>
                     </MenuItem>
                 </Menu>
