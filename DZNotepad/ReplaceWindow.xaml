@@ -24,8 +24,8 @@
         </Grid.RowDefinitions>
         <Label Style="{DynamicResource AnyStyle}" Content="Искомая подстрока" HorizontalAlignment="Center" VerticalAlignment="Center"/>
         <Label Style="{DynamicResource AnyStyle}" Content="Замена на" HorizontalAlignment="Center" Grid.Row="2" VerticalAlignment="Center"/>
-        <TextBox Style="{DynamicResource AnyStyle}" x:Name="findetText" HorizontalAlignment="Center" Grid.Row="1" Text="" TextWrapping="Wrap" VerticalAlignment="Center" Width="150"/>
-        <TextBox Style="{DynamicResource AnyStyle}" x:Name="replaceText" HorizontalAlignment="Center" Grid.Row="3" Text="" TextWrapping="Wrap" VerticalAlignment="Center" Width="150"/>
+        <TextBox Style="{DynamicResource AnyStyleTextBox}" x:Name="findetText" HorizontalAlignment="Center" Grid.Row="1" Text="" TextWrapping="Wrap" VerticalAlignment="Center" Width="150"/>
+        <TextBox Style="{DynamicResource AnyStyleTextBox}" x:Name="replaceText" HorizontalAlignment="Center" Grid.Row="3" Text="" TextWrapping="Wrap" VerticalAlignment="Center" Width="150"/>
         <StackPanel Grid.Row="4" Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center">
             <Button Style="{DynamicResource AnyStyleButton}" x:Name="replace" Padding="2" Content="Заменить" HorizontalAlignment="Center" VerticalAlignment="Center" Click="replace_Click" />
         </StackPanel>

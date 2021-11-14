@@ -10,6 +10,17 @@
     <FontStyle x:Key="anyFontStyleVal">Normal</FontStyle>
     <FontWeight x:Key="anyFontWeightVal">Normal</FontWeight>
 
+    <SolidColorBrush x:Key="anyTBBackgroundVal">White</SolidColorBrush>
+    <SolidColorBrush x:Key="anyTBForegroundVal">Black</SolidColorBrush>
+    <SolidColorBrush x:Key="anyTBBorderBrushVal">Black</SolidColorBrush>
+    <SolidColorBrush x:Key="anyTBSelectionBrushVal">#FF0078D7</SolidColorBrush>
+    <SolidColorBrush x:Key="anyTBCaretBrushVal">Black</SolidColorBrush>
+    <CornerRadius x:Key="anyTBCornerVal">0</CornerRadius>
+    <FontFamily x:Key="anyTBFontFamilyVal">Segoe UI</FontFamily>
+    <System:Double x:Key="anyTBFontSizeVal">12</System:Double>
+    <FontStyle x:Key="anyTBFontStyleVal">Normal</FontStyle>
+    <FontWeight x:Key="anyTBFontWeightVal">Normal</FontWeight>
+
     <SolidColorBrush x:Key="anyButtonBackgroundVal">#FFDDDDDD</SolidColorBrush>
     <SolidColorBrush x:Key="anyButtonForegroundVal">Black</SolidColorBrush>
     <SolidColorBrush x:Key="anyButtonBorderBrushVal">Black</SolidColorBrush>

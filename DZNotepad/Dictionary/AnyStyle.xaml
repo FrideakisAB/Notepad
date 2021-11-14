@@ -9,6 +9,23 @@
         <Setter Property="Control.FontStyle" Value="{DynamicResource anyFontStyleVal}" />
         <Setter Property="Control.FontWeight" Value="{DynamicResource anyFontWeightVal}" />
     </Style>
+    <Style x:Key="AnyStyleTextBox" TargetType="TextBox">
+        <Setter Property="Control.Background" Value="{DynamicResource anyTBBackgroundVal}" />
+        <Setter Property="Control.Foreground" Value="{DynamicResource anyTBForegroundVal}" />
+        <Setter Property="Control.BorderBrush" Value="{DynamicResource anyTBBorderBrushVal}" />
+        <Setter Property="SelectionBrush" Value="{DynamicResource anyTBSelectionBrushVal}" />
+        <Setter Property="CaretBrush" Value="{DynamicResource anyTBCaretBrushVal}" />
+        <Setter Property="Control.FontFamily" Value="{DynamicResource anyTBFontFamilyVal}" />
+        <Setter Property="Control.FontSize" Value="{DynamicResource anyTBFontSizeVal}" />
+        <Setter Property="Control.FontStyle" Value="{DynamicResource anyTBFontStyleVal}" />
+        <Setter Property="Control.FontWeight" Value="{DynamicResource anyTBFontWeightVal}" />
+        <Style.Resources>
+            <Style TargetType="{x:Type Border}">
+                <Setter Property="CornerRadius" Value="{DynamicResource anyTBCornerVal}" />
+                <Setter Property="BorderThickness" Value="1" />
+            </Style>
+        </Style.Resources>
+    </Style>
     <Style x:Key="AnyStyleButton" TargetType="{x:Type Button}">
         <Setter Property="Control.Foreground" Value="{DynamicResource anyButtonForegroundVal}" />
         <Setter Property="Control.FontFamily" Value="{DynamicResource anyButtonFontFamilyVal}" />
