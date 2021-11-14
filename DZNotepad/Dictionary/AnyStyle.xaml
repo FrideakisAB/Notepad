@@ -9,7 +9,7 @@
         <Setter Property="Control.FontStyle" Value="{DynamicResource anyFontStyleVal}" />
         <Setter Property="Control.FontWeight" Value="{DynamicResource anyFontWeightVal}" />
     </Style>
-    <Style x:Key="AnyStyleTextBox" TargetType="TextBox">
+    <Style x:Key="AnyStyleTextBox" TargetType="{x:Type TextBox}">
         <Setter Property="Control.Background" Value="{DynamicResource anyTBBackgroundVal}" />
         <Setter Property="Control.Foreground" Value="{DynamicResource anyTBForegroundVal}" />
         <Setter Property="Control.BorderBrush" Value="{DynamicResource anyTBBorderBrushVal}" />
