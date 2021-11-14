@@ -20,57 +20,49 @@
     <Grid Style="{DynamicResource AnyStyle}">
         <Grid.RowDefinitions>
             <RowDefinition Height="206*"/>
-            <RowDefinition Height="175*"/>
-            <RowDefinition Height="29*"/>
-            <RowDefinition Height="24*"/>
+            <RowDefinition Height="143*"/>
+            <RowDefinition Height="39*"/>
+            <RowDefinition Height="46*"/>
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="60*"/>
-            <ColumnDefinition Width="200*"/>
+            <ColumnDefinition Width="185*"/>
+            <ColumnDefinition Width="203*"/>
+            <ColumnDefinition Width="413*"/>
         </Grid.ColumnDefinitions>
-        <ListBox Grid.Column="0" Grid.RowSpan="2" x:Name="StyleList"/>
-        <Grid Grid.Column="1" Grid.Row="0"/>
-        <Grid Grid.Column="1" Margin="0,206,0,0" Grid.RowSpan="4"/>
-        <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center" Orientation="Horizontal" Grid.Row="3" Height="20" Width="110">
-            <Button Style="{DynamicResource AnyStyleButton}" Content="Переименовать" Height="20" Width="110" BorderThickness="1" x:Name="renameStyle" Cursor="Hand" Click="renameStyle_Click"/>
+        <ListBox Grid.Column="0" Grid.Row="0" x:Name="StyleList" Grid.RowSpan="2"/>
+        <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center" Orientation="Horizontal" Grid.Row="3">
+            <Button Style="{DynamicResource AnyStyleButton}" Content="Переименовать" Height="25" Width="125" BorderThickness="1" x:Name="renameStyle" Cursor="Hand" Click="renameStyle_Click"/>
         </StackPanel>
-        <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center" Orientation="Horizontal" Grid.Row="2" Height="20" Width="130">
-            <Button Style="{DynamicResource AnyStyleButton}" Content="Удалить"  Height="20" Width="60" BorderThickness="0" x:Name="DropItem" Margin="0,0,5,0" Click="DropItem_Click"/>
-            <Button Style="{DynamicResource AnyStyleButton}" Content="Добавить" x:Name="AddItem" Height="20" Width="60" BorderThickness="1" Margin="0,0,5,0" Click="AddItem_Click"/>
+        <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center" Orientation="Horizontal" Grid.Row="2">
+            <Button Style="{DynamicResource AnyStyleButton}" Content="Удалить"  Height="25" Width="73" BorderThickness="0" x:Name="DropItem" Margin="0,0,5,0" Click="DropItem_Click"/>
+            <Button Style="{DynamicResource AnyStyleButton}" Content="Добавить" x:Name="AddItem" Height="25" Width="73" BorderThickness="1" Click="AddItem_Click"/>
         </StackPanel>
-        <Grid Grid.Row="0" Grid.Column="1" Style="{DynamicResource AnyStyle}">
+        <Border BorderThickness="0.25" BorderBrush="Black" Grid.Row="2" Grid.Column="0" Grid.RowSpan="3"/>
+        <Grid Grid.Row="0" Grid.Column="1" Style="{DynamicResource AnyStyle}" Grid.RowSpan="4" Grid.ColumnSpan="2">
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="308*"/>
-                <ColumnDefinition Width="308*"/>
+                <ColumnDefinition Width="202*"/>
+                <ColumnDefinition Width="413*"/>
             </Grid.ColumnDefinitions>
             <Grid.RowDefinitions>
-                <RowDefinition Height="25*"/>
-                <RowDefinition Height="51*"/>
-                <RowDefinition Height="40*"/>
-                <RowDefinition Height="39*"/>
-                <RowDefinition Height="52*"/>
+                <RowDefinition Height="19*"/>
+                <RowDefinition Height="50*"/>
+                <RowDefinition Height="50*"/>
+                <RowDefinition Height="50*"/>
+                <RowDefinition Height="37*"/>
+                <RowDefinition Height="34*"/>
+                <RowDefinition Height="47*"/>
+                <RowDefinition Height="147*"/>
             </Grid.RowDefinitions>
-            <ComboBox Style="{DynamicResource AnyStyleComboBox}" HorizontalAlignment="Center" VerticalAlignment="Center" Width="100" Height="21" Grid.Row="1">
+            <ComboBox Style="{DynamicResource AnyStyleComboBox}" HorizontalAlignment="Center" VerticalAlignment="Center" Width="100" Height="20" Grid.Row="1">
                 <ComboBoxItem Content="Элемент 1"/>
                 <ComboBoxItem Content="Элемент 2"/>
                 <ComboBoxItem Content="Элемент 3"/>
             </ComboBox>
             <Button Style="{DynamicResource AnyStyleButton}" Grid.Row="2" Content="Кнопка" HorizontalAlignment="Center" VerticalAlignment="Center" Height="20" Width="44"/>
-            <TextBlock Style="{DynamicResource AnyStyle}" Grid.Row="3" Text="Текст" HorizontalAlignment="Center" VerticalAlignment="Center" TextAlignment="Center" Height="15" Width="49"/>
-            <TextBox Style="{DynamicResource AnyStyleTextBox}" Grid.Row="1" Grid.Column="1" Text="Введите тест" Grid.RowSpan="4" Margin="0,5,5,5" TextWrapping="Wrap"/>
-            <TextBlock Style="{DynamicResource AnyStyle}" Text="Предпросмотр" HorizontalAlignment="Left" VerticalAlignment="Center" TextAlignment="Center" Grid.ColumnSpan="2" Height="16" Margin="266,0,0,0" Width="83" />
-            <Border BorderThickness="0.5" BorderBrush="Black" Grid.ColumnSpan="2" Grid.Column="0" Grid.Row="0" Grid.RowSpan="5"/>
-        </Grid>
-        <Grid Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="2" Grid.RowSpan="3">
-            <Grid.RowDefinitions>
-                <RowDefinition Height="13*"/>
-                <RowDefinition Height="101*"/>
-            </Grid.RowDefinitions>
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="187*"/>
-                <ColumnDefinition Width="428*"/>
-            </Grid.ColumnDefinitions>
-            <ComboBox Style="{DynamicResource AnyStyleComboBox}" HorizontalAlignment="Center" VerticalAlignment="Top" Width="100" Height="21" Margin="0,23,0,0" Grid.Row="1">
+            <TextBlock Style="{DynamicResource AnyStyle}" Grid.Row="3" Text="Текст" HorizontalAlignment="Center" VerticalAlignment="Center" TextAlignment="Center" Height="16" Width="49"/>
+            <TextBox Style="{DynamicResource AnyStyleTextBox}" Grid.Row="1" Grid.Column="1" Text="Введите тест" Grid.RowSpan="3" Margin="11,5,5,21" TextWrapping="Wrap"/>
+            <TextBlock Style="{DynamicResource AnyStyle}" Text="Предпросмотр" HorizontalAlignment="Left" VerticalAlignment="Center" TextAlignment="Center" Height="16" Margin="16,0,0,0" Width="83" Grid.Column="1" />
+            <ComboBox Style="{DynamicResource AnyStyleComboBox}" HorizontalAlignment="Center" VerticalAlignment="Center" Width="150" Height="26" Grid.Row="6">
                 <ComboBoxItem Content="Кнопка"/>
                 <ComboBoxItem Content="Список"/>
                 <ComboBoxItem Content="Поле ввода"/>
@@ -78,15 +70,17 @@
                 <ComboBoxItem Content="Общий"/>
                 <ComboBoxItem Content="Вкладка"/>
             </ComboBox>
-            <TextBlock Style="{DynamicResource AnyStyle}" Text="Редактирование" HorizontalAlignment="Center" VerticalAlignment="Center" TextAlignment="Center" Grid.Column="1"  />
-            <TextBlock Style="{DynamicResource AnyStyle}" Text="Выбор элемента" HorizontalAlignment="Center" VerticalAlignment="Center" TextAlignment="Center" Grid.Column="0"  />
-            <Border BorderThickness="0.5" BorderBrush="Black" Grid.RowSpan="2" Grid.ColumnSpan="2">
-                <StackPanel Orientation="Horizontal" VerticalAlignment="Bottom" Height="22" Margin="0,0,0,153" HorizontalAlignment="Right" Width="38">
-                    <cc:ColorPicker x:Name="colorPicherWPF" VerticalAlignment="Top"></cc:ColorPicker>
-                </StackPanel>
-            </Border>
-            <Border BorderThickness="0.5" BorderBrush="Black" Grid.Row="0" Grid.Column="0" Grid.RowSpan="2" />
+            <TextBlock Style="{DynamicResource AnyStyle}" Text="Редактирование" HorizontalAlignment="Center" VerticalAlignment="Center" TextAlignment="Center" Grid.Column="1" Height="16" Width="90" Grid.Row="5" />
+            <TextBlock Style="{DynamicResource AnyStyle}" Text="Выбор элемента" HorizontalAlignment="Center" VerticalAlignment="Center" TextAlignment="Center" Height="16" Width="91" Grid.Row="5"  />
+            <cc:ColorPicker x:Name="colorPicherWPF" HorizontalAlignment="Left" Margin="374,11,0,11" Grid.Column="1" Grid.Row="6" Width="29"/>
+            <StackPanel HorizontalAlignment="Center" VerticalAlignment="Top" Orientation="Horizontal" Grid.Row="3" Height="0" Width="0" Margin="0,1,0,0"/>
+            <Border BorderThickness="0.25" BorderBrush="Black" Grid.Row="5" Margin="202,0,0,0" Grid.RowSpan="3" Grid.ColumnSpan="2"/>
+            <Border BorderThickness="0.25" BorderBrush="Black" Grid.Row="0" Padding="0,0,0,0" Grid.ColumnSpan="2" Grid.Column="0" Grid.RowSpan="5"/>
+            <StackPanel HorizontalAlignment="Right" VerticalAlignment="Bottom" Orientation="Horizontal" Grid.Column="1" Grid.Row="7" Margin="0,0,20,10">
+                <Button Style="{DynamicResource AnyStyleButton}" Content="Принять" Height="25" Width="73" Margin="0,0,5,0" />
+                <Button Style="{DynamicResource AnyStyleButton}" Content="Отменить" Height="25" Width="73" BorderThickness="1" Margin="0,0,5,0" />
+                <Button Style="{DynamicResource AnyStyleButton}" Content="Сохранить" BorderThickness="1" Cursor="Hand" Width="73" Height="25"/>
+            </StackPanel>
         </Grid>
-        <Border BorderThickness="0.5" BorderBrush="Black" Grid.Row="2" Grid.RowSpan="3"/>
     </Grid>
 </Window>
