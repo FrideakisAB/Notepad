@@ -36,5 +36,20 @@
             <Button Style="{DynamicResource AnyStyleButton}" Content="Удалить"  Height="20" Width="60" BorderThickness="0" x:Name="DropItem" Margin="0,0,5,0" Click="DropItem_Click"/>
             <Button Style="{DynamicResource AnyStyleButton}" Content="Добавить" x:Name="AddItem" Height="20" Width="60" BorderThickness="1" Margin="0,0,5,0" Click="AddItem_Click"/>
         </StackPanel>
+        <Grid Grid.Row="0" Grid.Column="1" Style="{DynamicResource AnyStyle}">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="309*"/>
+                <ColumnDefinition Width="307*"/>
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="52*"/>
+                <RowDefinition Height="43*"/>
+                <RowDefinition Height="41*"/>
+                <RowDefinition Height="153*"/>
+            </Grid.RowDefinitions>
+            <ComboBox Style="{DynamicResource AnyStyleComboBox}" HorizontalAlignment="Center" VerticalAlignment="Center" Width="100"  />
+            <Button Style="{DynamicResource AnyStyleButton}" Grid.Row="1" Content="Button" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+            <TextBlock Style="{DynamicResource AnyStyle}" Grid.Row="2" Grid.Column="0" Text="TextBlock" HorizontalAlignment="Center" VerticalAlignment="Center" TextAlignment="Center" />
+        </Grid>
     </Grid>
 </Window>

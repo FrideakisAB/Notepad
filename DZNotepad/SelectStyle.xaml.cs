@@ -62,6 +62,7 @@ namespace DZNotepad
 
         private void renameStyle_Click(object sender, RoutedEventArgs e)
         {
+
             RenameStyle renameStyle = new RenameStyle(this, (StyleList.SelectedItem as StyleItem));
             renameStyle.Owner = this;
             renameStyle.Show();

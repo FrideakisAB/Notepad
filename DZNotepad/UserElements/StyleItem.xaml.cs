@@ -68,24 +68,17 @@ namespace DZNotepad.UserElements
 
         private void DropItem_Click(object sender, RoutedEventArgs e)
         {
-            if (selectStyle.StyleList.SelectedItem != null)
-            {
-                var result = MessageBox.Show("Вы хотите удалить стиль " + Text, "Удаление " + Text, MessageBoxButton.YesNo, MessageBoxImage.Question);
-                if (result == MessageBoxResult.Yes)
-                {
-                    selectStyle.StyleList.Items.Remove(this);
-                    //TODO: БД удаление
-                }
-            }
-            else 
-            {
-                MessageBox.Show("Выберите стиль для удаления!");
-            }
+             var result = MessageBox.Show("Вы хотите удалить стиль " + Text, "Удаление " + Text, MessageBoxButton.YesNo, MessageBoxImage.Question);
+             if (result == MessageBoxResult.Yes)
+             {
+                 selectStyle.StyleList.Items.Remove(this);
+                 //TODO: БД удаление
+             }
         }
 
         private void RenameItem_Click(object sender, RoutedEventArgs e)
         {
-            RenameStyle renameStyle = new RenameStyle(selectStyle, (selectStyle.StyleList.SelectedItem as StyleItem));
+            RenameStyle renameStyle = new RenameStyle(selectStyle, this);
             renameStyle.Show();
         }
     }

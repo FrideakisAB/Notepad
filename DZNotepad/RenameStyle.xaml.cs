@@ -29,15 +29,20 @@ namespace DZNotepad
             item = styleItem;           
         }
 
-        private void saveNstyle_Click(object sender, RoutedEventArgs e)
+        private void CancelRename_Click(object sender, RoutedEventArgs e)
         {
-            if (selectStyle.StyleList.SelectedItem != null)
+            this.Close();
+        }
+
+        private void applyRename_Click(object sender, RoutedEventArgs e)
+        {
+            if (item != null)
             {
                 if (string.IsNullOrWhiteSpace(NnameStyle.Text))
                     MessageBox.Show("Введите имя!");
                 else
                 {
-                    var result = MessageBox.Show("Вы хотите переименовать стиль " + (selectStyle.StyleList.SelectedItem as StyleItem).Text, "Переименование " + (selectStyle.StyleList.SelectedItem as StyleItem).Text, MessageBoxButton.YesNo, MessageBoxImage.Question);
+                    var result = MessageBox.Show("Вы хотите переименовать стиль " + item.Text, "Переименование " + item.Text, MessageBoxButton.YesNo, MessageBoxImage.Question);
                     if (result == MessageBoxResult.Yes)
                     {
                         //TODO: БД изменение
@@ -49,12 +54,8 @@ namespace DZNotepad
             else 
             {
                 MessageBox.Show("Выберите стиль для редактирования!");
-            }            
-        }
-
-        private void CancelRename_Click(object sender, RoutedEventArgs e)
-        {
-            this.Close();
+            }
+            
         }
     }
 }
