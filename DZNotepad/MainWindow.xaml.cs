@@ -27,6 +27,8 @@ namespace DZNotepad
     public partial class MainWindow : Window
     {
         AboutProgram aboutProgramWindow;
+        SelectStyle selectStyle;
+        WindowHelp windowHelp;
         FindWindow findWindow;
         ReplaceWindow replaceWindow;
         FileInfoBlock fileInfoBlock = new FileInfoBlock();
@@ -132,6 +134,10 @@ namespace DZNotepad
                 findWindow.Close();
             if (replaceWindow != null)
                 replaceWindow.Close();
+            if (windowHelp != null)
+                windowHelp.Close();
+            if (selectStyle != null)
+                selectStyle.Close();
 
             analyser.Dispose();
 
@@ -398,13 +404,19 @@ namespace DZNotepad
 
         private void styleItem_Click(object sender, RoutedEventArgs e)
         {
-            SelectStyle selectStyle = new SelectStyle();
-            selectStyle.Show();  
+            if (selectStyle != null)
+                selectStyle.Close();
+            selectStyle = new SelectStyle();
+            selectStyle.Owner = this;
+            selectStyle.Show();
         }
 
         private void WindowHelp_Click(object sender, RoutedEventArgs e)
         {
-            WindowHelp windowHelp = new WindowHelp();
+            if (windowHelp != null)
+                aboutProgramWindow.Close();
+            windowHelp  = new WindowHelp();
+            windowHelp.Owner = this;
             windowHelp.Show();
         }
     }
