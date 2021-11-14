@@ -50,6 +50,7 @@
             <ComboBox Style="{DynamicResource AnyStyleComboBox}" HorizontalAlignment="Center" VerticalAlignment="Center" Width="100"  />
             <Button Style="{DynamicResource AnyStyleButton}" Grid.Row="1" Content="Button" HorizontalAlignment="Center" VerticalAlignment="Center"/>
             <TextBlock Style="{DynamicResource AnyStyle}" Grid.Row="2" Grid.Column="0" Text="TextBlock" HorizontalAlignment="Center" VerticalAlignment="Center" TextAlignment="Center" />
+            <TextBox Style="{DynamicResource AnyStyleTextBox}" Grid.Row="0" Grid.Column="1" Text="TextBox" Grid.RowSpan="2" Margin="0,0,10,0"/>
         </Grid>
     </Grid>
 </Window>
