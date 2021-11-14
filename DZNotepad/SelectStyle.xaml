@@ -13,7 +13,7 @@
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="Dictionary/Theme.xaml"/>
                 <ResourceDictionary Source="Dictionary/AnyStyle.xaml"/>
-                <ResourceDictionary Source="ColorPicker.xaml"/>
+                <ResourceDictionary Source="ColorPicker/ColorPicker.xaml"/>
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </Window.Resources>
@@ -28,7 +28,7 @@
             <ColumnDefinition Width="60*"/>
             <ColumnDefinition Width="200*"/>
         </Grid.ColumnDefinitions>
-        <ListBox Grid.Column="0" Grid.RowSpan="2" x:Name="StyleList" Margin="-1,0,1,0"/>
+        <ListBox Grid.Column="0" Grid.RowSpan="2" x:Name="StyleList"/>
         <Grid Grid.Column="1" Grid.Row="0"/>
         <Grid Grid.Column="1" Margin="0,206,0,0" Grid.RowSpan="4"/>
         <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center" Orientation="Horizontal" Grid.Row="3" Height="20" Width="110">
@@ -44,8 +44,8 @@
                 <ColumnDefinition Width="308*"/>
             </Grid.ColumnDefinitions>
             <Grid.RowDefinitions>
-                <RowDefinition Height="32*"/>
-                <RowDefinition Height="44*"/>
+                <RowDefinition Height="25*"/>
+                <RowDefinition Height="51*"/>
                 <RowDefinition Height="40*"/>
                 <RowDefinition Height="39*"/>
                 <RowDefinition Height="52*"/>
@@ -55,11 +55,11 @@
                 <ComboBoxItem Content="Элемент 2"/>
                 <ComboBoxItem Content="Элемент 3"/>
             </ComboBox>
-            <Button Style="{DynamicResource AnyStyleButton}" Grid.Row="2" Content="Кнопка" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+            <Button Style="{DynamicResource AnyStyleButton}" Grid.Row="2" Content="Кнопка" HorizontalAlignment="Center" VerticalAlignment="Center" Height="20" Width="44"/>
             <TextBlock Style="{DynamicResource AnyStyle}" Grid.Row="3" Text="Текст" HorizontalAlignment="Center" VerticalAlignment="Center" TextAlignment="Center" Height="15" Width="49"/>
-            <TextBox Style="{DynamicResource AnyStyleTextBox}" Grid.Row="1" Grid.Column="1" Text="Введите тест" Grid.RowSpan="5" Margin="0,0,5,5" />
-            <TextBlock Style="{DynamicResource AnyStyle}" Text="Предпросмотр" HorizontalAlignment="Center" VerticalAlignment="Center" TextAlignment="Center" Grid.ColumnSpan="2" />
-            <Border BorderThickness="1" BorderBrush="Black" Grid.Row="0" Grid.ColumnSpan="2" Grid.RowSpan="5"/>
+            <TextBox Style="{DynamicResource AnyStyleTextBox}" Grid.Row="1" Grid.Column="1" Text="Введите тест" Grid.RowSpan="4" Margin="0,5,5,5" TextWrapping="Wrap"/>
+            <TextBlock Style="{DynamicResource AnyStyle}" Text="Предпросмотр" HorizontalAlignment="Left" VerticalAlignment="Center" TextAlignment="Center" Grid.ColumnSpan="2" Height="16" Margin="266,0,0,0" Width="83" />
+            <Border BorderThickness="0.5" BorderBrush="Black" Grid.ColumnSpan="2" Grid.Column="0" Grid.Row="0" Grid.RowSpan="5"/>
         </Grid>
         <Grid Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="2" Grid.RowSpan="3">
             <Grid.RowDefinitions>
@@ -80,13 +80,13 @@
             </ComboBox>
             <TextBlock Style="{DynamicResource AnyStyle}" Text="Редактирование" HorizontalAlignment="Center" VerticalAlignment="Center" TextAlignment="Center" Grid.Column="1"  />
             <TextBlock Style="{DynamicResource AnyStyle}" Text="Выбор элемента" HorizontalAlignment="Center" VerticalAlignment="Center" TextAlignment="Center" Grid.Column="0"  />
-            <Border BorderThickness="1" BorderBrush="Black" Grid.ColumnSpan="2" Grid.RowSpan="2">
-                <StackPanel Orientation="Horizontal" VerticalAlignment="Top" Margin="503,27,9,0">
-                    <cc:ColorPicker x:Name="colorPicherWPF" Height="18" RenderTransformOrigin="0.5,0.5" Width="29"/>
-                    <Border Height="30" Width="48" Margin="10" BorderBrush="Silver" BorderThickness="1"
-                    Background="{Binding SelectedColor, ElementName=colorPicherWPF}"/>
+            <Border BorderThickness="0.5" BorderBrush="Black" Grid.RowSpan="2" Grid.ColumnSpan="2">
+                <StackPanel Orientation="Horizontal" VerticalAlignment="Bottom" Height="22" Margin="0,0,0,153" HorizontalAlignment="Right" Width="38">
+                    <cc:ColorPicker x:Name="colorPicherWPF" VerticalAlignment="Top"></cc:ColorPicker>
                 </StackPanel>
             </Border>
+            <Border BorderThickness="0.5" BorderBrush="Black" Grid.Row="0" Grid.Column="0" Grid.RowSpan="2" />
         </Grid>
+        <Border BorderThickness="0.5" BorderBrush="Black" Grid.Row="2" Grid.RowSpan="3"/>
     </Grid>
 </Window>

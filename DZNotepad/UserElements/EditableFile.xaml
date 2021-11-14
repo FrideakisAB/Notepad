@@ -12,6 +12,6 @@
         </Style>
     </UserControl.Resources>
     <Grid>
-        <TextBox Style="{DynamicResource AnyStyleTextBox}" BorderThickness="0" x:Name="textSource" Text="" TextWrapping="NoWrap" IsEnabled="True" AcceptsTab="True" AcceptsReturn="True" TextChanged="textSource_TextChanged" SelectionChanged="textSource_SelectionChanged"/>
+        <TextBox Style="{DynamicResource AnyStyleTextBox}" x:Name="textSource" Text="" TextWrapping="NoWrap" IsEnabled="True" AcceptsTab="True" AcceptsReturn="True" TextChanged="textSource_TextChanged" SelectionChanged="textSource_SelectionChanged"/>
     </Grid>
 </UserControl>

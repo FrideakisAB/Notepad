@@ -74,13 +74,25 @@
                         <MenuItem Foreground="Black" x:Name="performanceItem" Header="_Диспетчер приложения" IsCheckable="True" Click="performanceItem_Click"/>
                         <MenuItem Foreground="Black" Header="_Стиль" x:Name="styleItem" Click="styleItem_Click"/>
                         <MenuItem Header="Кодировка">
-                            <MenuItem Header="ASCII" Click="ChangeEncoding_Click"/>
-                            <MenuItem Header="UTF-8" Click="ChangeEncoding_Click"/>
-                            <MenuItem Header="UTF-16LE" Click="ChangeEncoding_Click"/>
-                            <MenuItem Header="UTF-16BE" Click="ChangeEncoding_Click"/>
-                            <MenuItem Header="UTF-32LE" Click="ChangeEncoding_Click"/>
-                            <MenuItem Header="UTF-32BE" Click="ChangeEncoding_Click"/>
-                            <MenuItem Header="windows-1251" Click="ChangeEncoding_Click"/>
+                            <MenuItem Header="UTF-8"/>
+                            <MenuItem Header="UTF-16 (BE and LE)"/>
+                            <MenuItem Header="UTF-32 (BE and LE)"/>
+                            <MenuItem Header="windows-1252 (mostly equivalent to iso8859-1)"/>
+                            <MenuItem Header="windows-1251 and ISO-8859-5 (cyrillic)"/>
+                            <MenuItem Header="windows-1253 and ISO-8859-7 (greek)"/>
+                            <MenuItem Header="windows-1255 (logical hebrew. Includes ISO-8859-8-Iand most of x-mac-hebrew)"/>
+                            <MenuItem Header="ISO-8859-8 (visual hebrew)"/>
+                            <MenuItem Header="Big-5"/>
+                            <MenuItem Header="gb18030 (superset of gb2312)"/>
+                            <MenuItem Header="HZ-GB-2312"/>
+                            <MenuItem Header="Shift-JIS"/>
+                            <MenuItem Header="EUC-KR, EUC-JP, EUC-TW"/>
+                            <MenuItem Header="ISO-2022-JP, ISO-2022-KR, ISO-2022-CN"/>
+                            <MenuItem Header="KOI8-R"/>
+                            <MenuItem Header="x-mac-cyrillic"/>
+                            <MenuItem Header="IBM855 and IBM866"/>
+                            <MenuItem Header="X-ISO-10646-UCS-4-3412 and X-ISO-10646-UCS-4-2413 (unusual BOM)"/>
+                            <MenuItem Header="ASCII"/>
                         </MenuItem>
                     </MenuItem>
                     <MenuItem Header="_Справка">
@@ -146,7 +158,7 @@
             </Border>
             <Border DockPanel.Dock="Bottom" Margin="18 0 18 0" x:Name="stateLine"  Visibility="Hidden" BorderBrush="#FFACACAC" BorderThickness="1">
                 <StackPanel VerticalAlignment="Center" Height="18" Orientation="Horizontal" Style="{DynamicResource AnyStyle}" FlowDirection="RightToLeft" HorizontalAlignment="Center">
-                    <TextBlock Style="{DynamicResource AnyStyle}" x:Name="encoding"  Text="0" Padding="5,0,0,0"/>
+                    <TextBlock Style="{DynamicResource AnyStyle}" x:Name="Code"  Text="0" Padding="5,0,0,0"/>
                     <Label Style="{DynamicResource AnyStyle}" Content=":Кодировка |" Padding="2,0,5,0"/>
                     <TextBlock Style="{DynamicResource AnyStyle}" x:Name="lineCount"  Text="0" Padding="0,0,0,0"/>
                     <Label Style="{DynamicResource AnyStyle}" Content=":Строк |" Padding="2,0,5,0"/>

@@ -24,7 +24,6 @@ namespace DZNotepad.UserElements
         public TextBlock CharCount;
         public TextBlock CurrentLine;
         public TextBlock CurrentChar;
-        public TextBlock CurrentEncode;
         public EditableFile CurrentFile;
     }
 
@@ -45,16 +44,12 @@ namespace DZNotepad.UserElements
         private FileInfoBlock fileInfoBlock;
         private TranslateInfoBlock translateInfoBlock;
 
-        private static Encoding UTF32BE = new UTF32Encoding(true, true);
         private string fileName = "";
         private string header = "Без имени";
         private bool isSupportedFormat = true;
         private bool isEditable = false;
         private DateTime lastWriteAcces;
         private int translatePosition = 0;
-        private string encoding = Encoding.Default.BodyName.ToUpper();
-        private Encoding srcEncoding = Encoding.Default;
-        private Encoding dstEncoding = Encoding.Default;
 
         public EditableFile(CloseableTab tab, FileInfoBlock fileBblock, TranslateInfoBlock translateBlock)
         {
@@ -83,77 +78,10 @@ namespace DZNotepad.UserElements
             fileName = path;
             lastWriteAcces = File.GetLastWriteTime(fileName);
             header = System.IO.Path.GetFileName(fileName);
-
-            using (FileStream fs = File.OpenRead(fileName))
-            {
-                Ude.CharsetDetector detector = new Ude.CharsetDetector();
-                detector.Feed(fs);
-                detector.DataEnd();
-                if (detector.Charset != null)
-                    encoding = detector.Charset;
-            }
-
-            srcEncoding = toSystemEncoding(encoding);
-
-            textSource.Text = File.ReadAllText(fileName, srcEncoding);
+            textSource.Text = File.ReadAllText(fileName);
             isEditable = false;
-
             parentTab.SetHeader(header);
             updateState();
-        }
-
-        private static Encoding toSystemEncoding(string encoding)
-        {
-            Encoding sysEncoding = Encoding.Default;
-
-            switch (encoding)
-            {
-                case "ASCII":
-                    sysEncoding = Encoding.ASCII;
-                    break;
-                case "UTF-8":
-                    sysEncoding = Encoding.UTF8;
-                    break;
-                case "UTF-16LE":
-                    sysEncoding = Encoding.Unicode;
-                    break;
-                case "UTF-16BE":
-                    sysEncoding = Encoding.BigEndianUnicode;
-                    break;
-                case "UTF-32LE":
-                    sysEncoding = Encoding.UTF32;
-                    break;
-                case "UTF-32BE":
-                    sysEncoding = UTF32BE;
-                    break;
-                case "windows-1251":
-                    sysEncoding = Encoding.GetEncoding(1251);
-                    break;
-            }
-
-            return sysEncoding;
-        }
-
-        private static string systemEncodingToString(Encoding encoding)
-        {
-            string sysEncoding = Encoding.Default.BodyName.ToUpper();
-
-            if (encoding.CodePage == Encoding.ASCII.CodePage)
-                sysEncoding = "ASCII";
-            else if (encoding.CodePage == Encoding.UTF8.CodePage)
-                sysEncoding = "UTF-8";
-            else if (encoding.CodePage == Encoding.Unicode.CodePage)
-                sysEncoding = "UTF-16LE";
-            else if (encoding.CodePage == Encoding.BigEndianUnicode.CodePage)
-                sysEncoding = "UTF-16BE";
-            else if (encoding.CodePage == Encoding.UTF32.CodePage)
-                sysEncoding = "UTF-32LE";
-            else if (encoding.CodePage == UTF32BE.CodePage)
-                sysEncoding = "UTF-32BE";
-            else if (encoding.CodePage == Encoding.GetEncoding(1251).CodePage)
-                sysEncoding = "windows-1251";
-
-            return sysEncoding;
         }
 
         private void updateState()
@@ -178,8 +106,7 @@ namespace DZNotepad.UserElements
                 }
 
                 fileInfoBlock.CurrentLine.Text = line.ToString();
-                fileInfoBlock.CurrentChar.Text = charIndex.ToString();
-                fileInfoBlock.CurrentEncode.Text = encoding;
+                fileInfoBlock.CurrentChar.Text = charIndex.ToString() ;
             }
         }
 
@@ -276,13 +203,9 @@ namespace DZNotepad.UserElements
                 else
                 {
                     isEditable = false;
-                    File.WriteAllText(fileName, textSource.Text, dstEncoding);
+                    File.WriteAllText(fileName, textSource.Text);
                     lastWriteAcces = File.GetLastWriteTime(fileName);
                     parentTab.SetHeader(header);
-
-                    srcEncoding = dstEncoding;
-                    encoding = systemEncodingToString(srcEncoding);
-                    updateState();
                 }
             }
         }
@@ -305,13 +228,9 @@ namespace DZNotepad.UserElements
                     isEditable = false;
                     fileName = dlg.FileName;
                     header = System.IO.Path.GetFileName(fileName);
-                    File.WriteAllText(fileName, textSource.Text, dstEncoding);
+                    File.WriteAllText(fileName, textSource.Text);
                     lastWriteAcces = File.GetLastWriteTime(fileName);
                     parentTab.SetHeader(header);
-
-                    srcEncoding = dstEncoding;
-                    encoding = systemEncodingToString(srcEncoding);
-                    updateState();
                 }
             }
         }
@@ -408,17 +327,6 @@ namespace DZNotepad.UserElements
         internal void OnStyleChange(Style style)
         {
             textSource.Style = style;
-        }
-
-        internal void OnChangeEncoding(string encoding)
-        {
-            Encoding sysEncoding = toSystemEncoding(encoding);
-            if (dstEncoding.CodePage != sysEncoding.CodePage && isSupportedFormat)
-            {
-                dstEncoding = sysEncoding;
-                isEditable = true;
-                parentTab.SetHeader(header + "*");
-            }
         }
     }
 }

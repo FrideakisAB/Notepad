@@ -9,8 +9,8 @@
 
   <ItemGroup>
     <None Remove="gears.png" />
-    <None Remove="Icons\fill.png" />
     <None Remove="Icons\iconCheck.png" />
+    <None Remove="Icons\iconColorPicker.png" />
     <None Remove="Icons\iconRename.png" />
     <None Remove="Icons\iconTrashcan.png" />
     <None Remove="Icons\Меню - Вид.png" />
@@ -35,8 +35,6 @@
   <ItemGroup>
     <PackageReference Include="LiveCharts.Wpf" Version="0.9.7" />
     <PackageReference Include="Microsoft.Data.Sqlite" Version="5.0.12" />
-    <PackageReference Include="System.Text.Encoding.CodePages" Version="6.0.0" />
-    <PackageReference Include="UDE.CSharp" Version="1.1.0" />
   </ItemGroup>
 
   <ItemGroup>
@@ -50,8 +48,8 @@
 
   <ItemGroup>
     <Resource Include="gears.png" />
-    <Resource Include="Icons\fill.png" />
     <Resource Include="Icons\iconCheck.png" />
+    <Resource Include="Icons\iconColorPicker.png" />
     <Resource Include="Icons\iconRename.png" />
     <Resource Include="Icons\iconTrashcan.png" />
     <Resource Include="Icons\Меню - Вид.png" />
