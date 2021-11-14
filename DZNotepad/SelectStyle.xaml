@@ -5,6 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:uc="clr-namespace:DZNotepad.UserElements"
         xmlns:local="clr-namespace:DZNotepad"
+        xmlns:cc="clr-namespace:DZNotepad"
         mc:Ignorable="d"
         Title="Стиль" Height="450" Width="800" ResizeMode="NoResize">
     <Window.Resources>
@@ -12,6 +13,7 @@
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="Dictionary/Theme.xaml"/>
                 <ResourceDictionary Source="Dictionary/AnyStyle.xaml"/>
+                <ResourceDictionary Source="ColorPicker.xaml"/>
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </Window.Resources>
@@ -78,7 +80,13 @@
             </ComboBox>
             <TextBlock Style="{DynamicResource AnyStyle}" Text="Редактирование" HorizontalAlignment="Center" VerticalAlignment="Center" TextAlignment="Center" Grid.Column="1"  />
             <TextBlock Style="{DynamicResource AnyStyle}" Text="Выбор элемента" HorizontalAlignment="Center" VerticalAlignment="Center" TextAlignment="Center" Grid.Column="0"  />
-            <Border BorderThickness="1" BorderBrush="Black" Grid.ColumnSpan="2" Grid.RowSpan="2"/>
+            <Border BorderThickness="1" BorderBrush="Black" Grid.ColumnSpan="2" Grid.RowSpan="2">
+                <StackPanel Orientation="Horizontal" VerticalAlignment="Top" Margin="503,27,9,0">
+                    <cc:ColorPicker x:Name="colorPicherWPF" Height="18" RenderTransformOrigin="0.5,0.5" Width="29"/>
+                    <Border Height="30" Width="48" Margin="10" BorderBrush="Silver" BorderThickness="1"
+                    Background="{Binding SelectedColor, ElementName=colorPicherWPF}"/>
+                </StackPanel>
+            </Border>
         </Grid>
     </Grid>
 </Window>

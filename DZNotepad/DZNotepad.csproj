@@ -9,6 +9,7 @@
 
   <ItemGroup>
     <None Remove="gears.png" />
+    <None Remove="Icons\fill.png" />
     <None Remove="Icons\iconCheck.png" />
     <None Remove="Icons\iconRename.png" />
     <None Remove="Icons\iconTrashcan.png" />
@@ -47,6 +48,7 @@
 
   <ItemGroup>
     <Resource Include="gears.png" />
+    <Resource Include="Icons\fill.png" />
     <Resource Include="Icons\iconCheck.png" />
     <Resource Include="Icons\iconRename.png" />
     <Resource Include="Icons\iconTrashcan.png" />
