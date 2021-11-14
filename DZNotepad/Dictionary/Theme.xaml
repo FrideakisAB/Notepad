@@ -4,6 +4,7 @@
                     xmlns:Media="clr-namespace:System.Windows.Media;assembly=PresentationCore">
     <SolidColorBrush x:Key="anyBackgroundVal">White</SolidColorBrush>
     <SolidColorBrush x:Key="anyForegroundVal">Black</SolidColorBrush>
+    <SolidColorBrush x:Key="anyBorderBrushVal">Black</SolidColorBrush>
     <FontFamily x:Key="anyFontFamilyVal">Segoe UI</FontFamily>
     <System:Double x:Key="anyFontSizeVal">12</System:Double>
     <FontStyle x:Key="anyFontStyleVal">Normal</FontStyle>
