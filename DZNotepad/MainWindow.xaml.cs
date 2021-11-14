@@ -44,6 +44,7 @@ namespace DZNotepad
 
         public MainWindow()
         {
+            Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
             InitializeComponent();
             DataContext = this;
 
@@ -57,6 +58,7 @@ namespace DZNotepad
             fileInfoBlock.CharCount = charCount;
             fileInfoBlock.CurrentLine = lineCurrent;
             fileInfoBlock.CurrentChar = charCurrent;
+            fileInfoBlock.CurrentEncode = encoding;
 
             translateInfoBlock.LocalTranslator = translator;
             translateInfoBlock.IsAutoTranslate = false;
@@ -105,9 +107,17 @@ namespace DZNotepad
                     item.Content = editableFile;
                     tabsContainer.SelectedItem = item;
 
-                    if (lastFiles.Count == 5)
-                        lastFiles.RemoveAt(0);
-                    lastFiles.Add(path);
+                    if (!lastFiles.Contains(path))
+                    {
+                        if (lastFiles.Count == 5)
+                            lastFiles.RemoveAt(0);
+                        lastFiles.Add(path);
+                    }
+                    else
+                    {
+                        lastFiles.Remove(path);
+                        lastFiles.Add(path);
+                    }
                 }
                 else
                 {
@@ -418,6 +428,12 @@ namespace DZNotepad
             windowHelp  = new WindowHelp();
             windowHelp.Owner = this;
             windowHelp.Show();
+        }
+
+        private void ChangeEncoding_Click(object sender, RoutedEventArgs e)
+        {
+            MenuItem item = (MenuItem)sender;
+            ((EditableFile)(tabsContainer.SelectedItem as CloseableTab)?.Content).OnChangeEncoding((string)item.Header);
         }
     }
 

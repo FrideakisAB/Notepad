@@ -35,6 +35,8 @@
   <ItemGroup>
     <PackageReference Include="LiveCharts.Wpf" Version="0.9.7" />
     <PackageReference Include="Microsoft.Data.Sqlite" Version="5.0.12" />
+    <PackageReference Include="System.Text.Encoding.CodePages" Version="6.0.0" />
+    <PackageReference Include="UDE.CSharp" Version="1.1.0" />
   </ItemGroup>
 
   <ItemGroup>
