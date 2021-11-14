@@ -17,6 +17,7 @@ using System.Windows.Shapes;
 using System.Net.Http;
 using DZNotepad.UserElements;
 using LiveCharts;
+using Microsoft.Data.Sqlite;
 
 namespace DZNotepad
 {
@@ -32,6 +33,8 @@ namespace DZNotepad
         TranslateInfoBlock translateInfoBlock = new TranslateInfoBlock();
         Translator translator = new Translator();
         PerformanceAnalyser analyser;
+
+        List<string> lastFiles = new List<string>(5);
 
         public ChartValues<double> CPUUsage { get; set; }
         public ChartValues<double> MemoryUsage { get; set; }
@@ -58,6 +61,16 @@ namespace DZNotepad
             translateInfoBlock.Language = string.Empty;
 
             createNewTab();
+
+            if (!File.Exists(Directory.GetCurrentDirectory() + "\\data.db"))
+                DBContext.Command(DBContext.LoadScriptFromResource("DZNotepad.SQLScripts.DBUp.sql"));
+
+            SqliteDataReader reader = DBContext.CommandReader("SELECT * FROM lastFiles");
+            if (reader.HasRows)
+            {
+                while (reader.Read())
+                    lastFiles.Add(reader.GetValue(0) as string);
+            }
         }
 
         void createNewTab(string path=null)
@@ -89,6 +102,10 @@ namespace DZNotepad
                     EditableFile editableFile = new EditableFile(item, fileInfoBlock, translateInfoBlock, path);
                     item.Content = editableFile;
                     tabsContainer.SelectedItem = item;
+
+                    if (lastFiles.Count == 5)
+                        lastFiles.RemoveAt(0);
+                    lastFiles.Add(path);
                 }
                 else
                 {
@@ -117,6 +134,13 @@ namespace DZNotepad
                 replaceWindow.Close();
 
             analyser.Dispose();
+
+            if (lastFiles.Count != 0)
+            {
+                DBContext.Command("DELETE FROM lastFiles;");
+                foreach (string file in lastFiles)
+                    DBContext.Command(string.Format("INSERT INTO lastFiles VALUES ('{0}');", file));
+            }
         }
 
         private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
@@ -170,12 +194,18 @@ namespace DZNotepad
 
         private void findCommand_Executed(object sender, ExecutedRoutedEventArgs e)
         {
+            if (findWindow != null)
+                findWindow.Close();
+            findWindow = new FindWindow(((EditableFile)(tabsContainer.SelectedItem as CloseableTab).Content), this);
             findWindow.Owner = this;
             findWindow.Show();
         }
 
         private void replaceCommand_Executed(object sender, ExecutedRoutedEventArgs e)
         {
+            if (replaceWindow != null)
+                replaceWindow.Close();
+            replaceWindow = new ReplaceWindow(((EditableFile)(tabsContainer.SelectedItem as CloseableTab).Content));
             replaceWindow.Owner = this;
             replaceWindow.Show();
         }

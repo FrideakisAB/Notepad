@@ -1,4 +1,7 @@
-﻿using Microsoft.Data.Sqlite;
+﻿using System.IO;
+using System.Linq;
+using System.Reflection;
+using Microsoft.Data.Sqlite;
 
 namespace DZNotepad
 {
@@ -13,7 +16,11 @@ namespace DZNotepad
         public static SqliteConnection Get()
         {
             if (connection == null)
-                connection = new SqliteConnection("Data Source=data.db;Cache=Shared;");
+            {
+                connection = new SqliteConnection("Data Source=data.db");
+                connection.Open();
+            }
+
             return connection;
         }
 
@@ -53,6 +60,30 @@ namespace DZNotepad
             command.Connection = Get();
             command.CommandText = commandStr;
             return command.ExecuteReader();
+        }
+
+        /// <summary>
+        /// Загружает SQL скрипт из ресурсов приложения
+        /// </summary>
+        /// <param name="resource">Имя ресурса в формате: {Namespace}.{Folder}.{Filename}.{Extension}</param>
+        /// <returns>Возвращает строку с содержимым скрипта</returns>
+        public static string LoadScriptFromResource(string resource)
+        {
+            var assembly = Assembly.GetExecutingAssembly();
+            string resourcePath = resource;
+            if (!resource.StartsWith(nameof(DZNotepad)))
+            {
+                resourcePath = assembly.GetManifestResourceNames()
+                    .Single(str => str.EndsWith(resource));
+            }
+
+            using (Stream stream = assembly.GetManifestResourceStream(resourcePath))
+            {
+                using (StreamReader reader = new StreamReader(stream))
+                {
+                    return reader.ReadToEnd();
+                }
+            }
         }
     }
 }
