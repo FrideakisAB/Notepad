@@ -67,5 +67,55 @@ namespace DZNotepad
             renameStyle.Owner = this;
             renameStyle.Show();
         }
+
+        private void Elements_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            switch (Elements.SelectedIndex)
+            {
+                case 0:
+                    CornerValue.IsEnabled = true;
+                    break;
+                case 1:
+                    CornerValue.IsEnabled = true;
+                    break;
+                case 2:
+                    CornerValue.IsEnabled = true;
+                    break;
+                case 3:
+                    CornerValue.IsEnabled = false;
+                    break;                  
+                case 4:                     
+                    CornerValue.IsEnabled = false;
+                    break;
+                case 5:
+                    CornerValue.IsEnabled = true;
+                    break;
+            }
+        }
+
+        private void CornerValue_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
+        {
+            switch (Elements.SelectedIndex)
+            {
+                case 0:
+                    TestButton.Resources["anyButtonCornerVal"] = new CornerRadius(CornerValue.Value);
+                    break;
+                case 1:
+                    TestComboBox.Resources["anyComboCornerVal"] = new CornerRadius(CornerValue.Value);
+                    break;
+                case 2:
+                    TestTextBox.Resources["anyTBCornerVal"] = new CornerRadius(CornerValue.Value);
+                    break;
+                case 3:
+
+                    break;
+                case 4:
+
+                    break;
+                case 5:
+                    TestTab.Resources["anyTabItemCornerVal"] = new CornerRadius(CornerValue.Value);
+                    break;
+            }
+        }
     }
 }

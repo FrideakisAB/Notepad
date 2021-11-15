@@ -53,16 +53,8 @@
                 <RowDefinition Height="47*"/>
                 <RowDefinition Height="147*"/>
             </Grid.RowDefinitions>
-            <ComboBox Style="{DynamicResource AnyStyleComboBox}" HorizontalAlignment="Center" VerticalAlignment="Center" Width="100" Height="20" Grid.Row="1">
-                <ComboBoxItem Content="Элемент 1"/>
-                <ComboBoxItem Content="Элемент 2"/>
-                <ComboBoxItem Content="Элемент 3"/>
-            </ComboBox>
-            <Button Style="{DynamicResource AnyStyleButton}" Grid.Row="2" Content="Кнопка" HorizontalAlignment="Center" VerticalAlignment="Center" Height="20" Width="44"/>
-            <TextBlock Style="{DynamicResource AnyStyle}" Grid.Row="3" Text="Текст" HorizontalAlignment="Center" VerticalAlignment="Center" TextAlignment="Center" Height="16" Width="49"/>
-            <TextBox Style="{DynamicResource AnyStyleTextBox}" Grid.Row="1" Grid.Column="1" Text="Введите тест" Grid.RowSpan="3" Margin="11,5,5,21" TextWrapping="Wrap"/>
             <TextBlock Style="{DynamicResource AnyStyle}" Text="Предпросмотр" HorizontalAlignment="Left" VerticalAlignment="Center" TextAlignment="Center" Height="16" Margin="16,0,0,0" Width="83" Grid.Column="1" />
-            <ComboBox Style="{DynamicResource AnyStyleComboBox}" HorizontalAlignment="Center" VerticalAlignment="Center" Width="150" Height="26" Grid.Row="6">
+            <ComboBox Style="{DynamicResource AnyStyleComboBox}" x:Name="Elements" HorizontalAlignment="Center" VerticalAlignment="Center" Width="150" Height="26" Grid.Row="6" SelectionChanged="Elements_SelectionChanged">
                 <ComboBoxItem Content="Кнопка"/>
                 <ComboBoxItem Content="Список"/>
                 <ComboBoxItem Content="Поле ввода"/>
@@ -81,6 +73,23 @@
                 <Button Style="{DynamicResource AnyStyleButton}" Content="Отменить" Height="25" Width="73" BorderThickness="1" Margin="0,0,5,0" />
                 <Button Style="{DynamicResource AnyStyleButton}" Content="Сохранить" BorderThickness="1" Cursor="Hand" Width="73" Height="25"/>
             </StackPanel>
+            <ComboBox Style="{DynamicResource AnyStyleComboBox}" x:Name="TestComboBox" HorizontalAlignment="Center" VerticalAlignment="Center" Width="110" Height="20" Grid.Row="1">
+                <ComboBoxItem Content="Item 1"/>
+                <ComboBoxItem Content="Item 2"/>
+                <ComboBoxItem Content="Item 3"/>
+                <ComboBoxItem Content="Item 4"/>
+                <ComboBoxItem Content="Item 5"/>
+                <ComboBoxItem Content="Item 6"/>
+            </ComboBox>
+            <Button Style="{DynamicResource AnyStyleButton}" Grid.Row="2" x:Name="TestButton" Content="Кнопка" HorizontalAlignment="Center" VerticalAlignment="Center" Height="20" Width="44"/>
+            <TextBlock Style="{DynamicResource AnyStyle}" Grid.Row="3" x:Name="TestText" Text="Текст" HorizontalAlignment="Center" VerticalAlignment="Center" TextAlignment="Center" Height="16" Width="49"/>
+            <TabControl Grid.Row="1" Grid.RowSpan="4" Grid.Column="1" x:Name="TabControl">
+                <TabItem Header="Вкладка" Style="{DynamicResource AnyStyleTabItem}" x:Name="TestTab">
+                    <TextBox Style="{DynamicResource AnyStyleTextBox}" Grid.Row="1" x:Name="TestTextBox" Grid.Column="1" Text="Введите тест" Grid.RowSpan="3" Margin="11,5,5,21" TextWrapping="Wrap"/>
+                </TabItem>
+            </TabControl>
+            <TextBlock Style="{DynamicResource AnyStyle}" HorizontalAlignment="Left" Grid.Column="1" VerticalAlignment="Center" TextAlignment="Center" Grid.Row="5" Margin="233,0,0,0" Grid.RowSpan="2" FontSize="10"><Run Text="Закругление "/><Run Text="границ"/></TextBlock>
+            <Slider x:Name="CornerValue" HorizontalAlignment="Center" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" Grid.Column="1" Grid.Row="6" Width="86" VerticalAlignment="Center" Margin="150,5,0,0" ValueChanged="CornerValue_ValueChanged" Maximum="15"/>
         </Grid>
     </Grid>
 </Window>
