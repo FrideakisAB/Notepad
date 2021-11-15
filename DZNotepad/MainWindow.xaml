@@ -160,11 +160,10 @@
             </Border>
             <Border x:Name="translateWindow" Margin="0 0 18 0" Width="0" DockPanel.Dock="Right" BorderBrush="#FFACACAC" BorderThickness="1">
                 <Grid Style="{DynamicResource AnyStyle}">
-                    <TextBlock Text="Перевод" Padding="60 0 60 0"/>
                     <Label Style="{DynamicResource AnyStyle}" Content="Авто-перевод" HorizontalAlignment="Left" VerticalAlignment="Top" Padding="4,1,1,3" Height="24" Width="100" Margin="10,21,0,0"/>
                     <uc:ToggleSlider x:Name="autoTranslateState" CheckedChange="autoSlider_CheckedChange"  Width="40" Height="20" HorizontalAlignment="Right" Margin="0,20,10,0" VerticalAlignment="Top"/>
-                    <ComboBox Style="{DynamicResource AnyStyleComboBox}" x:Name="languagesCombo" HorizontalAlignment="Center" VerticalAlignment="Top" Width="120" SelectionChanged="languagesCombo_SelectionChanged" Margin="0,45,0,0"/>
-                    <Button Style="{DynamicResource AnyStyleButton}" x:Name="translateManual" Content="Перевести текст" HorizontalAlignment="Center" VerticalAlignment="Top" Click="translateManual_Click" Margin="0,72,0,0"/>
+                    <ComboBox Style="{DynamicResource AnyStyleComboBox}" x:Name="languagesCombo" HorizontalAlignment="Center" VerticalAlignment="Top" Width="120" SelectionChanged="languagesCombo_SelectionChanged" Margin="0,50,0,0"/>
+                    <Button Style="{DynamicResource AnyStyleButton}" x:Name="translateManual" Content="Перевести текст" HorizontalAlignment="Center" VerticalAlignment="Top" Click="translateManual_Click" Margin="0,85,0,0" Cursor="Hand"/>
                 </Grid>
             </Border>
             <TabControl x:Name="tabsContainer" Margin="18 0 0 0" SelectionChanged="tabsContainer_SelectionChanged" Padding="0,0,0,0" Style="{DynamicResource AnyStyle}"/>
