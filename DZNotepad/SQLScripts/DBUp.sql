@@ -1,14 +1,13 @@
 -- Скрипт развёртки БД
--- Версия: 1.0
+-- Версия: 1.1
 
 CREATE TABLE IF NOT EXISTS stylesNames (
-    styleNameId INT NOT NULL,
-    styleName NVARCHAR(45) NOT NULL,
-    PRIMARY KEY (styleNameId)
+    styleNameId INTEGER PRIMARY KEY AUTOINCREMENT,
+    styleName NVARCHAR(45) NOT NULL
 );
 
 CREATE TABLE IF NOT EXISTS styles (
-    styleNameId INT NOT NULL,
+    styleNameId INTEGER NOT NULL,
     paramName NVARCHAR(45) NOT NULL,
     paramValue NVARCHAR(256) NOT NULL,
     PRIMARY KEY (styleNameId, paramName),
