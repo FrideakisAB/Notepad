@@ -4,6 +4,7 @@ using System.Text;
 using System.Windows;
 using System.Text.RegularExpressions;
 using System.Windows.Media;
+using Microsoft.Data.Sqlite;
 
 namespace DZNotepad
 {
@@ -141,7 +142,68 @@ namespace DZNotepad
 
         public static void LoadStyleFromDB(ResourceDictionary style, string name)
         {
-            //TODO
+            BrushConverter brushConverter = new BrushConverter();
+            FontFamilyConverter fontFamilyConverter = new FontFamilyConverter();
+            FontStyleConverter fontStyleConverter = new FontStyleConverter();
+            FontWeightConverter fontWeightConverter = new FontWeightConverter();
+            CornerRadiusConverter cornerRadiusConverter = new CornerRadiusConverter();
+
+            long id = (long)DBContext.CommandScalar(string.Format("SELECT styleNameId FROM stylesNames WHERE styleName = '{0}';", name));
+
+            style["anyBackgroundVal"] = brushConverter.ConvertFromString((string)DBContext.CommandScalar(string.Format("SELECT paramValue FROM styles WHERE styleNameId = {0} AND paramName = 'anyBackgroundVal'", id)));
+            style["anyForegroundVal"] = brushConverter.ConvertFromString((string)DBContext.CommandScalar(string.Format("SELECT paramValue FROM styles WHERE styleNameId = {0} AND paramName = 'anyForegroundVal'", id)));
+            style["anyBorderBrushVal"] = brushConverter.ConvertFromString((string)DBContext.CommandScalar(string.Format("SELECT paramValue FROM styles WHERE styleNameId = {0} AND paramName = 'anyBorderBrushVal'", id)));
+            style["anyFontFamilyVal"] = fontFamilyConverter.ConvertFromString((string)DBContext.CommandScalar(string.Format("SELECT paramValue FROM styles WHERE styleNameId = {0} AND paramName = 'anyFontFamilyVal'", id)));
+            style["anyFontSizeVal"] = Convert.ToDouble((string)DBContext.CommandScalar(string.Format("SELECT paramValue FROM styles WHERE styleNameId = {0} AND paramName = 'anyFontSizeVal'", id)));
+            style["anyFontStyleVal"] = fontStyleConverter.ConvertFromString((string)DBContext.CommandScalar(string.Format("SELECT paramValue FROM styles WHERE styleNameId = {0} AND paramName = 'anyFontStyleVal'", id)));
+            style["anyFontWeightVal"] = fontWeightConverter.ConvertFromString((string)DBContext.CommandScalar(string.Format("SELECT paramValue FROM styles WHERE styleNameId = {0} AND paramName = 'anyFontWeightVal'", id)));
+
+            style["anyTBBackgroundVal"] = brushConverter.ConvertFromString((string)DBContext.CommandScalar(string.Format("SELECT paramValue FROM styles WHERE styleNameId = {0} AND paramName = 'anyTBBackgroundVal'", id)));
+            style["anyTBForegroundVal"] = brushConverter.ConvertFromString((string)DBContext.CommandScalar(string.Format("SELECT paramValue FROM styles WHERE styleNameId = {0} AND paramName = 'anyTBForegroundVal'", id)));
+            style["anyTBBorderBrushVal"] = brushConverter.ConvertFromString((string)DBContext.CommandScalar(string.Format("SELECT paramValue FROM styles WHERE styleNameId = {0} AND paramName = 'anyTBBorderBrushVal'", id)));
+            style["anyTBSelectionBrushVal"] = brushConverter.ConvertFromString((string)DBContext.CommandScalar(string.Format("SELECT paramValue FROM styles WHERE styleNameId = {0} AND paramName = 'anyTBSelectionBrushVal'", id)));
+            style["anyTBCaretBrushVal"] = brushConverter.ConvertFromString((string)DBContext.CommandScalar(string.Format("SELECT paramValue FROM styles WHERE styleNameId = {0} AND paramName = 'anyTBCaretBrushVal'", id)));
+            style["anyTBCornerVal"] = cornerRadiusConverter.ConvertFromString(((string)DBContext.CommandScalar(string.Format("SELECT paramValue FROM styles WHERE styleNameId = {0} AND paramName = 'anyTBCornerVal'", id))).Replace(",", " "));
+            style["anyTBFontFamilyVal"] = fontFamilyConverter.ConvertFromString((string)DBContext.CommandScalar(string.Format("SELECT paramValue FROM styles WHERE styleNameId = {0} AND paramName = 'anyTBFontFamilyVal'", id)));
+            style["anyTBFontSizeVal"] = Convert.ToDouble((string)DBContext.CommandScalar(string.Format("SELECT paramValue FROM styles WHERE styleNameId = {0} AND paramName = 'anyTBFontSizeVal'", id)));
+            style["anyTBFontStyleVal"] = fontStyleConverter.ConvertFromString((string)DBContext.CommandScalar(string.Format("SELECT paramValue FROM styles WHERE styleNameId = {0} AND paramName = 'anyTBFontStyleVal'", id)));
+            style["anyTBFontWeightVal"] = fontWeightConverter.ConvertFromString((string)DBContext.CommandScalar(string.Format("SELECT paramValue FROM styles WHERE styleNameId = {0} AND paramName = 'anyTBFontWeightVal'", id)));
+
+            style["anyButtonBackgroundVal"] = brushConverter.ConvertFromString((string)DBContext.CommandScalar(string.Format("SELECT paramValue FROM styles WHERE styleNameId = {0} AND paramName = 'anyButtonBackgroundVal'", id)));
+            style["anyButtonForegroundVal"] = brushConverter.ConvertFromString((string)DBContext.CommandScalar(string.Format("SELECT paramValue FROM styles WHERE styleNameId = {0} AND paramName = 'anyButtonForegroundVal'", id)));
+            style["anyButtonBorderBrushVal"] = brushConverter.ConvertFromString((string)DBContext.CommandScalar(string.Format("SELECT paramValue FROM styles WHERE styleNameId = {0} AND paramName = 'anyButtonBorderBrushVal'", id)));
+            style["anyButtonMouseOverVal"] = brushConverter.ConvertFromString((string)DBContext.CommandScalar(string.Format("SELECT paramValue FROM styles WHERE styleNameId = {0} AND paramName = 'anyButtonMouseOverVal'", id)));
+            style["anyButtonPressedVal"] = brushConverter.ConvertFromString((string)DBContext.CommandScalar(string.Format("SELECT paramValue FROM styles WHERE styleNameId = {0} AND paramName = 'anyButtonPressedVal'", id)));
+            style["anyButtonCornerVal"] = cornerRadiusConverter.ConvertFromString(((string)DBContext.CommandScalar(string.Format("SELECT paramValue FROM styles WHERE styleNameId = {0} AND paramName = 'anyButtonCornerVal'", id))).Replace(",", " "));
+            style["anyButtonFontFamilyVal"] = fontFamilyConverter.ConvertFromString((string)DBContext.CommandScalar(string.Format("SELECT paramValue FROM styles WHERE styleNameId = {0} AND paramName = 'anyButtonFontFamilyVal'", id)));
+            style["anyButtonFontSizeVal"] = Convert.ToDouble((string)DBContext.CommandScalar(string.Format("SELECT paramValue FROM styles WHERE styleNameId = {0} AND paramName = 'anyButtonFontSizeVal'", id)));
+            style["anyButtonFontStyleVal"] = fontStyleConverter.ConvertFromString((string)DBContext.CommandScalar(string.Format("SELECT paramValue FROM styles WHERE styleNameId = {0} AND paramName = 'anyButtonFontStyleVal'", id)));
+            style["anyButtonFontWeightVal"] = fontWeightConverter.ConvertFromString((string)DBContext.CommandScalar(string.Format("SELECT paramValue FROM styles WHERE styleNameId = {0} AND paramName = 'anyButtonFontWeightVal'", id)));
+
+            style["anyTabItemBackgroundVal"] = brushConverter.ConvertFromString((string)DBContext.CommandScalar(string.Format("SELECT paramValue FROM styles WHERE styleNameId = {0} AND paramName = 'anyTabItemBackgroundVal'", id)));
+            style["anyTabItemForegroundVal"] = brushConverter.ConvertFromString((string)DBContext.CommandScalar(string.Format("SELECT paramValue FROM styles WHERE styleNameId = {0} AND paramName = 'anyTabItemForegroundVal'", id)));
+            style["anyTabItemBorderBrushVal"] = brushConverter.ConvertFromString((string)DBContext.CommandScalar(string.Format("SELECT paramValue FROM styles WHERE styleNameId = {0} AND paramName = 'anyTabItemBorderBrushVal'", id)));
+            style["anyTabItemCornerVal"] = cornerRadiusConverter.ConvertFromString(((string)DBContext.CommandScalar(string.Format("SELECT paramValue FROM styles WHERE styleNameId = {0} AND paramName = 'anyTabItemCornerVal'", id))).Replace(",", " "));
+            style["anyTabItemFontFamilyVal"] = fontFamilyConverter.ConvertFromString((string)DBContext.CommandScalar(string.Format("SELECT paramValue FROM styles WHERE styleNameId = {0} AND paramName = 'anyTabItemFontFamilyVal'", id)));
+            style["anyTabItemFontSizeVal"] = Convert.ToDouble((string)DBContext.CommandScalar(string.Format("SELECT paramValue FROM styles WHERE styleNameId = {0} AND paramName = 'anyTabItemFontSizeVal'", id)));
+            style["anyTabItemFontStyleVal"] = fontStyleConverter.ConvertFromString((string)DBContext.CommandScalar(string.Format("SELECT paramValue FROM styles WHERE styleNameId = {0} AND paramName = 'anyTabItemFontStyleVal'", id)));
+            style["anyTabItemFontWeightVal"] = fontWeightConverter.ConvertFromString((string)DBContext.CommandScalar(string.Format("SELECT paramValue FROM styles WHERE styleNameId = {0} AND paramName = 'anyTabItemFontWeightVal'", id)));
+
+            style["anyComboBackgroundVal"] = brushConverter.ConvertFromString((string)DBContext.CommandScalar(string.Format("SELECT paramValue FROM styles WHERE styleNameId = {0} AND paramName = 'anyComboBackgroundVal'", id)));
+            style["anyComboForegroundVal"] = brushConverter.ConvertFromString((string)DBContext.CommandScalar(string.Format("SELECT paramValue FROM styles WHERE styleNameId = {0} AND paramName = 'anyComboForegroundVal'", id)));
+            style["anyComboBorderBrushVal"] = brushConverter.ConvertFromString((string)DBContext.CommandScalar(string.Format("SELECT paramValue FROM styles WHERE styleNameId = {0} AND paramName = 'anyComboBorderBrushVal'", id)));
+            style["anyComboArrowVal"] = brushConverter.ConvertFromString((string)DBContext.CommandScalar(string.Format("SELECT paramValue FROM styles WHERE styleNameId = {0} AND paramName = 'anyComboArrowVal'", id)));
+            style["anyComboMouseOverVal"] = brushConverter.ConvertFromString((string)DBContext.CommandScalar(string.Format("SELECT paramValue FROM styles WHERE styleNameId = {0} AND paramName = 'anyComboMouseOverVal'", id)));
+            style["anyComboPressedVal"] = brushConverter.ConvertFromString((string)DBContext.CommandScalar(string.Format("SELECT paramValue FROM styles WHERE styleNameId = {0} AND paramName = 'anyComboPressedVal'", id)));
+            style["anyComboUnpressedVal"] = brushConverter.ConvertFromString((string)DBContext.CommandScalar(string.Format("SELECT paramValue FROM styles WHERE styleNameId = {0} AND paramName = 'anyComboUnpressedVal'", id)));
+            style["anyComboPopupBackVal"] = brushConverter.ConvertFromString((string)DBContext.CommandScalar(string.Format("SELECT paramValue FROM styles WHERE styleNameId = {0} AND paramName = 'anyComboPopupBackVal'", id)));
+            style["anyComboPopupBorderVal"] = brushConverter.ConvertFromString((string)DBContext.CommandScalar(string.Format("SELECT paramValue FROM styles WHERE styleNameId = {0} AND paramName = 'anyComboPopupBorderVal'", id)));
+            style["anyComboCornerVal"] = cornerRadiusConverter.ConvertFromString(((string)DBContext.CommandScalar(string.Format("SELECT paramValue FROM styles WHERE styleNameId = {0} AND paramName = 'anyComboCornerVal'", id))).Replace(",", " "));
+            style["anyComboCornerArrowVal"] = cornerRadiusConverter.ConvertFromString(((string)DBContext.CommandScalar(string.Format("SELECT paramValue FROM styles WHERE styleNameId = {0} AND paramName = 'anyComboCornerArrowVal'", id))).Replace(",", " "));
+            style["anyComboFontFamilyVal"] = fontFamilyConverter.ConvertFromString((string)DBContext.CommandScalar(string.Format("SELECT paramValue FROM styles WHERE styleNameId = {0} AND paramName = 'anyComboFontFamilyVal'", id)));
+            style["anyComboFontSizeVal"] = Convert.ToDouble((string)DBContext.CommandScalar(string.Format("SELECT paramValue FROM styles WHERE styleNameId = {0} AND paramName = 'anyComboFontSizeVal'", id)));
+            style["anyComboFontStyleVal"] = fontStyleConverter.ConvertFromString((string)DBContext.CommandScalar(string.Format("SELECT paramValue FROM styles WHERE styleNameId = {0} AND paramName = 'anyComboFontStyleVal'", id)));
+            style["anyComboFontWeightVal"] = fontWeightConverter.ConvertFromString((string)DBContext.CommandScalar(string.Format("SELECT paramValue FROM styles WHERE styleNameId = {0} AND paramName = 'anyComboFontWeightVal'", id)));
         }
     }
 }
