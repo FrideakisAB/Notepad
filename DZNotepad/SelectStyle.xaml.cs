@@ -73,10 +73,7 @@ namespace DZNotepad
 
         private void DropItem_Click(object sender, RoutedEventArgs e)
         {
-            if (Item != null)
-                Item.DeleteElement();
-            else
-                MessageBox.Show("Выберите стиль для удаления!");
+            Item?.DeleteElement();
         }
 
         private void AddItem_Click(object sender, RoutedEventArgs e)
@@ -88,7 +85,7 @@ namespace DZNotepad
 
         private void RenameStyle_Click(object sender, RoutedEventArgs e)
         {
-            Item.RequestRename();
+            Item?.RequestRename();
         }
 
         public void Notify(ResourceDictionary dictionary)
@@ -99,7 +96,8 @@ namespace DZNotepad
 
         private void StyleList_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            DictionaryProvider.LoadStyleFromDB(preview.Resources, Item.Text);
+            if (Item != null)
+                DictionaryProvider.LoadStyleFromDB(preview.Resources, Item.Text);
         }
 
         private void ApplyChangedStyle_Click(object sender, RoutedEventArgs e)

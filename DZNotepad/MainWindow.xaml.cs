@@ -88,6 +88,8 @@ namespace DZNotepad
         private void UpdateStyleObservers(ResourceDictionary dictionary)
         {
             DictionaryProvider.ApplyDictionary(this.Resources, dictionary);
+            foreach (var tab in tabsContainer.Items)
+                (tab as CloseableTab)?.SetStyle(this.Resources["AnyStyleTabItem"] as Style);
         }
 
         void createNewTab(string path=null)
