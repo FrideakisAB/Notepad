@@ -24,6 +24,19 @@ namespace DZNotepad
         {
             InitializeComponent();
             editableFile = file;
+
+            SelectStyle.UpdateStyleObservers += UpdateStyleObservers;
+            DictionaryProvider.ApplyDictionary(this.Resources, SelectStyle.CurrentDictionary);
+        }
+
+        ~ReplaceWindow()
+        {
+            SelectStyle.UpdateStyleObservers -= UpdateStyleObservers;
+        }
+
+        private void UpdateStyleObservers(ResourceDictionary dictionary)
+        {
+            DictionaryProvider.ApplyDictionary(this.Resources, dictionary);
         }
 
         public void ChangeEditableFile(EditableFile file)

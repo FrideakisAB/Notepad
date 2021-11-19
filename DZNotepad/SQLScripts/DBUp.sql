@@ -14,8 +14,6 @@ CREATE TABLE IF NOT EXISTS styles (
     FOREIGN KEY (styleNameId) REFERENCES stylesNames(styleNameId) ON DELETE CASCADE
 );
 
--- TODO: сделать вставку начальных стилей (ситуация удаления БД)
-
 CREATE TABLE IF NOT EXISTS lastFiles (
     filename NVARCHAR(256) NOT NULL,
     PRIMARY KEY (filename)

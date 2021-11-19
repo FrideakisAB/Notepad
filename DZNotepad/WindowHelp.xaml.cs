@@ -20,6 +20,19 @@ namespace DZNotepad
         public WindowHelp()
         {
             InitializeComponent();
+
+            SelectStyle.UpdateStyleObservers += UpdateStyleObservers;
+            DictionaryProvider.ApplyDictionary(this.Resources, SelectStyle.CurrentDictionary);
+        }
+
+        ~WindowHelp()
+        {
+            SelectStyle.UpdateStyleObservers -= UpdateStyleObservers;
+        }
+
+        private void UpdateStyleObservers(ResourceDictionary dictionary)
+        {
+            DictionaryProvider.ApplyDictionary(this.Resources, dictionary);
         }
     }
 }

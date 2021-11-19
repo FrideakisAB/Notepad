@@ -18,6 +18,7 @@
     <None Remove="Icons\Меню - Справка.png" />
     <None Remove="Icons\Меню - Файл.png" />
     <None Remove="SQLScripts\DBUp.sql" />
+    <None Remove="SQLScripts\LightThemeSetup.sql" />
   </ItemGroup>
 
   <ItemGroup>
@@ -59,6 +60,7 @@
     <Resource Include="Icons\Меню - Справка.png" />
     <Resource Include="Icons\Меню - Файл.png" />
     <EmbeddedResource Include="SQLScripts\DBUp.sql" />
+    <EmbeddedResource Include="SQLScripts\LightThemeSetup.sql" />
   </ItemGroup>
 
 </Project>

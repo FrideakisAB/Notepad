@@ -63,23 +63,44 @@ namespace DZNotepad.UserElements
 
         private void SetStyle_Click(object sender, RoutedEventArgs e)
         {
-
+            Apply();
         }
 
         private void DropItem_Click(object sender, RoutedEventArgs e)
         {
-             var result = MessageBox.Show("Вы хотите удалить стиль " + Text, "Удаление " + Text, MessageBoxButton.YesNo, MessageBoxImage.Question);
-             if (result == MessageBoxResult.Yes)
-             {
-                 selectStyle.StyleList.Items.Remove(this);
-                 //TODO: БД удаление
-             }
+            DeleteElement();
         }
 
         private void RenameItem_Click(object sender, RoutedEventArgs e)
         {
+            RequestRename();
+        }
+
+        public void RequestRename()
+        {
+            string oldName = text;
             RenameStyle renameStyle = new RenameStyle(selectStyle, this);
-            renameStyle.Show();
+            renameStyle.ShowDialog();
+
+            if (oldName != text)
+                DBContext.Command($"UPDATE stylesNames SET styleName = '{text}' WHERE styleNameId = (SELECT styleNameId FROM stylesNames WHERE styleName = '{oldName}')");
+        }
+
+        public void DeleteElement()
+        {
+            var result = MessageBox.Show("Вы хотите удалить стиль " + Text, "Удаление " + Text, MessageBoxButton.YesNo, MessageBoxImage.Question);
+            if (result == MessageBoxResult.Yes)
+            {
+                selectStyle.StyleList.Items.Remove(this);
+                DBContext.Command($"DELETE FROM stylesNames WHERE styleNameId = (SELECT styleNameId FROM stylesNames WHERE styleName = '{text}')");
+            }
+        }
+
+        public void Apply()
+        {
+            ResourceDictionary dictionary = new ResourceDictionary();
+            DictionaryProvider.LoadStyleFromDB(dictionary, text);
+            selectStyle.Notify(dictionary);
         }
     }
 }

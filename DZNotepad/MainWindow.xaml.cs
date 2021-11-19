@@ -46,6 +46,7 @@ namespace DZNotepad
         {
             Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
             InitializeComponent();
+            SelectStyle.CurrentDictionary = this.Resources;
             DataContext = this;
 
             CPUUsage = new ChartValues<double>(new double[120]);
@@ -75,6 +76,18 @@ namespace DZNotepad
                 while (reader.Read())
                     lastFiles.Add(reader.GetValue(0) as string);
             }
+
+            SelectStyle.UpdateStyleObservers += UpdateStyleObservers;
+        }
+
+        ~MainWindow()
+        {
+            SelectStyle.UpdateStyleObservers -= UpdateStyleObservers;
+        }
+
+        private void UpdateStyleObservers(ResourceDictionary dictionary)
+        {
+            DictionaryProvider.ApplyDictionary(this.Resources, dictionary);
         }
 
         void createNewTab(string path=null)

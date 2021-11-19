@@ -12,6 +12,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
+using Microsoft.Data.Sqlite;
 
 namespace DZNotepad
 {
@@ -21,6 +22,7 @@ namespace DZNotepad
     public partial class SelectStyle : Window
     {
         PreviewPage preview = new PreviewPage();
+
         public StyleItem Item
         {
             get
@@ -28,120 +30,110 @@ namespace DZNotepad
                return (StyleItem)StyleList.SelectedItem;
             }
         }
+
+        public delegate void UpdateStyle(ResourceDictionary dictionary);
+        public static event UpdateStyle UpdateStyleObservers;
+        public static ResourceDictionary CurrentDictionary;
+
         public SelectStyle()
         {
             InitializeComponent();
 
-            
-            StyleList.Items.Add(new StyleItem("Светлый стиль", this));
-            StyleList.Items.Add(new StyleItem("Темный стиль", this));
-            StyleList.Items.Add(new StyleItem("Серый стиль", this));
-            //TODO: БД инициализация
+            previewFrame.Navigate(preview);
+
+            SqliteDataReader reader = DBContext.CommandReader("SELECT styleName FROM stylesNames");
+
+            if (!reader.HasRows)
+            {
+                //TODO: сделать скрипт для добавления стандартных тем
+                //TODO: запустить скрипт для добавления стандартных тем
+            }
+
+            if (reader.HasRows)
+            {
+                while (reader.Read())
+                    StyleList.Items.Add(new StyleItem(reader.GetString(0), this));
+            }
+
+            UpdateStyleObservers += SelectStyle_UpdateStyleObservers;
+            DictionaryProvider.ApplyDictionary(this.Resources, CurrentDictionary);
+
+            editableItem.SelectedIndex = 0;
+        }
+
+        ~SelectStyle()
+        {
+            UpdateStyleObservers -= SelectStyle_UpdateStyleObservers;
+        }
+
+        private void SelectStyle_UpdateStyleObservers(ResourceDictionary dictionary)
+        {
+            DictionaryProvider.ApplyDictionary(this.Resources, dictionary);
         }
 
         private void DropItem_Click(object sender, RoutedEventArgs e)
         {
-            if (StyleList.SelectedItem != null)
-            {
-                var result = MessageBox.Show("Вы хотите удалить стиль " + (StyleList.SelectedItem as StyleItem).Text, "Удаление " + (StyleList.SelectedItem as StyleItem).Text, MessageBoxButton.YesNo, MessageBoxImage.Question);
-                if (result == MessageBoxResult.Yes)
-                {
-                    StyleList.Items.Remove(StyleList.SelectedItem);
-                    //TODO: БД удаление
-                }
-            }
-            else 
-            {
+            if (Item != null)
+                Item.DeleteElement();
+            else
                 MessageBox.Show("Выберите стиль для удаления!");
-            }        
         }
 
         private void AddItem_Click(object sender, RoutedEventArgs e)
         {
-            NameStyle nameStyle = new NameStyle(this);
-            nameStyle.Owner = this;
-            nameStyle.Show();
+            CreateStyle createStyle = new CreateStyle(this);
+            createStyle.Owner = this;
+            createStyle.ShowDialog();
         }
 
-        private void renameStyle_Click(object sender, RoutedEventArgs e)
+        private void RenameStyle_Click(object sender, RoutedEventArgs e)
         {
-
-            RenameStyle renameStyle = new RenameStyle(this, (StyleList.SelectedItem as StyleItem));
-            renameStyle.Owner = this;
-            renameStyle.Show();
+            Item.RequestRename();
         }
 
-        private void Elements_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        public void Notify(ResourceDictionary dictionary)
         {
-            switch (Elements.SelectedIndex)
+            CurrentDictionary = dictionary;
+            UpdateStyleObservers?.Invoke(dictionary);
+        }
+
+        private void StyleList_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            DictionaryProvider.LoadStyleFromDB(preview.Resources, Item.Text);
+        }
+
+        private void ApplyChangedStyle_Click(object sender, RoutedEventArgs e)
+        {
+            if (Item != null)
+                Notify(preview.Resources);
+        }
+
+        private void SaveChangedStyle_Click(object sender, RoutedEventArgs e)
+        {
+            if (Item != null)
             {
-                case 0:
-                    CornerValue.IsEnabled = true;
-                    break;
-                case 1:
-                    CornerValue.IsEnabled = true;
-                    break;
-                case 2:
-                    CornerValue.IsEnabled = true;
-                    break;
-                case 3:
-                    CornerValue.IsEnabled = false;
-                    break;                  
-                case 4:                     
-                    CornerValue.IsEnabled = false;
-                    break;
-                case 5:
-                    CornerValue.IsEnabled = true;
-                    break;
+                DBContext.Command($"DELETE FROM styles WHERE styleNameId = (SELECT styleNameId FROM stylesNames WHERE styleName = '{Item.Text}')");
+                DictionaryProvider.SaveStyleInDB(preview.Resources, Item.Text);
             }
         }
 
-        private void CornerValue_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
+        private void EditableItem_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            switch (Elements.SelectedIndex)
+            switch ((string)(editableItem.SelectedItem as ComboBoxItem).Content)
             {
-                case 0:
-                    preview.TestButton.Resources["anyButtonCornerVal"] = new CornerRadius(CornerValue.Value);
+                case "Фон":
                     break;
-                case 1:
-                    preview.TestComboBox.Resources["anyComboCornerVal"] = new CornerRadius(CornerValue.Value);
-                    break;
-                case 2:
-                    preview.TestTextBox.Resources["anyTBCornerVal"] = new CornerRadius(CornerValue.Value);
-                    break;
-                case 3:
 
+                case "Поле ввода":
                     break;
-                case 4:
 
+                case "Кнопка":
                     break;
-                case 5:
-                    preview.TestTab.Resources["anyTabItemCornerVal"] = new CornerRadius(CornerValue.Value);
-                    break;
-            }
-        }
 
-        private void FontFamilyBox_DropDownClosed(object sender, EventArgs e)
-        {
-            switch (Elements.SelectedIndex)
-            {
-                case 0:
-                    preview.TestButton.Resources["anyButtonFontFamilyVal"] = new FontFamily(FontFamilyBox.SelectedItem.ToString());
+                case "Вкладка":
                     break;
-                case 1:
-                    preview.TestComboBox.Resources["anyComboFontFamilyVal"] = new FontFamily(FontFamilyBox.SelectedItem.ToString());
-                    break;
-                case 2:
-                    preview.TestTextBox.Resources["anyTBFontFamilyVal"] = new FontFamily(FontFamilyBox.SelectedItem.ToString());
-                    break;
-                case 3:
-                    preview.TestText.Resources["anyFontFamilyVal"] = new FontFamily(FontFamilyBox.SelectedItem.ToString());
-                    break;
-                case 4:
-                    preview.TestBackground.Resources["anyFontFamilyVal"] = new FontFamily(FontFamilyBox.SelectedItem.ToString());
-                    break;
-                case 5:
-                    preview.TestTab.Resources["anyTabItemFontFamilyVal"] = new FontFamily(FontFamilyBox.SelectedItem.ToString());
+
+                case "Список":
                     break;
             }
         }
