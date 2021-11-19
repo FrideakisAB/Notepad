@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Linq;
 using System.Text;
 using System.Windows;
 using System.Windows.Controls;
@@ -19,7 +20,8 @@ namespace DZNotepad
     /// </summary>
     public partial class SelectStyle : Window
     {
-        public object Item
+        PreviewPage preview = new PreviewPage();
+        public StyleItem Item
         {
             get
             {
@@ -30,6 +32,7 @@ namespace DZNotepad
         {
             InitializeComponent();
 
+            
             StyleList.Items.Add(new StyleItem("Светлый стиль", this));
             StyleList.Items.Add(new StyleItem("Темный стиль", this));
             StyleList.Items.Add(new StyleItem("Серый стиль", this));
@@ -98,13 +101,13 @@ namespace DZNotepad
             switch (Elements.SelectedIndex)
             {
                 case 0:
-                    TestButton.Resources["anyButtonCornerVal"] = new CornerRadius(CornerValue.Value);
+                    preview.TestButton.Resources["anyButtonCornerVal"] = new CornerRadius(CornerValue.Value);
                     break;
                 case 1:
-                    TestComboBox.Resources["anyComboCornerVal"] = new CornerRadius(CornerValue.Value);
+                    preview.TestComboBox.Resources["anyComboCornerVal"] = new CornerRadius(CornerValue.Value);
                     break;
                 case 2:
-                    TestTextBox.Resources["anyTBCornerVal"] = new CornerRadius(CornerValue.Value);
+                    preview.TestTextBox.Resources["anyTBCornerVal"] = new CornerRadius(CornerValue.Value);
                     break;
                 case 3:
 
@@ -113,7 +116,32 @@ namespace DZNotepad
 
                     break;
                 case 5:
-                    TestTab.Resources["anyTabItemCornerVal"] = new CornerRadius(CornerValue.Value);
+                    preview.TestTab.Resources["anyTabItemCornerVal"] = new CornerRadius(CornerValue.Value);
+                    break;
+            }
+        }
+
+        private void FontFamilyBox_DropDownClosed(object sender, EventArgs e)
+        {
+            switch (Elements.SelectedIndex)
+            {
+                case 0:
+                    preview.TestButton.Resources["anyButtonFontFamilyVal"] = new FontFamily(FontFamilyBox.SelectedItem.ToString());
+                    break;
+                case 1:
+                    preview.TestComboBox.Resources["anyComboFontFamilyVal"] = new FontFamily(FontFamilyBox.SelectedItem.ToString());
+                    break;
+                case 2:
+                    preview.TestTextBox.Resources["anyTBFontFamilyVal"] = new FontFamily(FontFamilyBox.SelectedItem.ToString());
+                    break;
+                case 3:
+                    preview.TestText.Resources["anyFontFamilyVal"] = new FontFamily(FontFamilyBox.SelectedItem.ToString());
+                    break;
+                case 4:
+                    preview.TestBackground.Resources["anyFontFamilyVal"] = new FontFamily(FontFamilyBox.SelectedItem.ToString());
+                    break;
+                case 5:
+                    preview.TestTab.Resources["anyTabItemFontFamilyVal"] = new FontFamily(FontFamilyBox.SelectedItem.ToString());
                     break;
             }
         }
