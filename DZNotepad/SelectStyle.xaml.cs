@@ -35,6 +35,8 @@ namespace DZNotepad
         public static event UpdateStyle UpdateStyleObservers;
         public static ResourceDictionary CurrentDictionary;
 
+        private IEditorPage currentEditor = null;
+
         public SelectStyle()
         {
             InitializeComponent();
@@ -97,7 +99,10 @@ namespace DZNotepad
         private void StyleList_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             if (Item != null)
+            {
                 DictionaryProvider.LoadStyleFromDB(preview.Resources, Item.Text);
+                currentEditor?.ChangePreview();
+            }
         }
 
         private void ApplyChangedStyle_Click(object sender, RoutedEventArgs e)
@@ -120,6 +125,8 @@ namespace DZNotepad
             switch ((string)(editableItem.SelectedItem as ComboBoxItem).Content)
             {
                 case "Фон":
+                    currentEditor = new BackgroundEditor(preview);
+                    changeFrame.Navigate(currentEditor);
                     break;
 
                 case "Поле ввода":

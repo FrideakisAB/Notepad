@@ -16,6 +16,8 @@ namespace DZNotepad
             DefaultStyleKeyProperty.OverrideMetadata(typeof(ColorPicker), new FrameworkPropertyMetadata(typeof(ColorPicker)));
         }
 
+        public event EventHandler SelectedColorChanged;
+
         public CornerRadius CornerRadius
         {
             get { return (CornerRadius)GetValue(CornerRadiusProperty); }
@@ -74,7 +76,6 @@ namespace DZNotepad
         internal static readonly DependencyProperty DefaultColorsProperty =
             DependencyProperty.Register("DefaultColors", typeof(ObservableCollection<Brush>), typeof(ColorPicker), new PropertyMetadata(GetDefaultColors()));
 
-
         internal int AlphaValue
         {
             get { return (int)GetValue(AlphaValueProperty); }
@@ -84,7 +85,6 @@ namespace DZNotepad
         internal static readonly DependencyProperty AlphaValueProperty =
             DependencyProperty.Register("AlphaValue", typeof(int), typeof(ColorPicker), new FrameworkPropertyMetadata(255, AlphaValue_Changed));
 
-
         internal Color StartColor
         {
             get { return (Color)GetValue(StartColorProperty); }
@@ -93,7 +93,6 @@ namespace DZNotepad
 
         internal static readonly DependencyProperty StartColorProperty =
             DependencyProperty.Register("StartColor", typeof(Color), typeof(ColorPicker));
-
 
         internal Color EndColor
         {
@@ -141,6 +140,7 @@ namespace DZNotepad
 
             cp.StartColor = Color.FromArgb(0, color.R, color.G, color.B);
             cp.EndColor = Color.FromArgb(255, color.R, color.G, color.B);
+            cp.SelectedColorChanged?.Invoke(cp, new EventArgs());
         }
 
         private static List<Tuple<int, int, int>> GetUserCustomColors()
@@ -255,6 +255,7 @@ namespace DZNotepad
             return result;
         }
     }
+
     public static class ColorExtensions
     {
         public static Brush ToBrush(this Color color)
