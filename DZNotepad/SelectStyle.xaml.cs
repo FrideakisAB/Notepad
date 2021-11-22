@@ -122,6 +122,7 @@ namespace DZNotepad
 
         private void EditableItem_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
+            changeFrame.NavigationService.RemoveBackEntry();
             switch ((string)(editableItem.SelectedItem as ComboBoxItem).Content)
             {
                 case "Фон":
@@ -136,6 +137,8 @@ namespace DZNotepad
                     break;
 
                 case "Вкладка":
+                    currentEditor = new TabItemEditor(preview);
+                    changeFrame.Navigate(currentEditor);
                     break;
 
                 case "Список":

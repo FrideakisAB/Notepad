@@ -1,4 +1,4 @@
-﻿<Page x:Class="DZNotepad.BackgroundEditor"
+﻿<Page x:Class="DZNotepad.TabItemEditor"
       xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
@@ -6,7 +6,7 @@
       xmlns:local="clr-namespace:DZNotepad"
       mc:Ignorable="d"
       d:DesignHeight="175" d:DesignWidth="480"
-      Title="BackgroundEditor">
+      Title="TabItemEditor">
     <Page.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
@@ -88,6 +88,10 @@
                 <x:Static Member="FontWeights.UltraBold"/>
                 <x:Static Member="FontWeights.UltraLight"/>
             </ComboBox>
+        </StackPanel>
+        <StackPanel Orientation="Horizontal" Grid.Row="4" Grid.Column="1">
+            <Label Style="{DynamicResource AnyStyle}" Content="Закругление" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+            <Slider x:Name="cornerSlider" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" ValueChanged="cornerSlider_ValueChanged" Width="90" Height="18"/>
         </StackPanel>
     </Grid>
 </Page>

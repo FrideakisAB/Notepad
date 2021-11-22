@@ -41,15 +41,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Reference Include="GoogleTranslateFreeApi">
-      <HintPath>deps\GoogleTranslateFreeApi.dll</HintPath>
-    </Reference>
-    <Reference Include="Newtonsoft.Json">
-      <HintPath>deps\Newtonsoft.Json.dll</HintPath>
-    </Reference>
-  </ItemGroup>
-
-  <ItemGroup>
     <Resource Include="gears.png" />
     <Resource Include="Icons\iconCheck.png" />
     <Resource Include="Icons\iconColorPicker.png" />
