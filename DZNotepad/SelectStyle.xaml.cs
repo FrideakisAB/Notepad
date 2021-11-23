@@ -142,6 +142,8 @@ namespace DZNotepad
                     break;
 
                 case "Список":
+                    currentEditor = new ComboBoxEditor(preview);
+                    changeFrame.Navigate(currentEditor);
                     break;
             }
         }
