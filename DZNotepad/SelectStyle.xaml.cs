@@ -13,6 +13,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 using Microsoft.Data.Sqlite;
+using DZNotepad.Pages;
 
 namespace DZNotepad
 {
@@ -131,9 +132,13 @@ namespace DZNotepad
                     break;
 
                 case "Поле ввода":
+                    currentEditor = new TextBoxEditor(preview);
+                    changeFrame.Navigate(currentEditor);
                     break;
 
                 case "Кнопка":
+                    currentEditor = new ButtonEditor(preview);
+                    changeFrame.Navigate(currentEditor);
                     break;
 
                 case "Вкладка":
