@@ -55,11 +55,13 @@ namespace DZNotepad.UserElements
         private string encoding = Encoding.Default.BodyName.ToUpper();
         private Encoding srcEncoding = Encoding.Default;
         private Encoding dstEncoding = Encoding.Default;
+        private LastFiles lastFiles;
 
-        public EditableFile(CloseableTab tab, FileInfoBlock fileBblock, TranslateInfoBlock translateBlock)
+        public EditableFile(LastFiles lastFiles, CloseableTab tab, FileInfoBlock fileBblock, TranslateInfoBlock translateBlock)
         {
             InitializeComponent();
             this.DataContext = this;
+            this.lastFiles = lastFiles;
 
             parentTab = tab;
             parentTab.Closed += parentTab_TabClosed;
@@ -70,7 +72,7 @@ namespace DZNotepad.UserElements
             updateState();
         }
 
-        public EditableFile(CloseableTab tab, FileInfoBlock fileBblock, TranslateInfoBlock translateBlock, string path) : this(tab, fileBblock, translateBlock)
+        public EditableFile(LastFiles lastFiles, CloseableTab tab, FileInfoBlock fileBblock, TranslateInfoBlock translateBlock, string path) : this(lastFiles, tab, fileBblock, translateBlock)
         {
             if (File.GetAttributes(path).HasFlag(FileAttributes.ReadOnly) ||
                 File.GetAttributes(path).HasFlag(FileAttributes.ReparsePoint) ||
@@ -277,6 +279,7 @@ namespace DZNotepad.UserElements
                 {
                     isEditable = false;
                     File.WriteAllText(fileName, textSource.Text, dstEncoding);
+                    lastFiles.RegisterNewFile(fileName);
                     lastWriteAcces = File.GetLastWriteTime(fileName);
                     parentTab.SetHeader(header);
 
@@ -306,6 +309,7 @@ namespace DZNotepad.UserElements
                     fileName = dlg.FileName;
                     header = System.IO.Path.GetFileName(fileName);
                     File.WriteAllText(fileName, textSource.Text, dstEncoding);
+                    lastFiles.RegisterNewFile(fileName);
                     lastWriteAcces = File.GetLastWriteTime(fileName);
                     parentTab.SetHeader(header);
 

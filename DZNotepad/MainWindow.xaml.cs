@@ -35,8 +35,7 @@ namespace DZNotepad
         TranslateInfoBlock translateInfoBlock = new TranslateInfoBlock();
         Translator translator = new Translator();
         PerformanceAnalyser analyser;
-
-        List<string> lastFiles = new List<string>(5);
+        LastFiles lastFiles = new LastFiles();
 
         public ChartValues<double> CPUUsage { get; set; }
         public ChartValues<double> MemoryUsage { get; set; }
@@ -46,7 +45,7 @@ namespace DZNotepad
         {
             Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
             InitializeComponent();
-            SelectStyle.CurrentDictionary = this.Resources;
+            SelectStyle.CurrentDictionary = Resources;
             DataContext = this;
 
             CPUUsage = new ChartValues<double>(new double[120]);
@@ -65,19 +64,25 @@ namespace DZNotepad
             translateInfoBlock.IsAutoTranslate = false;
             translateInfoBlock.Language = string.Empty;
 
+            LastFiles_OnAddFile(lastFiles, new EventArgs());
+
+            lastFiles.OnAddFile += LastFiles_OnAddFile;
+
             createNewTab();
 
             if (!File.Exists(Directory.GetCurrentDirectory() + "\\data.db"))
                 DBContext.Command(DBContext.LoadScriptFromResource("DZNotepad.SQLScripts.DBUp.sql"));
 
-            SqliteDataReader reader = DBContext.CommandReader("SELECT * FROM lastFiles");
-            if (reader.HasRows)
-            {
-                while (reader.Read())
-                    lastFiles.Add(reader.GetValue(0) as string);
-            }
-
             SelectStyle.UpdateStyleObservers += UpdateStyleObservers;
+        }
+
+        private void LastFiles_OnAddFile(object sender, EventArgs e)
+        {
+            lastFilesMenu.Items.Clear();
+
+            string[] files = lastFiles.GetLastFiles();
+            for (int i = files.Length - 1; i >= 0; i--)
+                lastFilesMenu.Items.Add(files[i]);
         }
 
         ~MainWindow()
@@ -99,7 +104,7 @@ namespace DZNotepad
                 CloseableTab item = new CloseableTab();
                 item.SetStyle(this.Resources["AnyStyleTabItem"] as Style);
                 tabsContainer.Items.Add(item);
-                EditableFile editableFile = new EditableFile(item, fileInfoBlock, translateInfoBlock);
+                EditableFile editableFile = new EditableFile(lastFiles, item, fileInfoBlock, translateInfoBlock);
                 item.Content = editableFile;
                 tabsContainer.SelectedItem = item;
             }
@@ -118,21 +123,11 @@ namespace DZNotepad
                     CloseableTab item = new CloseableTab();
                     item.SetStyle(this.Resources["AnyStyleTabItem"] as Style);
                     tabsContainer.Items.Add(item);
-                    EditableFile editableFile = new EditableFile(item, fileInfoBlock, translateInfoBlock, path);
+                    EditableFile editableFile = new EditableFile(lastFiles, item, fileInfoBlock, translateInfoBlock, path);
                     item.Content = editableFile;
                     tabsContainer.SelectedItem = item;
 
-                    if (!lastFiles.Contains(path))
-                    {
-                        if (lastFiles.Count == 5)
-                            lastFiles.RemoveAt(0);
-                        lastFiles.Add(path);
-                    }
-                    else
-                    {
-                        lastFiles.Remove(path);
-                        lastFiles.Add(path);
-                    }
+                    lastFiles.RegisterNewFile(path);
                 }
                 else
                 {
@@ -165,13 +160,7 @@ namespace DZNotepad
                 selectStyle.Close();
 
             analyser.Dispose();
-
-            if (lastFiles.Count != 0)
-            {
-                DBContext.Command("DELETE FROM lastFiles;");
-                foreach (string file in lastFiles)
-                    DBContext.Command(string.Format("INSERT INTO lastFiles VALUES ('{0}');", file));
-            }
+            lastFiles.Dispose();
         }
 
         private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
