@@ -35,7 +35,7 @@ namespace DZNotepad
         TranslateInfoBlock translateInfoBlock = new TranslateInfoBlock();
         Translator translator = new Translator();
         PerformanceAnalyser analyser;
-        LastFiles lastFiles = new LastFiles();
+        LastFiles lastFiles;
 
         public ChartValues<double> CPUUsage { get; set; }
         public ChartValues<double> MemoryUsage { get; set; }
@@ -64,14 +64,16 @@ namespace DZNotepad
             translateInfoBlock.IsAutoTranslate = false;
             translateInfoBlock.Language = string.Empty;
 
-            LastFiles_OnAddFile(lastFiles, new EventArgs());
-
-            lastFiles.OnAddFile += LastFiles_OnAddFile;
-
             createNewTab();
 
             if (!File.Exists(Directory.GetCurrentDirectory() + "\\data.db"))
                 DBContext.Command(DBContext.LoadScriptFromResource("DZNotepad.SQLScripts.DBUp.sql"));
+
+            lastFiles = new LastFiles();
+
+            LastFiles_OnAddFile(lastFiles, new EventArgs());
+
+            lastFiles.OnAddFile += LastFiles_OnAddFile;
 
             SelectStyle.UpdateStyleObservers += UpdateStyleObservers;
         }
