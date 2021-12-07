@@ -74,7 +74,7 @@ namespace DZNotepad.Pages
         private void borderBrushColor_SelectedColorChanged(object sender, EventArgs e)
         {
             if (Preview != null)
-                Preview.Resources["anyButtonForegroundVal"] = borderBrushColor.SelectedColor as SolidColorBrush;
+                Preview.Resources["anyButtonBorderBrushVal"] = borderBrushColor.SelectedColor as SolidColorBrush;
         }
 
         private void buttonMouseOverColor_SelectedColorChanged(object sender, EventArgs e)
