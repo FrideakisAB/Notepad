@@ -100,7 +100,7 @@
         </StackPanel>
         <StackPanel Orientation="Vertical" Grid.Row="0" Grid.RowSpan="2" Grid.Column="2">
             <Label Style="{DynamicResource AnyStyle}" Content="Закругление границ"/>
-            <Slider Width="130" x:Name="cornerRadiusEditor" VerticalAlignment="Bottom" Margin="5,0,0,10" Maximum="15" HorizontalAlignment="Left" ValueChanged="cornerRadiusEditor_ValueChanged"  />
+            <Slider Width="130" x:Name="cornerRadiusEditor" VerticalAlignment="Bottom" Margin="5,0,0,10" HorizontalAlignment="Left" ValueChanged="cornerRadiusEditor_ValueChanged"  />
         </StackPanel>
     </Grid>
 </Page>

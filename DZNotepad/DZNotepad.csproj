@@ -19,6 +19,11 @@
     <None Remove="Icons\Меню - Файл.png" />
     <None Remove="SQLScripts\DBUp.sql" />
     <None Remove="SQLScripts\LightThemeSetup.sql" />
+    <None Remove="SQLScripts\SetupBaseStyles.sql" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Include="SQLScripts\SetupBaseStyles.sql" />
   </ItemGroup>
 
   <ItemGroup>

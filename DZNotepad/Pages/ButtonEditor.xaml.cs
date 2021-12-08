@@ -46,16 +46,17 @@ namespace DZNotepad.Pages
         {
             if (Preview != null)
             {
-                backgroundColor.SelectedColor = Preview.Resources["anyBackgroundVal"] as SolidColorBrush;
-                foregroundColor.SelectedColor = Preview.Resources["anyForegroundVal"] as SolidColorBrush;
-                borderBrushColor.SelectedColor = Preview.Resources["anyBorderBrushVal"] as SolidColorBrush;
+                backgroundColor.SelectedColor = Preview.Resources["anyButtonBackgroundVal"] as SolidColorBrush;
+                foregroundColor.SelectedColor = Preview.Resources["anyButtonForegroundVal"] as SolidColorBrush;
+                borderBrushColor.SelectedColor = Preview.Resources["anyButtonBorderBrushVal"] as SolidColorBrush;
 
-                fontFamilyCombo.SelectedItem = fontFamilyCombo.Items.Cast<FontFamily>().Where(i => i.Equals(Preview.Resources["anyFontFamilyVal"])).First();
+                fontFamilyCombo.SelectedItem = fontFamilyCombo.Items.Cast<FontFamily>().Where(i => i.Equals(Preview.Resources["anyButtonFontFamilyVal"])).First();
 
-                string fontSize = ((int)((double)Preview.Resources["anyFontSizeVal"])).ToString();
+                string fontSize = ((int)((double)Preview.Resources["anyButtonFontSizeVal"])).ToString();
                 fontSizeCombo.SelectedItem = fontSizeCombo.Items.Cast<ComboBoxItem>().Where(i => (i.Content as string) == fontSize).First();
-                fontStyleCombo.SelectedItem = fontStyleCombo.Items.Cast<FontStyle>().Where(i => i.Equals(Preview.Resources["anyFontStyleVal"])).First();
-                fontWeightCombo.SelectedItem = fontWeightCombo.Items.Cast<FontWeight>().Where(i => i.Equals(Preview.Resources["anyFontWeightVal"])).First();
+                fontStyleCombo.SelectedItem = fontStyleCombo.Items.Cast<FontStyle>().Where(i => i.Equals(Preview.Resources["anyButtonFontStyleVal"])).First();
+                fontWeightCombo.SelectedItem = fontWeightCombo.Items.Cast<FontWeight>().Where(i => i.Equals(Preview.Resources["anyButtonFontWeightVal"])).First();
+                cornerRadiusEditor.Value = ((CornerRadius)Preview.Resources["anyButtonCornerVal"]).TopLeft;
             }
         }
 

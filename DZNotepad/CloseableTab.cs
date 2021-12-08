@@ -43,7 +43,6 @@ namespace DZNotepad
 
         public void SetStyle(Style style)
         {
-            // (Header as DockPanel).Style = style;
             this.Style = style;
         }
     }
