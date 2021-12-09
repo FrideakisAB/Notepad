@@ -47,7 +47,10 @@ namespace DZNotepad
             SqliteDataReader reader = DBContext.CommandReader("SELECT styleName FROM stylesNames");
 
             if (!reader.HasRows)
+            {
                 DBContext.Command(DBContext.LoadScriptFromResource("DZNotepad.SQLScripts.SetupBaseStyles.sql"));
+                reader = DBContext.CommandReader("SELECT styleName FROM stylesNames");
+            }
 
             if (reader.HasRows)
             {

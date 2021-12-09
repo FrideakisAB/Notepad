@@ -91,7 +91,7 @@
         </StackPanel>
         <StackPanel Orientation="Horizontal" Grid.Row="4" Grid.Column="1">
             <Label Style="{DynamicResource AnyStyle}" Content="Закругление" HorizontalAlignment="Center" VerticalAlignment="Center"/>
-            <Slider x:Name="cornerSlider" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" ValueChanged="cornerSlider_ValueChanged" Width="90" Height="18"/>
+            <Slider x:Name="cornerSlider" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" ValueChanged="cornerSlider_ValueChanged" Width="90" Height="18" Maximum="15" SmallChange="1" IsSnapToTickEnabled="True" TickFrequency="1"/>
         </StackPanel>
     </Grid>
 </Page>
