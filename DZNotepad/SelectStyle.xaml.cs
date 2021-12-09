@@ -47,10 +47,7 @@ namespace DZNotepad
             SqliteDataReader reader = DBContext.CommandReader("SELECT styleName FROM stylesNames");
 
             if (!reader.HasRows)
-            {
-                //TODO: сделать скрипт для добавления стандартных тем
-                //TODO: запустить скрипт для добавления стандартных тем
-            }
+                DBContext.Command(DBContext.LoadScriptFromResource("DZNotepad.SQLScripts.SetupBaseStyles.sql"));
 
             if (reader.HasRows)
             {
@@ -109,7 +106,11 @@ namespace DZNotepad
         private void ApplyChangedStyle_Click(object sender, RoutedEventArgs e)
         {
             if (Item != null)
-                Notify(preview.Resources);
+            {
+                ResourceDictionary dictionary = new ResourceDictionary();
+                DictionaryProvider.ApplyDictionary(dictionary, preview.Resources);
+                Notify(dictionary);
+            }
         }
 
         private void SaveChangedStyle_Click(object sender, RoutedEventArgs e)

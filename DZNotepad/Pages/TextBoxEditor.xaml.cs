@@ -27,9 +27,9 @@ namespace DZNotepad.Pages
 
             Preview = preview;
 
-            ChangePreview();
-
             DictionaryProvider.ApplyDictionary(this.Resources, SelectStyle.CurrentDictionary);
+
+            ChangePreview();
 
             SelectStyle.UpdateStyleObservers += UpdateStyleObservers;
         }

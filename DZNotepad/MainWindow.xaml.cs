@@ -65,10 +65,7 @@ namespace DZNotepad
             translateInfoBlock.Language = string.Empty;
 
             if (!File.Exists(Directory.GetCurrentDirectory() + "\\data.db"))
-            {
                 DBContext.Command(DBContext.LoadScriptFromResource("DZNotepad.SQLScripts.DBUp.sql"));
-                DBContext.Command(DBContext.LoadScriptFromResource("DZNotepad.SQLScripts.SetupBaseStyles.sql"));
-            }
 
             lastFiles = new LastFiles();
 
