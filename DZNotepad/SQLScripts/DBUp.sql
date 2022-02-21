@@ -24,6 +24,15 @@ CREATE TABLE IF NOT EXISTS supportLanguages (
     PRIMARY KEY (languageName)
 );
 
+CREATE TABLE IF NOT EXISTS users (
+    userId INTEGER PRIMARY KEY,
+    lastName NVARCHAR(45) NOT NULL,
+    name NVARCHAR(45) NOT NULL,
+    middleName NVARCHAR(45) NOT NULL,
+    login NVARCHAR(45) NOT NULL,
+    password NVARCHAR(45) NOT NULL
+);
+
 INSERT INTO supportLanguages VALUES ('afrikaans');
 INSERT INTO supportLanguages VALUES ('albanian');
 INSERT INTO supportLanguages VALUES ('amharic');

@@ -8,6 +8,7 @@ namespace DZNotepad
     {
         public const int LastFilesCount = 5;
         public event EventHandler OnAddFile;
+
         List<string> lastFiles = new List<string>(LastFilesCount);
 
         public LastFiles()

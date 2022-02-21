@@ -3,10 +3,26 @@ using System.Linq;
 using System.Reflection;
 using Microsoft.Data.Sqlite;
 
+
 namespace DZNotepad
 {
     public class DBContext
     {
+        private static Entitys entitys = null;
+        /// <summary>
+        /// Сущности базы данных представленные в форме EF
+        /// </summary>
+        public static Entitys Entitys
+        {
+            get
+            {
+                if (entitys == null)
+                    entitys = new Entitys();
+
+                return entitys;
+            }
+        }
+
         private static SqliteConnection connection = null;
 
         /// <summary>
