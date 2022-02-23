@@ -43,20 +43,28 @@
                     <MenuItem Header="_Файл">
                         <MenuItem Foreground="Black" Header="_Новый файл" Command="New" InputGestureText="Ctrl+N"/>
                         <MenuItem Foreground="Black" Header="_Открыть" Command="Open" InputGestureText="Ctrl+O"/>
+                        <Separator/>
                         <MenuItem Foreground="Black" Header="_Сохранить" Command="Save" InputGestureText="Ctrl+S"/>
                         <MenuItem Foreground="Black" Header="_Сохранить как..." Command="SaveAs" InputGestureText="Ctrl+Alt+S"/>
                         <MenuItem Foreground="Black" Header="_Сохранить всё" Click="SaveAll_Click" />
+                        <Separator/>
                         <MenuItem Foreground="Black" Header="_Закрыть" Command="Close" InputGestureText="Ctrl+W"/>
                         <MenuItem Foreground="Black" Header="_Закрыть все" Click="closeAll_Click"/>
                         <MenuItem Foreground="Black" Header="_Выйти" Command="local:WindowCommands.Exit" InputGestureText="Ctrl+Q"/>
+                        <Separator/>
                         <MenuItem Foreground="Black" Header="_Последние файлы" x:Name="lastFilesMenu" />
                     </MenuItem>
                     <MenuItem Header="_Правка">
+                        <MenuItem Foreground="Black" x:Name="undo" Header="_Вернуть" InputGestureText="Ctrl+Z" Command="Undo"/>
+                        <MenuItem Foreground="Black" x:Name="redo" Header="_Повтор" InputGestureText="Ctrl+Y" Command="Redo"/>
+                        <Separator/>
                         <MenuItem Foreground="Black" x:Name="copyItem" Header="_Копировать" Command="Copy" InputGestureText="Ctrl+C" Click="copyItem_Click" />
                         <MenuItem Foreground="Black" x:Name="pasteItem" Header="_Вставить" Command="Paste" InputGestureText="Ctrl+V" Click="pasteItem_Click" />
                         <MenuItem Foreground="Black" x:Name="cutItem" Header="_Вырезать" Command="Cut" InputGestureText="Ctrl+X" Click="cutItem_Click"  />
+                        <Separator/>
                         <MenuItem Foreground="Black" Header="_Найти" Command="Find" InputGestureText="Ctrl+F"/>
                         <MenuItem Foreground="Black" Header="_Заменить" Command="Replace" InputGestureText="Ctrl+R" />
+                        <Separator/>
                         <MenuItem Foreground="Black" Header="Изменить размер шрифта">
                             <MenuItem Header="2" Click="changeSize_Click" />
                             <MenuItem Header="4" Click="changeSize_Click" />
@@ -74,6 +82,7 @@
                         <MenuItem Foreground="Black" x:Name="translateItem" Header="_Перевод" IsCheckable="True" Click="translateItem_Click"/>
                         <MenuItem Foreground="Black" x:Name="performanceItem" Header="_Диспетчер приложения" IsCheckable="True" Click="performanceItem_Click"/>
                         <MenuItem Foreground="Black" Header="_Стиль" x:Name="styleItem" Click="styleItem_Click"/>
+                        <Separator/>
                         <MenuItem Header="Кодировка">
                             <MenuItem Header="ASCII" Click="ChangeEncoding_Click"/>
                             <MenuItem Header="UTF-8" Click="ChangeEncoding_Click"/>
