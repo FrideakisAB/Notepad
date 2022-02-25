@@ -1,0 +1,34 @@
+﻿<Window x:Class="DZNotepad.UserElements.SecureFileDialog"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:DZNotepad.UserElements"
+        mc:Ignorable="d"
+        Title="SecureFileDialog" Height="400" MinHeight="200" Width="420" MinWidth="420">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="30"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="30"/>
+        </Grid.RowDefinitions>
+        <Button x:Name="RootDirButton" Content="Выше" HorizontalAlignment="Left" Margin="10,0,0,0" VerticalAlignment="Center" Click="RootDirButton_Click"/>
+        <TextBlock x:Name="CurrentPathLabel" HorizontalAlignment="Stretch" Margin="65,0,5,0" Text="TextBlock" TextWrapping="Wrap" VerticalAlignment="Center"/>
+        <ListBox x:Name="FilesEntries" Grid.Row="1" MouseDoubleClick="FilesEntries_MouseDoubleClick">
+            <ListBox.ItemTemplate>
+                <DataTemplate>
+                    <StackPanel Orientation="Horizontal">
+                        <Image Source="{Binding Path=Icon}" Height="16" />
+                        <TextBlock Text="{Binding Path=FullPath}" />
+                    </StackPanel>
+                </DataTemplate>
+            </ListBox.ItemTemplate>
+        </ListBox>
+        <StackPanel Grid.Row="2" Orientation="Horizontal">
+            <TextBlock x:Name="FileNameLabel" Text="Файл:" HorizontalAlignment="Left" Margin="5,0,5,0" VerticalAlignment="Center" />
+            <TextBox x:Name="FileNameField" HorizontalAlignment="Left" Margin="5,0,5,0" Text="" TextWrapping="NoWrap" VerticalAlignment="Center" Width="240"/>
+            <Button x:Name="SelectButton" Content="Открыть" HorizontalAlignment="Left" Margin="5,0,5,0" VerticalAlignment="Center" Click="SelectButton_Click"/>
+            <Button x:Name="CancelButton" Content="Отмена" HorizontalAlignment="Left" Margin="5,0,5,0" VerticalAlignment="Center" Click="CancelButton_Click"/>
+        </StackPanel>
+    </Grid>
+</Window>

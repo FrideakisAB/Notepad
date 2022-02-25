@@ -68,7 +68,7 @@ namespace DZNotepad.UserElements
         {
             if (File.GetAttributes(path).HasFlag(FileAttributes.ReadOnly) ||
                 File.GetAttributes(path).HasFlag(FileAttributes.ReparsePoint) ||
-                System.IO.Path.GetExtension(path) != ".txt")
+                Path.GetExtension(path) != ".txt")
             {
                 isSupportedFormat = false;
                 textSource.IsReadOnly = true;
@@ -76,7 +76,7 @@ namespace DZNotepad.UserElements
 
             fileName = path;
             lastWriteAcces = File.GetLastWriteTime(fileName);
-            header = System.IO.Path.GetFileName(fileName);
+            header = Path.GetFileName(fileName);
 
             using (FileStream fs = File.OpenRead(fileName))
             {
@@ -269,6 +269,8 @@ namespace DZNotepad.UserElements
                     OnSaveAs();
                 else
                 {
+                    //TODO: если пользователь - записать в историю
+
                     isEditable = false;
                     File.WriteAllText(fileName, textSource.Text, dstEncoding);
                     lastFiles.RegisterNewFile(fileName);
@@ -284,6 +286,8 @@ namespace DZNotepad.UserElements
 
         internal void OnSaveAs()
         {
+            //TODO: use SecureFileDialog if User not null
+
             Microsoft.Win32.SaveFileDialog dlg = new Microsoft.Win32.SaveFileDialog();
 
             dlg.DefaultExt = ".txt";
@@ -299,7 +303,7 @@ namespace DZNotepad.UserElements
                 {
                     isEditable = false;
                     fileName = dlg.FileName;
-                    header = System.IO.Path.GetFileName(fileName);
+                    header = Path.GetFileName(fileName);
                     File.WriteAllText(fileName, textSource.Text, dstEncoding);
                     lastFiles.RegisterNewFile(fileName);
                     lastWriteAcces = File.GetLastWriteTime(fileName);
