@@ -99,7 +99,7 @@ namespace DZNotepad
                 (tab as CloseableTab)?.SetStyle(this.Resources["AnyStyleTabItem"] as Style);
         }
 
-        void createNewTab(string path=null)
+        void createNewTab(string path = null)
         {
             if (string.IsNullOrWhiteSpace(path))
             {
@@ -431,7 +431,7 @@ namespace DZNotepad
         {
             if (windowHelp != null)
                 aboutProgramWindow.Close();
-            windowHelp  = new WindowHelp();
+            windowHelp = new WindowHelp();
             windowHelp.Owner = this;
             windowHelp.Show();
         }
@@ -441,8 +441,42 @@ namespace DZNotepad
             MenuItem item = (MenuItem)sender;
             ((EditableFile)(tabsContainer.SelectedItem as CloseableTab)?.Content).OnChangeEncoding((string)item.Header);
         }
-    }
 
+        private void btnSingIn_Click(object sender, RoutedEventArgs e)
+        {
+            if (!String.IsNullOrEmpty(LoginBox.Text))
+            {
+                if (!String.IsNullOrEmpty(PassBox.Password))
+                {
+                    var result = DBContext.Entitys.Users.Where((userLocal) => userLocal.Login == LoginBox.Text && userLocal.Password == PassBox.Password);
+                    if (result.Count() != 0)
+                    {
+                        MessageBox.Show("Добро пожаловать " + LoginBox.Text);
+                    }
+                    else
+                    {
+                        MessageBox.Show("Неверный логин или пароль!");
+                    }
+                }
+            }
+            else
+            {
+                MessageBox.Show("Проверьте все ли поля заполнены!");
+            }
+        }
+
+        private void LoginItem_Click(object sender, RoutedEventArgs e)
+        {
+            if (LoginItem.IsChecked) 
+            {
+                LoginWindow.Width = 200;
+            }
+            else 
+            {
+                LoginWindow.Width = 0;
+            }     
+        } 
+    }
     public class WindowCommands
     {
         static WindowCommands()
@@ -450,5 +484,5 @@ namespace DZNotepad
             Exit = new RoutedCommand("Exit", typeof(MainWindow));
         }
         public static RoutedCommand Exit { get; set; }
-    }
+    }  
 }

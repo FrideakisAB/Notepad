@@ -17,13 +17,13 @@
         </ResourceDictionary>
     </Window.Resources>
     <Window.CommandBindings>
-        <CommandBinding x:Name="newFileCommand" Command="New" Executed="newFileCommand_Executed"  />
-        <CommandBinding x:Name="openFileCommand" Command="Open" Executed="openFile_Executed" />
-        <CommandBinding x:Name="saveFileCommand" Command="Save" Executed="saveFile_Executed" />
-        <CommandBinding x:Name="saveAsFileCommand" Command="SaveAs" Executed="saveAsFile_Executed" />
-        <CommandBinding x:Name="closeFileCommand" Command="Close" Executed="closeFileCommand_Executed" />
-        <CommandBinding x:Name="exitCommand" Command="local:WindowCommands.Exit" Executed="exitCommand_Executed"  />
-        <CommandBinding x:Name="findCommand" Command="Find" Executed="findCommand_Executed" />
+        <CommandBinding x:Name="newFileCommand" Command="New" Executed="newFileCommand_Executed"/>
+        <CommandBinding x:Name="openFileCommand" Command="Open" Executed="openFile_Executed"/>
+        <CommandBinding x:Name="saveFileCommand" Command="Save" Executed="saveFile_Executed"/>
+        <CommandBinding x:Name="saveAsFileCommand" Command="SaveAs" Executed="saveAsFile_Executed"/>
+        <CommandBinding x:Name="closeFileCommand" Command="Close" Executed="closeFileCommand_Executed"/>
+        <CommandBinding x:Name="exitCommand" Command="local:WindowCommands.Exit" Executed="exitCommand_Executed"/>
+        <CommandBinding x:Name="findCommand" Command="Find" Executed="findCommand_Executed"/>
         <CommandBinding x:Name="replaceCommand" Command="Replace" Executed="replaceCommand_Executed"/>
     </Window.CommandBindings>
     <Window.InputBindings>
@@ -51,6 +51,7 @@
                         <MenuItem Foreground="Black" Header="_Закрыть" Command="Close" InputGestureText="Ctrl+W"/>
                         <MenuItem Foreground="Black" Header="_Закрыть все" Click="closeAll_Click"/>
                         <MenuItem Foreground="Black" Header="_Выйти" Command="local:WindowCommands.Exit" InputGestureText="Ctrl+Q"/>
+                        <MenuItem Foreground="Black" IsCheckable="True" x:Name="LoginItem" Header="Авторизация" Click="LoginItem_Click"/>
                         <Separator/>
                         <MenuItem Foreground="Black" Header="_Последние файлы" x:Name="lastFilesMenu" />
                     </MenuItem>
@@ -176,7 +177,33 @@
                     <Button Style="{DynamicResource AnyStyleButton}" x:Name="translateManual" Content="Перевести текст" HorizontalAlignment="Center" VerticalAlignment="Top" Click="translateManual_Click" Margin="0,85,0,0" Cursor="Hand"/>
                 </Grid>
             </Border>
-            <TabControl x:Name="tabsContainer" Margin="18 0 0 0" SelectionChanged="tabsContainer_SelectionChanged" Padding="0,0,0,0" Style="{DynamicResource AnyStyle}"/>
+            <Border x:Name="LoginWindow" Margin="18 0 0 0" Width="0" DockPanel.Dock="Left" BorderBrush="#FFACACAC" BorderThickness="1">
+                <Grid Style="{DynamicResource AnyStyle}">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="35"/>
+                        <RowDefinition Height="35"/>
+                        <RowDefinition Height="35"/>
+                        <RowDefinition Height="35"/>
+                        <RowDefinition Height="35"/>
+                        <RowDefinition Height="249*"/>
+                    </Grid.RowDefinitions>
+                    <TextBlock Style="{DynamicResource AnyStyle}" Text="Авторизация" Grid.Row="0" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                    <TextBlock Style="{DynamicResource AnyStyle}" Text="Логин" Grid.Row="1" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                    <TextBox Style="{DynamicResource AnyStyleTextBox}" x:Name="LoginBox" Grid.Row="2" HorizontalAlignment="Stretch" VerticalAlignment="Center" Margin="10,0,10,0">
+                        <TextBox.ToolTip>
+                            Введите свой логин
+                        </TextBox.ToolTip>
+                    </TextBox>
+                    <TextBlock Style="{DynamicResource AnyStyle}" Text="Пароль" Grid.Row="3" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+                    <PasswordBox x:Name="PassBox" Grid.Row="4" VerticalAlignment="Center" Margin="10,0,10,0">
+                        <PasswordBox.ToolTip>
+                            Введите свой пароль
+                        </PasswordBox.ToolTip>
+                    </PasswordBox>
+                    <Button Style="{DynamicResource AnyStyleButton}" Click="btnSingIn_Click" Content="Войти" Grid.Row="6" x:Name="btnSingIn" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="0,20,0,0" Width="50" Cursor="Hand"/>
+                </Grid>
+            </Border>
+            <TabControl x:Name="tabsContainer" Margin="0 0 0 0" SelectionChanged="tabsContainer_SelectionChanged" Padding="0,0,0,0" Style="{DynamicResource AnyStyle}"/>
         </DockPanel>
     </Grid>
 </Window>

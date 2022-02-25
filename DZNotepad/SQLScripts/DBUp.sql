@@ -33,6 +33,9 @@ CREATE TABLE IF NOT EXISTS users (
     password NVARCHAR(45) NOT NULL
 );
 
+INSERT INTO users VALUES (1, 'Николаев', 'Илья', 'Александрович', 'Ilya', '111');
+
+
 INSERT INTO supportLanguages VALUES ('afrikaans');
 INSERT INTO supportLanguages VALUES ('albanian');
 INSERT INTO supportLanguages VALUES ('amharic');
