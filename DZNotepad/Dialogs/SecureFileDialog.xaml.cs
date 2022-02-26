@@ -147,8 +147,76 @@ namespace DZNotepad
 
         private void CancelButton_Click(object sender, RoutedEventArgs e)
         {
-            DialogResult = false;
             Close();
+        }
+
+        private void CreateFolder_Click(object sender, RoutedEventArgs e)
+        {
+            CreateFolder dlg = new CreateFolder();
+            dlg.ShowDialog();
+
+            if (dlg.DialogResult == true)
+            {
+                try
+                {
+                    Directory.CreateDirectory(Path.Combine(CurrentPath, dlg.Name));
+                    DisplayDirectory();
+                }
+                catch
+                {
+                    MessageBox.Show("При создании папки произошла ошибка, попробуйте другое имя", "Ошибка создания", MessageBoxButton.OK, MessageBoxImage.Error);
+                }
+            }
+        }
+
+        private void DeleteElement_Click(object sender, RoutedEventArgs e)
+        {
+            if (FilesEntries.SelectedItem != null &&
+                MessageBox.Show("Вы уверены что хотите удалить элемент?", "Удаление", MessageBoxButton.YesNo, MessageBoxImage.Question) == MessageBoxResult.Yes)
+            {
+                try
+                {
+                    Proxy proxy = FilesEntries.SelectedItem as Proxy;
+                    if (Directory.Exists(proxy.Path))
+                        Directory.Delete(proxy.Path);
+                    else
+                    {
+                        DBContext.Command($"INSERT INTO fileHistory (filePath, userId, changeTime) VALUES ('{proxy.Path}', {UserSingleton.Get().LoginUser.UserId}, CURRENT_TIMESTAMP)");
+                        File.Delete(proxy.Path);
+                    }
+                }
+                catch
+                {
+                    MessageBox.Show("При удалении элемента произошла ошибка", "Ошибка удаления", MessageBoxButton.OK, MessageBoxImage.Error);
+                }
+            }
+        }
+
+        private void Window_Closed(object sender, EventArgs e)
+        {
+            if (!DialogResult.HasValue)
+                DialogResult = false;
+        }
+
+        private void CreateFile_Click(object sender, RoutedEventArgs e)
+        {
+            CreateFile dlg = new CreateFile();
+            dlg.ShowDialog();
+
+            if (dlg.DialogResult == true)
+            {
+                try
+                {
+                    string filePath = Path.Combine(CurrentPath, dlg.Name);
+                    DBContext.Command($"INSERT INTO fileHistory (filePath, userId, changeTime) VALUES ('{filePath}', {UserSingleton.Get().LoginUser.UserId}, CURRENT_TIMESTAMP)");
+                    File.CreateText(filePath).Close();
+                    DisplayDirectory();
+                }
+                catch
+                {
+                    MessageBox.Show("При создании файла произошла ошибка, попробуйте другое имя", "Ошибка создания", MessageBoxButton.OK, MessageBoxImage.Error);
+                }
+            }
         }
 
         private static System.Drawing.Icon GetFileIcon(string name, bool isDir, bool isSmall, bool linkOverlay)

@@ -480,7 +480,13 @@ namespace DZNotepad
                 LoginWindow.Width = 200;
             else
                 LoginWindow.Width = 0;
-        } 
+        }
+
+        private void SignOut_Click(object sender, RoutedEventArgs e)
+        {
+            if (UserSingleton.Get().LoginUser != null &&  MessageBox.Show("Вы уверены что хотите выйти из учётной записи?", "Выход из учётной записи", MessageBoxButton.YesNo) == MessageBoxResult.Yes)
+                UserSingleton.Get().LoginUser = null;
+        }
     }
     public class WindowCommands
     {

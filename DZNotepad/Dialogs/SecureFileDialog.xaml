@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:DZNotepad"
         mc:Ignorable="d"
-        Title="SecureFileDialog" Height="400" MinHeight="200" Width="420" MinWidth="420">
+        Title="SecureFileDialog" Height="400" MinHeight="200" Width="420" MinWidth="420" Closed="Window_Closed">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="30"/>
@@ -15,6 +15,13 @@
         <Button x:Name="RootDirButton" Content="Выше" HorizontalAlignment="Left" Margin="10,0,0,0" VerticalAlignment="Center" Click="RootDirButton_Click"/>
         <TextBlock x:Name="CurrentPathLabel" HorizontalAlignment="Stretch" Margin="65,0,5,0" Text="TextBlock" TextWrapping="Wrap" VerticalAlignment="Center"/>
         <ListBox x:Name="FilesEntries" Grid.Row="1" MouseDoubleClick="FilesEntries_MouseDoubleClick">
+            <ListBox.ContextMenu>
+                <ContextMenu>
+                    <MenuItem x:Name="CreateFile" Header="Создать файл" Click="CreateFile_Click"/>
+                    <MenuItem x:Name="CreateFolder" Header="Создать папку" Click="CreateFolder_Click"/>
+                    <MenuItem x:Name="DeleteElement" Header="Удалить" Click="DeleteElement_Click"/>
+                </ContextMenu>
+            </ListBox.ContextMenu>
             <ListBox.ItemTemplate>
                 <DataTemplate>
                     <StackPanel Orientation="Horizontal">

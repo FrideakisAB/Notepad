@@ -53,6 +53,7 @@
                         <MenuItem Foreground="Black" Header="_Выйти" Command="local:WindowCommands.Exit" InputGestureText="Ctrl+Q"/>
                         <Separator/>
                         <MenuItem Foreground="Black" IsCheckable="True" x:Name="LoginItem" Header="Авторизация" Click="LoginItem_Click"/>
+                        <MenuItem Foreground="Black" x:Name="SignOut" Header="Выход" Click="SignOut_Click"/>
                         <Separator/>
                         <MenuItem Foreground="Black" Header="_Последние файлы" x:Name="lastFilesMenu" />
                     </MenuItem>
