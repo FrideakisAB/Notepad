@@ -1,20 +1,10 @@
 ﻿using System;
 using System.IO;
-using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using System.Text.Json;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
-using System.Net.Http;
 using DZNotepad.UserElements;
 using LiveCharts;
 using Microsoft.Data.Sqlite;
@@ -76,6 +66,13 @@ namespace DZNotepad
             SelectStyle.UpdateStyleObservers += UpdateStyleObservers;
 
             createNewTab();
+
+            // Создание подпапок
+            Directory.CreateDirectory(Path.Combine(UserSingleton.RootPath, "english"));
+            Directory.CreateDirectory(Path.Combine(UserSingleton.RootPath, "german"));
+            Directory.CreateDirectory(Path.Combine(UserSingleton.RootPath, "french"));
+            Directory.CreateDirectory(Path.Combine(UserSingleton.RootPath, "bulgarian"));
+            Directory.CreateDirectory(Path.Combine(UserSingleton.RootPath, "polish"));
         }
 
         private void LastFiles_OnAddFile(object sender, EventArgs e)
@@ -180,12 +177,24 @@ namespace DZNotepad
 
         private void openFile_Executed(object sender, ExecutedRoutedEventArgs e)
         {
-            Microsoft.Win32.OpenFileDialog dlg = new Microsoft.Win32.OpenFileDialog();
+            bool result;
+            string fileName;
 
-            dlg.DefaultExt = ".txt";
-            dlg.Filter = "Text Files (*.txt)|*.txt|All files (*.*)|*.*";
+            if (UserSingleton.Get().LoginUser != null)
+            {
+                SecureFileDialog dlg = new SecureFileDialog(UserSingleton.RootPath, "Выберите файл...", SecureFileDialogType.Open);
+                result = (bool)dlg.ShowDialog();
+                fileName = dlg.FileName;
+            }
+            else
+            {
+                Microsoft.Win32.OpenFileDialog dlg = new Microsoft.Win32.OpenFileDialog();
+                dlg.DefaultExt = ".txt";
+                dlg.Filter = "Text Files (*.txt)|*.txt|All files (*.*)|*.*";
+                result = (bool)dlg.ShowDialog();
+                fileName = dlg.FileName;
+            }
 
-            Nullable<bool> result = dlg.ShowDialog();
             if (result == true)
             {
                 bool isEmpty = false;
@@ -193,7 +202,7 @@ namespace DZNotepad
                 if (tabsContainer.Items.Count == 1 && editableFile.FileName == "" && !editableFile.IsEditable)
                     isEmpty = true;
 
-                createNewTab(dlg.FileName);
+                createNewTab(fileName);
                 if (isEmpty)
                     tabsContainer.Items.Remove(editableFile);
             }
@@ -399,11 +408,11 @@ namespace DZNotepad
             if (performanceItem.IsChecked)
             {
                 performanceWindow.Height = 170;
-                this.Height += 170;
+                Height += 170;
             }
             else
             {
-                this.Height -= 170;
+                Height -= 170;
                 performanceWindow.Height = 0;
             }
         }
@@ -451,30 +460,26 @@ namespace DZNotepad
                     var result = DBContext.Entitys.Users.Where((userLocal) => userLocal.Login == LoginBox.Text && userLocal.Password == PassBox.Password);
                     if (result.Count() != 0)
                     {
+                        UserSingleton.Get().LoginUser = result.First();
                         MessageBox.Show("Добро пожаловать " + LoginBox.Text);
+
+                        LoginWindow.Width = 0;
+                        LoginItem.IsChecked = false;
                     }
                     else
-                    {
                         MessageBox.Show("Неверный логин или пароль!");
-                    }
                 }
             }
             else
-            {
                 MessageBox.Show("Проверьте все ли поля заполнены!");
-            }
         }
 
         private void LoginItem_Click(object sender, RoutedEventArgs e)
         {
-            if (LoginItem.IsChecked) 
-            {
+            if (LoginItem.IsChecked)
                 LoginWindow.Width = 200;
-            }
-            else 
-            {
+            else
                 LoginWindow.Width = 0;
-            }     
         } 
     }
     public class WindowCommands

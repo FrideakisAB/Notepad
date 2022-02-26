@@ -6,7 +6,7 @@ using System.Windows.Input;
 using System.Windows.Interop;
 using System.Windows.Media.Imaging;
 
-namespace DZNotepad.UserElements
+namespace DZNotepad
 {
     /// <summary>
     /// Логика взаимодействия для SecureFileDialog.xaml

@@ -51,6 +51,7 @@
                         <MenuItem Foreground="Black" Header="_Закрыть" Command="Close" InputGestureText="Ctrl+W"/>
                         <MenuItem Foreground="Black" Header="_Закрыть все" Click="closeAll_Click"/>
                         <MenuItem Foreground="Black" Header="_Выйти" Command="local:WindowCommands.Exit" InputGestureText="Ctrl+Q"/>
+                        <Separator/>
                         <MenuItem Foreground="Black" IsCheckable="True" x:Name="LoginItem" Header="Авторизация" Click="LoginItem_Click"/>
                         <Separator/>
                         <MenuItem Foreground="Black" Header="_Последние файлы" x:Name="lastFilesMenu" />
