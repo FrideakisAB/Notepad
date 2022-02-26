@@ -35,6 +35,13 @@ CREATE TABLE IF NOT EXISTS users (
 
 INSERT INTO users VALUES (1, 'Николаев', 'Илья', 'Александрович', 'Ilya', '111');
 
+CREATE TABLE IF NOT EXISTS fileHistory (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    filePath NVARCHAR(260) NOT NULL,
+    userId INTEGER NOT NULL,
+    changeTime DATETIME NOT NULL,
+    FOREIGN KEY (userId) REFERENCES users (userId)
+);
 
 INSERT INTO supportLanguages VALUES ('afrikaans');
 INSERT INTO supportLanguages VALUES ('albanian');

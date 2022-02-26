@@ -11,8 +11,8 @@
     <Window.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
-                <ResourceDictionary Source="Dictionary/Theme.xaml"/>
-                <ResourceDictionary Source="Dictionary/AnyStyle.xaml"/>
+                <ResourceDictionary Source="../Dictionary/Theme.xaml"/>
+                <ResourceDictionary Source="../Dictionary/AnyStyle.xaml"/>
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </Window.Resources>
