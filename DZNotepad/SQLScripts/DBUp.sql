@@ -43,6 +43,19 @@ CREATE TABLE IF NOT EXISTS fileHistory (
     FOREIGN KEY (userId) REFERENCES users (userId)
 );
 
+CREATE TABLE IF NOT EXISTS mainFiles (
+    fileId INTEGER PRIMARY KEY,
+    path NVARCHAR(260) NOT NULL
+);
+
+CREATE TABLE IF NOT EXISTS translateFiles (
+    fileId INTEGER NOT NULL,
+    translatePath NVARCHAR(260) NOT NULL,
+    language NVARCHAR(45) NOT NULL,
+    FOREIGN KEY (language) REFERENCES supportLanguages (languageName),
+    FOREIGN KEY (fileId) REFERENCES mainFiles (fileId)
+);
+
 INSERT INTO supportLanguages VALUES ('afrikaans');
 INSERT INTO supportLanguages VALUES ('albanian');
 INSERT INTO supportLanguages VALUES ('amharic');

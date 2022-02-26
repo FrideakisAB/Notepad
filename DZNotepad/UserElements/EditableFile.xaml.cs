@@ -407,6 +407,11 @@ namespace DZNotepad.UserElements
         {
             if (translatePosition != textSource.Text.Length)
             {
+                if (UserSingleton.Get().LoginUser != null)
+                {
+                    //TODO: make file and add line in translateFiles
+                }
+
                 textSource.Text = translateInfoBlock.LocalTranslator.Translate("russian", translateInfoBlock.Language, textSource.Text);
                 translatePosition = textSource.Text.Length;
             }
