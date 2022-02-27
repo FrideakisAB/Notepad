@@ -54,9 +54,6 @@ namespace DZNotepad
             translateInfoBlock.IsAutoTranslate = false;
             translateInfoBlock.Language = string.Empty;
 
-            if (!File.Exists(Directory.GetCurrentDirectory() + "\\data.db"))
-                DBContext.Command(DBContext.LoadScriptFromResource("DZNotepad.SQLScripts.DBUp.sql"));
-
             lastFiles = new LastFiles();
 
             LastFiles_OnAddFile(lastFiles, new EventArgs());

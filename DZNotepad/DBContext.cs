@@ -33,11 +33,45 @@ namespace DZNotepad
         {
             if (connection == null)
             {
-                connection = new SqliteConnection("Data Source=data.db");
-                connection.Open();
+                CreateConnection();
+
+                if (IsNeedDrop())
+                {
+                    connection.Close();
+                    File.Delete("data.db");
+
+                    CreateConnection();
+                    DBContext.Command(DBContext.LoadScriptFromResource("DZNotepad.SQLScripts.DBUp.sql"));
+                }
             }
 
             return connection;
+        }
+
+        private static void CreateConnection()
+        {
+            connection = new SqliteConnection("Data Source=data.db");
+            connection.Open();
+        }
+
+        private static bool IsNeedDrop()
+        {
+            try
+            {
+                long version = (long)CommandScalar("SELECT versionNum FROM dbVersion;");
+
+                string currentScript = LoadScriptFromResource("DZNotepad.SQLScripts.DBUp.sql");
+
+                int numStart = currentScript.IndexOf("dbVersion VALUES(") + 17;
+                int numLength = currentScript.IndexOf(");", numStart) - numStart;
+                long currentVersion = long.Parse(currentScript.Substring(numStart, numLength));
+
+                return version != currentVersion;
+            }
+            catch
+            {
+                return true;
+            }
         }
 
         /// <summary>

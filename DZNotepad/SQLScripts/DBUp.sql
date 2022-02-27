@@ -1,5 +1,13 @@
 -- Скрипт развёртки БД
--- Версия: 1.1
+
+-- Не изменять сигнатуру
+CREATE TABLE IF NOT EXISTS dbVersion (
+    versionNum INTEGER NOT NULL
+);
+
+-- Не изменять сигнатуру
+-- При изменении БД необходимо инкрементировать значение
+INSERT INTO dbVersion VALUES(1);
 
 CREATE TABLE IF NOT EXISTS stylesNames (
     styleNameId INTEGER PRIMARY KEY AUTOINCREMENT,
