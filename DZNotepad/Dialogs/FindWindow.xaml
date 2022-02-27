@@ -21,10 +21,10 @@
             <RowDefinition Height="40*"/>
         </Grid.RowDefinitions>
         <Label Style="{DynamicResource AnyStyle}" Content="Искомая подстрока" HorizontalAlignment="Center" VerticalAlignment="Center"/>
-        <TextBox Style="{DynamicResource AnyStyleTextBox}" x:Name="findetText" HorizontalAlignment="Center" Grid.Row="1" Text="" TextWrapping="Wrap" VerticalAlignment="Center" Width="150"/>
+        <TextBox Style="{DynamicResource AnyStyleTextBox}" x:Name="SearchText" HorizontalAlignment="Center" Grid.Row="1" Text="" TextWrapping="Wrap" VerticalAlignment="Center" Width="150"/>
         <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center">
-            <Button Style="{DynamicResource AnyStyleButton}" x:Name="prevFind" Padding="2" Content="Предыдущее" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0,0,5,0" Click="prevFind_Click"/>
-            <Button Style="{DynamicResource AnyStyleButton}" x:Name="nextFind" Padding="2" Content="Следующее" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="5,0,0,0" Click="nextFind_Click"/>
+            <Button Style="{DynamicResource AnyStyleButton}" x:Name="PrevFind" Padding="2" Content="Предыдущее" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0,0,5,0" Click="PrevFind_Click"/>
+            <Button Style="{DynamicResource AnyStyleButton}" x:Name="NextFind" Padding="2" Content="Следующее" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="5,0,0,0" Click="NextFind_Click"/>
         </StackPanel>
     </Grid>
 </Window>

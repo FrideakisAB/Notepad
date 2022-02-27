@@ -250,7 +250,7 @@ namespace DZNotepad
         {
             if (replaceWindow != null)
                 replaceWindow.Close();
-            replaceWindow = new ReplaceWindow(((EditableFile)(tabsContainer.SelectedItem as CloseableTab).Content));
+            replaceWindow = new ReplaceWindow(((EditableFile)(tabsContainer.SelectedItem as CloseableTab).Content), this);
             replaceWindow.Owner = this;
             replaceWindow.Show();
         }

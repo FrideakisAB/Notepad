@@ -18,15 +18,15 @@ namespace DZNotepad
     /// </summary>
     public partial class FindWindow : Window
     {
-        MainWindow mainWindow;
-        int currentIndex = 0;
-        EditableFile editableFile;
+        MainWindow FileWindow;
+        int CurrentIndex = 0;
+        EditableFile FileEntry;
 
         public FindWindow(EditableFile file, MainWindow window)
         {
             InitializeComponent();
-            editableFile = file;
-            mainWindow = window;
+            FileEntry = file;
+            FileWindow = window;
 
             SelectStyle.UpdateStyleObservers += UpdateStyleObservers;
             DictionaryProvider.ApplyDictionary(this.Resources, SelectStyle.CurrentDictionary);
@@ -44,42 +44,48 @@ namespace DZNotepad
 
         public void ChangeEditableFile(EditableFile file)
         {
-            currentIndex = 0;
-            editableFile = file;
+            CurrentIndex = 0;
+            FileEntry = file;
         }
 
         private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
         {
-            findetText.Text = string.Empty;
-            currentIndex = 0;
+            SearchText.Text = string.Empty;
+            CurrentIndex = 0;
         }
 
-        private void prevFind_Click(object sender, RoutedEventArgs e)
+        private void PrevFind_Click(object sender, RoutedEventArgs e)
         {
-            currentIndex = editableFile.TextSource.Text.LastIndexOf(findetText.Text, currentIndex);
+            CurrentIndex = FileEntry.TextSource.Text.LastIndexOf(SearchText.Text, CurrentIndex);
 
-            if (currentIndex != -1)
+            if (CurrentIndex != -1)
             {
-                editableFile.TextSource.Select(currentIndex, findetText.Text.Length);
-                --currentIndex;
-                if (currentIndex == -1)
-                    currentIndex = editableFile.TextSource.Text.Length - 1;
-                mainWindow.Focus();
+                FileEntry.TextSource.Select(CurrentIndex, SearchText.Text.Length);
+                --CurrentIndex;
+                if (CurrentIndex == -1)
+                    CurrentIndex = FileEntry.TextSource.Text.Length - 1;
+                FileWindow.Focus();
             }
             else
-                currentIndex = editableFile.TextSource.Text.Length - 1;
+                CurrentIndex = FileEntry.TextSource.Text.Length - 1;
         }
 
-        private void nextFind_Click(object sender, RoutedEventArgs e)
+        private void NextFind_Click(object sender, RoutedEventArgs e)
         {
-            currentIndex = editableFile.TextSource.Text.IndexOf(findetText.Text, currentIndex);
+            CurrentIndex = FileEntry.TextSource.Text.IndexOf(SearchText.Text, CurrentIndex);
 
-            if (currentIndex == -1)
-                currentIndex = 0;
-            
-            editableFile.TextSource.Select(currentIndex, findetText.Text.Length);
-            ++currentIndex;
-            mainWindow.Focus();
+            if (CurrentIndex == -1)
+                CurrentIndex = FileEntry.TextSource.Text.IndexOf(SearchText.Text, 0);
+
+            if (CurrentIndex == -1)
+            {
+                CurrentIndex = 0;
+                return;
+            }
+
+            FileEntry.TextSource.Select(CurrentIndex, SearchText.Text.Length);
+            ++CurrentIndex;
+            FileWindow.Focus();
         }
     }
 }

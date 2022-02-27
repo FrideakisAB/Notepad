@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:DZNotepad"
         mc:Ignorable="d"
-        Title="" Height="230" Width="230" ResizeMode="NoResize" Closing="Window_Closing" WindowStyle="ToolWindow">
+        Title="" Height="230" Width="315" ResizeMode="NoResize" Closing="Window_Closing" WindowStyle="ToolWindow">
     <Window.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
@@ -24,10 +24,13 @@
         </Grid.RowDefinitions>
         <Label Style="{DynamicResource AnyStyle}" Content="Искомая подстрока" HorizontalAlignment="Center" VerticalAlignment="Center"/>
         <Label Style="{DynamicResource AnyStyle}" Content="Замена на" HorizontalAlignment="Center" Grid.Row="2" VerticalAlignment="Center"/>
-        <TextBox Style="{DynamicResource AnyStyleTextBox}" x:Name="findetText" HorizontalAlignment="Center" Grid.Row="1" Text="" TextWrapping="Wrap" VerticalAlignment="Center" Width="150"/>
-        <TextBox Style="{DynamicResource AnyStyleTextBox}" x:Name="replaceText" HorizontalAlignment="Center" Grid.Row="3" Text="" TextWrapping="Wrap" VerticalAlignment="Center" Width="150"/>
+        <TextBox Style="{DynamicResource AnyStyleTextBox}" x:Name="SearchText" HorizontalAlignment="Center" Grid.Row="1" Text="" TextWrapping="Wrap" VerticalAlignment="Center" Width="270"/>
+        <TextBox Style="{DynamicResource AnyStyleTextBox}" x:Name="ReplaceText" HorizontalAlignment="Center" Grid.Row="3" Text="" TextWrapping="Wrap" VerticalAlignment="Center" Width="270"/>
         <StackPanel Grid.Row="4" Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center">
-            <Button Style="{DynamicResource AnyStyleButton}" x:Name="replace" Padding="2" Content="Заменить" HorizontalAlignment="Center" VerticalAlignment="Center" Click="replace_Click" />
+            <Button Style="{DynamicResource AnyStyleButton}" x:Name="PrevFind" Padding="2" Content="Предыдущее" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0,0,5,0" Click="PrevFind_Click"/>
+            <Button Style="{DynamicResource AnyStyleButton}" x:Name="NextFind" Padding="2" Content="Следующее" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0,0,5,0" Click="NextFind_Click"/>
+            <Button Style="{DynamicResource AnyStyleButton}" x:Name="Replace" Padding="2" Content="Заменить" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0,0,5,0" Click="Replace_Click"/>
+            <Button Style="{DynamicResource AnyStyleButton}" x:Name="ReplaceAll" Padding="2" Content="Заменить все" HorizontalAlignment="Center" VerticalAlignment="Center" Click="ReplaceAll_Click"/>
         </StackPanel>
     </Grid>
 </Window>
