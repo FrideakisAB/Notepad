@@ -62,7 +62,7 @@ namespace DZNotepad
 
             SelectStyle.UpdateStyleObservers += UpdateStyleObservers;
 
-            createNewTab();
+            CreateNewTab();
 
             // Создание подпапок
             Directory.CreateDirectory(Path.Combine(UserSingleton.RootPath + "\\..", "russian"));
@@ -79,7 +79,23 @@ namespace DZNotepad
 
             string[] files = lastFiles.GetLastFiles();
             for (int i = files.Length - 1; i >= 0; i--)
-                lastFilesMenu.Items.Add(files[i]);
+            {
+                MenuItem item = new MenuItem();
+                item.Header = files[i];
+                item.Click += LastFile_Click;
+
+                lastFilesMenu.Items.Add(item);
+            }
+        }
+
+        private void LastFile_Click(object sender, RoutedEventArgs e)
+        {
+            MenuItem item = sender as MenuItem;
+
+            string path = item.Header as string;
+
+            if (path.Contains(UserSingleton.RootPath) || UserSingleton.Get().LoginUser == null)
+                CreateNewTab(path);
         }
 
         ~MainWindow()
@@ -94,7 +110,7 @@ namespace DZNotepad
                 (tab as CloseableTab)?.SetStyle(this.Resources["AnyStyleTabItem"] as Style);
         }
 
-        void createNewTab(string path = null)
+        private void CreateNewTab(string path = null)
         {
             if (string.IsNullOrWhiteSpace(path))
             {
@@ -200,7 +216,7 @@ namespace DZNotepad
                 if (tabsContainer.Items.Count == 1 && editableFile.FileName == "" && !editableFile.IsEditable)
                     isEmpty = true;
 
-                createNewTab(fileName);
+                CreateNewTab(fileName);
                 if (isEmpty)
                     tabsContainer.Items.Remove(editableFile);
             }
@@ -218,7 +234,7 @@ namespace DZNotepad
 
         private void newFileCommand_Executed(object sender, ExecutedRoutedEventArgs e)
         {
-            createNewTab();
+            CreateNewTab();
         }
 
         private void findCommand_Executed(object sender, ExecutedRoutedEventArgs e)
@@ -259,7 +275,7 @@ namespace DZNotepad
         {
             if (tabsContainer.Items.IsEmpty)
             {
-                createNewTab();
+                CreateNewTab();
                 tabsContainer.SelectedItem = tabsContainer.Items.GetItemAt(0);
             }
 
