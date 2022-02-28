@@ -279,7 +279,7 @@ namespace DZNotepad.UserElements
             string dlgFileName;
             if (UserSingleton.Get().LoginUser != null)
             {
-                SecureFileDialog dlg = new SecureFileDialog(UserSingleton.RootPath, "Выберите расположение...", SecureFileDialogType.Save);
+                SecureFileDialog dlg = new SecureFileDialog(Path.Combine(UserSingleton.RootPath, "russian"), "Выберите расположение...", SecureFileDialogType.Save);
                 result = (bool)dlg.ShowDialog();
                 dlgFileName = dlg.FileName;
             }
@@ -321,15 +321,14 @@ namespace DZNotepad.UserElements
                     long id;
                     try
                     {
-                        
                         id = (long)DBContext.CommandScalar($"SELECT MAX(fileId) FROM mainFiles") + 1;
-                        DBContext.Command($"INSERT INTO mainFiles VALUES ({id},'{fileName}');");
                     }
                     catch 
                     {
                         id = 1;
                     }
-                    
+
+                    DBContext.Command($"INSERT INTO mainFiles VALUES ({id},'{fileName}');");
                 }
             }
 

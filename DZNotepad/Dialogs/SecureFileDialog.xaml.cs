@@ -96,7 +96,7 @@ namespace DZNotepad
 
         private void RootDirButton_Click(object sender, RoutedEventArgs e)
         {
-            if (CurrentPath != RootPath)
+            if (CurrentPath != RootPath || (string.IsNullOrEmpty(RootPath) && !string.IsNullOrEmpty(CurrentPath)))
             {
                 CurrentPath = Directory.GetParent(CurrentPath).FullName;
                 DisplayDirectory();

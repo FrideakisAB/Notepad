@@ -7,7 +7,7 @@ namespace DZNotepad
         private static UserSingleton singleton;
 
         public User LoginUser { get; set; }
-        public static string RootPath { get => Path.Combine(Directory.GetCurrentDirectory(), "Users\\"); }
+        public static string RootPath { get => Path.Combine(Directory.GetCurrentDirectory(), "Users"); }
 
         public static UserSingleton Get()
         {
