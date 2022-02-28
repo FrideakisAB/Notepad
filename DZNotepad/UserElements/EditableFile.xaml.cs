@@ -3,6 +3,7 @@ using System.Text;
 using System.Windows;
 using System.Windows.Controls;
 using System.IO;
+using Microsoft.Data.Sqlite;
 
 namespace DZNotepad.UserElements
 {
@@ -310,7 +311,27 @@ namespace DZNotepad.UserElements
         private void SaveFile()
         {
             if (UserSingleton.Get().LoginUser != null)
+            {
                 DBContext.Command($"INSERT INTO fileHistory (filePath, userId, changeTime) VALUES ('{fileName}', {UserSingleton.Get().LoginUser.UserId}, CURRENT_TIMESTAMP)");
+
+                long value = (long)DBContext.CommandScalar($"SELECT COUNT(*) FROM mainFiles WHERE path = '{fileName}';");
+
+                if (value == 0)
+                {
+                    long id;
+                    try
+                    {
+                        
+                        id = (long)DBContext.CommandScalar($"SELECT MAX(fileId) FROM mainFiles") + 1;
+                        DBContext.Command($"INSERT INTO mainFiles VALUES ({id},'{fileName}');");
+                    }
+                    catch 
+                    {
+                        id = 1;
+                    }
+                    
+                }
+            }
 
             isEditable = false;
             File.WriteAllText(fileName, textSource.Text, dstEncoding);
@@ -409,11 +430,30 @@ namespace DZNotepad.UserElements
             {
                 if (UserSingleton.Get().LoginUser != null)
                 {
-                    //TODO: make file and add line in translateFiles
-                }
+                    try
+                    {
+                        string filePath = fileName.Replace("russian", translateInfoBlock.Language);
 
-                textSource.Text = translateInfoBlock.LocalTranslator.Translate("russian", translateInfoBlock.Language, textSource.Text);
-                translatePosition = textSource.Text.Length;
+                        SqliteDataReader reader = DBContext.CommandReader($"SELECT fileId FROM mainFiles WHERE path = '{fileName}'");
+                        if (reader.HasRows)
+                        {
+                            string translate = translateInfoBlock.LocalTranslator.Translate("russian", translateInfoBlock.Language, textSource.Text);
+                            translatePosition = textSource.Text.Length;
+                            File.WriteAllText(filePath, translate);
+                            reader.Read();
+                            DBContext.Command($"INSERT INTO translateFiles (fileId, translatePath, language) VALUES ({reader.GetInt64(0)}, '{filePath}', '{translateInfoBlock.Language}')");
+                        }
+                    }
+                    catch
+                    {
+                        MessageBox.Show("При создании файла произошла ошибка, попробуйте другое имя", "Ошибка создания", MessageBoxButton.OK, MessageBoxImage.Error);
+                    }
+                }
+                else
+                {
+                    textSource.Text = translateInfoBlock.LocalTranslator.Translate("russian", translateInfoBlock.Language, textSource.Text);
+                    translatePosition = textSource.Text.Length;
+                }
             }
         }
 

@@ -65,12 +65,12 @@ namespace DZNotepad
             CreateNewTab();
 
             // Создание подпапок
-            Directory.CreateDirectory(Path.Combine(UserSingleton.RootPath + "\\..", "russian"));
-            Directory.CreateDirectory(Path.Combine(UserSingleton.RootPath + "\\..", "english"));
-            Directory.CreateDirectory(Path.Combine(UserSingleton.RootPath + "\\..", "german"));
-            Directory.CreateDirectory(Path.Combine(UserSingleton.RootPath + "\\..", "french"));
-            Directory.CreateDirectory(Path.Combine(UserSingleton.RootPath + "\\..", "bulgarian"));
-            Directory.CreateDirectory(Path.Combine(UserSingleton.RootPath + "\\..", "polish"));
+            Directory.CreateDirectory(Path.Combine(UserSingleton.RootPath + "russian"));
+            Directory.CreateDirectory(Path.Combine(UserSingleton.RootPath + "english"));
+            Directory.CreateDirectory(Path.Combine(UserSingleton.RootPath + "german"));
+            Directory.CreateDirectory(Path.Combine(UserSingleton.RootPath + "french"));
+            Directory.CreateDirectory(Path.Combine(UserSingleton.RootPath + "bulgarian"));
+            Directory.CreateDirectory(Path.Combine(UserSingleton.RootPath + "polish"));
         }
 
         private void LastFiles_OnAddFile(object sender, EventArgs e)
