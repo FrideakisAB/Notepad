@@ -110,7 +110,7 @@ namespace DZNotepad
                 pathButton.Click += (object sender, RoutedEventArgs e) => {
                     if (IsAccessPath(currentPath))
                     {
-                        CurrentPath = currentPath.Replace(SecureRootName, RootPath);
+                        CurrentPath = currentPath.Replace(SecureRootName, RootPath + "\\");
                         DisplayDirectory();
                     }
                 };
@@ -127,6 +127,8 @@ namespace DZNotepad
 
                 mainPath = currentPath;
             }
+
+            PathScroll.ScrollToRightEnd();
         }
 
         private string GetCurrentPath()
@@ -163,7 +165,7 @@ namespace DZNotepad
                 return false;
 
             if (!DiscardRoot && !Directory.Exists(path) ||
-                DiscardRoot && !Directory.Exists(path.Replace(SecureRootName, RootPath)))
+                DiscardRoot && !Directory.Exists(path.Replace(SecureRootName, RootPath + "\\")))
                 return false;
 
             return true;
@@ -389,6 +391,11 @@ namespace DZNotepad
             /// <returns>N/A</returns>
             [DllImport("User32.dll")]
             public static extern int DestroyIcon(IntPtr hIcon);
+        }
+
+        private void PathScroll_MouseUp(object sender, MouseButtonEventArgs e)
+        {
+            CurrentPathLabel.Focus();
         }
     }
 }
