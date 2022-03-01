@@ -2,8 +2,10 @@
 using System.IO;
 using System.Runtime.InteropServices;
 using System.Windows;
+using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Interop;
+using System.Windows.Media;
 using System.Windows.Media.Imaging;
 
 namespace DZNotepad
@@ -89,7 +91,42 @@ namespace DZNotepad
 
         private void SetupPathLine()
         {
-            CurrentPathLabel.Text = GetCurrentPath();
+            BarGrid.Visibility = Visibility.Visible;
+            BarGrid.Children.Clear();
+
+            string mainPath = string.Empty;
+
+            foreach (string folder in GetCurrentPath().Split(Path.DirectorySeparatorChar))
+            {
+                if (string.IsNullOrWhiteSpace(folder))
+                    continue;
+
+                string currentPath = mainPath + folder + Path.DirectorySeparatorChar;
+
+                Button pathButton = new Button();
+                pathButton.Content = folder;
+                pathButton.Background = new SolidColorBrush();
+                pathButton.BorderBrush = new SolidColorBrush();
+                pathButton.Click += (object sender, RoutedEventArgs e) => {
+                    if (IsAccessPath(currentPath))
+                    {
+                        CurrentPath = currentPath.Replace(SecureRootName, RootPath);
+                        DisplayDirectory();
+                    }
+                };
+
+                BarGrid.Children.Add(pathButton);
+
+                TextBlock arrow = new TextBlock();
+                arrow.TextWrapping = TextWrapping.NoWrap;
+                arrow.VerticalAlignment = VerticalAlignment.Center;
+                arrow.Text = ">";
+                arrow.Margin = new Thickness(1, 0, 1, 0);
+
+                BarGrid.Children.Add(arrow);
+
+                mainPath = currentPath;
+            }
         }
 
         private string GetCurrentPath()
@@ -135,6 +172,18 @@ namespace DZNotepad
         private void Window_MouseDown(object sender, MouseButtonEventArgs e)
         {
             MainGrid.Focus();
+        }
+
+        private void CurrentPathLabel_GotFocus(object sender, RoutedEventArgs e)
+        {
+            BarGrid.Visibility = Visibility.Hidden;
+            CurrentPathLabel.Text = GetCurrentPath();
+            CurrentPathLabel.Select(0, CurrentPathLabel.Text.Length);
+        }
+
+        private void CurrentPathLabel_LostFocus(object sender, RoutedEventArgs e)
+        {
+            CurrentPathLabel.Text = string.Empty;
             SetupPathLine();
         }
 
@@ -150,15 +199,6 @@ namespace DZNotepad
                 }
                 else
                     SelectButton_Click(null, null);
-            }
-        }
-
-        private void RootDirButton_Click(object sender, RoutedEventArgs e)
-        {
-            if (CurrentPath != RootPath || (string.IsNullOrEmpty(RootPath) && !string.IsNullOrEmpty(CurrentPath)))
-            {
-                CurrentPath = Directory.GetParent(CurrentPath).FullName;
-                DisplayDirectory();
             }
         }
 

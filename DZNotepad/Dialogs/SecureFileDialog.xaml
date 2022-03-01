@@ -8,11 +8,12 @@
         Title="SecureFileDialog" Height="400" MinHeight="200" Width="420" MinWidth="420" Closed="Window_Closed" MouseDown="Window_MouseDown">
     <Grid x:Name="MainGrid" Focusable="True">
         <Grid.RowDefinitions>
-            <RowDefinition Height="30"/>
+            <RowDefinition Height="35"/>
             <RowDefinition Height="*"/>
             <RowDefinition Height="30"/>
         </Grid.RowDefinitions>
-        <TextBox x:Name="CurrentPathLabel" HorizontalAlignment="Stretch" Text="TextBox" TextWrapping="Wrap" VerticalAlignment="Center" Margin="5" KeyDown="CurrentPathLabel_KeyDown" />
+        <TextBox x:Name="CurrentPathLabel" HorizontalAlignment="Stretch" Text="" TextWrapping="NoWrap" VerticalAlignment="Stretch" Margin="5" KeyDown="CurrentPathLabel_KeyDown" GotFocus="CurrentPathLabel_GotFocus" LostFocus="CurrentPathLabel_LostFocus" MaxLines="1" />
+        <StackPanel x:Name="BarGrid" Orientation="Horizontal" Margin="5, 5, 30, 5" />
         <ListBox x:Name="FilesEntries" Grid.Row="1" MouseDoubleClick="FilesEntries_MouseDoubleClick">
             <ListBox.ContextMenu>
                 <ContextMenu>
