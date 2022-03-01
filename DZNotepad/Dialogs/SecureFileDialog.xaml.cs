@@ -38,6 +38,7 @@ namespace DZNotepad
         private string RootPath;
         private string CurrentPath;
         private SecureFileDialogType Mode;
+        private bool DiscardRoot;
 
         /// <summary>
         /// Конструктор диалога открытия/сохранения файла
@@ -45,7 +46,8 @@ namespace DZNotepad
         /// <param name="rootPath">Корневой путь, верхний предел иерархии, доступ выше него будет ограничен</param>
         /// <param name="name">Название окна</param>
         /// <param name="dialogType">Тип диалога, открытие или сохранение</param>
-        public SecureFileDialog(string rootPath, string name, SecureFileDialogType dialogType)
+        /// <param name="discardRoot">Если true - скрывает корневой путь в строке пути</param>
+        public SecureFileDialog(string rootPath, string name, SecureFileDialogType dialogType, bool discardRoot=true)
         {
             InitializeComponent();
 
@@ -54,6 +56,7 @@ namespace DZNotepad
             RootPath = rootPath;
             CurrentPath = rootPath;
             Mode = dialogType;
+            DiscardRoot = discardRoot;
 
             if (Mode == SecureFileDialogType.Open)
             {
@@ -66,7 +69,7 @@ namespace DZNotepad
 
         private void DisplayDirectory()
         {
-            CurrentPathLabel.Text = CurrentPath;
+            SetupPathLine();
             FilesEntries.Items.Clear();
 
             foreach (var dir in Directory.EnumerateDirectories(CurrentPath))
@@ -80,6 +83,18 @@ namespace DZNotepad
                 BitmapSource source = Imaging.CreateBitmapSourceFromHIcon(GetFileIcon(file, false, true, false).Handle, Int32Rect.Empty, BitmapSizeOptions.FromEmptyOptions());
                 FilesEntries.Items.Add(new Proxy { Icon = source, Path = file });
             }
+        }
+
+        private void SetupPathLine()
+        {
+            string securePath;
+
+            if (DiscardRoot == false)
+                securePath = CurrentPath;
+            else
+                securePath = CurrentPath.Replace(RootPath, "RDC:\\");
+
+            CurrentPathLabel.Text = securePath;
         }
 
         private void FilesEntries_MouseDoubleClick(object sender, MouseButtonEventArgs e)
