@@ -40,6 +40,8 @@ namespace DZNotepad
         private SecureFileDialogType Mode;
         private bool DiscardRoot;
 
+        private static string SecureRootName = "RDC:\\";
+
         /// <summary>
         /// Конструктор диалога открытия/сохранения файла
         /// </summary>
@@ -87,26 +89,68 @@ namespace DZNotepad
 
         private void SetupPathLine()
         {
+            CurrentPathLabel.Text = GetCurrentPath();
+        }
+
+        private string GetCurrentPath()
+        {
             string securePath;
 
             if (DiscardRoot == false)
                 securePath = CurrentPath;
             else
-                securePath = CurrentPath.Replace(RootPath, "RDC:\\");
+                securePath = CurrentPath.Replace(RootPath, SecureRootName);
 
-            CurrentPathLabel.Text = securePath;
+            return securePath;
+        }
+
+        private void CurrentPathLabel_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.Enter)
+            {
+                string trimmedPath = CurrentPathLabel.Text.Trim();
+                if (trimmedPath != GetCurrentPath() && IsAccessPath(trimmedPath))
+                {
+                    CurrentPath = trimmedPath.Replace(SecureRootName, RootPath);
+                    DisplayDirectory();
+                }
+                else
+                    MessageBox.Show("Не удаётся найти путь, проверьте правильность ввода", "Ошибка пути", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+        }
+
+        private bool IsAccessPath(string path)
+        {
+            if (!DiscardRoot && path.IndexOf(RootPath) != 0 ||
+                DiscardRoot && path.IndexOf(SecureRootName) != 0)
+                return false;
+
+            if (!DiscardRoot && !Directory.Exists(path) ||
+                DiscardRoot && !Directory.Exists(path.Replace(SecureRootName, RootPath)))
+                return false;
+
+            return true;
+        }
+
+        private void Window_MouseDown(object sender, MouseButtonEventArgs e)
+        {
+            MainGrid.Focus();
+            SetupPathLine();
         }
 
         private void FilesEntries_MouseDoubleClick(object sender, MouseButtonEventArgs e)
         {
             Proxy proxy = FilesEntries.SelectedItem as Proxy;
-            if (Directory.Exists(proxy.Path))
+            if (proxy != null)
             {
-                CurrentPath = proxy.Path;
-                DisplayDirectory();
+                if (Directory.Exists(proxy.Path))
+                {
+                    CurrentPath = proxy.Path;
+                    DisplayDirectory();
+                }
+                else
+                    SelectButton_Click(null, null);
             }
-            else
-                SelectButton_Click(null, null);
         }
 
         private void RootDirButton_Click(object sender, RoutedEventArgs e)
