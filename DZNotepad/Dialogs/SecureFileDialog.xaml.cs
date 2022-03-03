@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using System.Collections.Generic;
 using System.Runtime.InteropServices;
 using System.Windows;
 using System.Windows.Controls;
@@ -36,13 +37,22 @@ namespace DZNotepad
         /// В случае если DialogResult = true, содержит путь к выбранному файлу
         /// </summary>
         public string FileName { get; private set; }
+        public string Filter
+        {
+            set
+            {
+                ParseFilter(value);
+            }
+        }
+        public int FilterIndex { get; set; } = 0;
 
-        private string RootPath;
+        private readonly string RootPath;
+        private readonly SecureFileDialogType Mode;
+        private readonly bool DiscardRoot;
+        private List<string> FilterExtensions = new List<string>();
         private string CurrentPath;
-        private SecureFileDialogType Mode;
-        private bool DiscardRoot;
 
-        private static string SecureRootName = "RDC:\\";
+        private static readonly string SecureRootName = "RDC:\\";
 
         /// <summary>
         /// Конструктор диалога открытия/сохранения файла
@@ -62,6 +72,7 @@ namespace DZNotepad
             Mode = dialogType;
             DiscardRoot = discardRoot;
 
+
             if (Mode == SecureFileDialogType.Open)
             {
                 FileNameLabel.Visibility = Visibility.Collapsed;
@@ -69,6 +80,38 @@ namespace DZNotepad
             }
 
             DisplayDirectory();
+        }
+
+        private void ParseFilter(string filter)
+        {
+            FilterExtensions.Clear();
+
+            if (string.IsNullOrWhiteSpace(filter))
+            {
+                FileExtensionCombo.ItemsSource = new List<string> { "Все файлы (*.*)" };
+                FileExtensionCombo.SelectedIndex = 0;
+                return;
+            }
+
+            string[] filters = filter.Split('|');
+
+            if (filters.Length <= 1)
+            {
+                FileExtensionCombo.ItemsSource = new List<string> { "Все файлы (*.*)" };
+                FileExtensionCombo.SelectedIndex = 0;
+                return;
+            }
+
+            List<string> comboFilter = new List<string>();
+
+            for (int i = 0; i < filters.Length / 2; i++)
+            {
+                FilterExtensions.Add(filters[i * 2 + 1]);
+                comboFilter.Add($"{filters[i * 2]} ({filters[i * 2 + 1]})");
+            }
+
+            FileExtensionCombo.ItemsSource = comboFilter;
+            FileExtensionCombo.SelectedIndex = FilterIndex;
         }
 
         private void DisplayDirectory()
@@ -84,8 +127,62 @@ namespace DZNotepad
 
             foreach (var file in Directory.EnumerateFiles(CurrentPath))
             {
-                BitmapSource source = Imaging.CreateBitmapSourceFromHIcon(GetFileIcon(file, false, true, false).Handle, Int32Rect.Empty, BitmapSizeOptions.FromEmptyOptions());
-                FilesEntries.Items.Add(new Proxy { Icon = source, Path = file });
+                if (IsAvailabeFile(file))
+                {
+                    BitmapSource source = Imaging.CreateBitmapSourceFromHIcon(GetFileIcon(file, false, true, false).Handle, Int32Rect.Empty, BitmapSizeOptions.FromEmptyOptions());
+                    FilesEntries.Items.Add(new Proxy { Icon = source, Path = file });
+                }
+            }
+        }
+
+        private bool IsAvailabeFile(string path)
+        {
+            if (FilterExtensions.Count == 0)
+                return true;
+
+            int index = FileExtensionCombo.SelectedIndex;
+            if (index == -1)
+                index = 0;
+
+            if (FilterExtensions[index] == "*.*")
+                return true;
+
+            string[] fileParts = path.Split('.');
+
+            if (fileParts.Length <= 1)
+                return false;
+
+            string[] filters = FilterExtensions[index].Split(';');
+
+            foreach (string filter in filters)
+            {
+                if (fileParts[^1] == filter.Substring(filter.IndexOf('.') + 1))
+                    return true;
+            }
+
+            return false;
+        }
+        
+        private void FileExtensionCombo_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            DisplayDirectory();
+
+            if (FilterExtensions.Count != 0)
+            {
+                int length = FileNameField.Text.LastIndexOf('.');
+                if (length == -1)
+                    length = FileNameField.Text.Length;
+
+                string fileName = FileNameField.Text.Substring(0, length);
+
+                int index = FileExtensionCombo.SelectedIndex;
+                if (index == -1)
+                    index = 0;
+
+                if (FilterExtensions[index] == "*.*")
+                    return;
+
+                FileNameField.Text = fileName + "." + FilterExtensions[index].Substring(FilterExtensions[index].IndexOf('.') + 1);
             }
         }
 
@@ -178,15 +275,22 @@ namespace DZNotepad
 
         private void CurrentPathLabel_GotFocus(object sender, RoutedEventArgs e)
         {
-            BarGrid.Visibility = Visibility.Hidden;
+            BarGrid.Visibility = Visibility.Collapsed;
             CurrentPathLabel.Text = GetCurrentPath();
+            Canvas.SetZIndex(CurrentPathLabel, 1);
             CurrentPathLabel.Select(0, CurrentPathLabel.Text.Length);
         }
 
         private void CurrentPathLabel_LostFocus(object sender, RoutedEventArgs e)
         {
+            Canvas.SetZIndex(CurrentPathLabel, 0);
             CurrentPathLabel.Text = string.Empty;
             SetupPathLine();
+        }
+
+        private void PathScroll_MouseUp(object sender, MouseButtonEventArgs e)
+        {
+            CurrentPathLabel.Focus();
         }
 
         private void FilesEntries_MouseDoubleClick(object sender, MouseButtonEventArgs e)
@@ -391,11 +495,6 @@ namespace DZNotepad
             /// <returns>N/A</returns>
             [DllImport("User32.dll")]
             public static extern int DestroyIcon(IntPtr hIcon);
-        }
-
-        private void PathScroll_MouseUp(object sender, MouseButtonEventArgs e)
-        {
-            CurrentPathLabel.Focus();
         }
     }
 }

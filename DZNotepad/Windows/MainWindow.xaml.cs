@@ -197,14 +197,16 @@ namespace DZNotepad
             if (UserSingleton.Get().LoginUser != null)
             {
                 SecureFileDialog dlg = new SecureFileDialog(UserSingleton.RootPath, "Выберите файл...", SecureFileDialogType.Open);
+                dlg.FilterIndex = 0;
+                dlg.Filter = "Текстовый файл (*.txt)|*.txt|Все файлы (*.*)|*.*";
                 result = (bool)dlg.ShowDialog();
                 fileName = dlg.FileName;
             }
             else
             {
                 Microsoft.Win32.OpenFileDialog dlg = new Microsoft.Win32.OpenFileDialog();
-                dlg.DefaultExt = ".txt";
-                dlg.Filter = "Text Files (*.txt)|*.txt|All files (*.*)|*.*";
+                dlg.FilterIndex = 0;
+                dlg.Filter = "Текстовый файл (*.txt)|*.txt|Все файлы (*.*)|*.*";
                 result = (bool)dlg.ShowDialog();
                 fileName = dlg.FileName;
             }

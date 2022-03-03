@@ -280,19 +280,19 @@ namespace DZNotepad.UserElements
             if (UserSingleton.Get().LoginUser != null)
             {
                 SecureFileDialog dlg = new SecureFileDialog(Path.Combine(UserSingleton.RootPath, "russian"), "Выберите расположение...", SecureFileDialogType.Save);
+                dlg.Filter = "Текстовый файл (*.txt)|*.txt";
+
                 result = (bool)dlg.ShowDialog();
                 dlgFileName = dlg.FileName;
             }
             else
             {
                 Microsoft.Win32.SaveFileDialog dlg = new Microsoft.Win32.SaveFileDialog();
-                dlg.DefaultExt = ".txt";
-                dlg.Filter = "Text Files (*.txt)|*.txt";
+                dlg.Filter = "Текстовый файл (*.txt)|*.txt";
 
                 result = (bool)dlg.ShowDialog();
                 dlgFileName = dlg.FileName;
             }
-
 
             if (result == true)
             {
