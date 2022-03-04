@@ -78,12 +78,35 @@ namespace DZNotepad.UserElements
 
         public void RequestRename()
         {
-            string oldName = text;
-            RenameStyle renameStyle = new RenameStyle(selectStyle, this);
+            OneFieldDialog renameStyle = new OneFieldDialog();
+            renameStyle.InputName = "Введите новое название стиля";
+            renameStyle.ValidatorCallback += ValidateRenameStyle;
             renameStyle.ShowDialog();
 
-            if (oldName != text)
-                DBContext.Command($"UPDATE stylesNames SET styleName = '{text}' WHERE styleNameId = (SELECT styleNameId FROM stylesNames WHERE styleName = '{oldName}')");
+            if (renameStyle.DialogResult == true)
+            {
+                DBContext.Command($"UPDATE stylesNames SET styleName = '{renameStyle.Result}' WHERE styleNameId = (SELECT styleNameId FROM stylesNames WHERE styleName = '{text}')");
+                text = renameStyle.Result;
+            }
+        }
+
+        private MessageBoxResult ValidateRenameStyle(string input)
+        {
+            if (string.IsNullOrWhiteSpace(input) || (long)DBContext.CommandScalar($"SELECT COUNT(styleNameId) FROM stylesNames WHERE styleName = '{input}'") != 0)
+            {
+                MessageBox.Show("Введите уникальное имя!");
+                return MessageBoxResult.No;
+            }
+            else if (input == text)
+            {
+                MessageBox.Show("Введите имя, отличное от текущего!");
+                return MessageBoxResult.No;
+            }
+            else
+            {
+                var result = MessageBox.Show("Вы хотите переименовать стиль " + input, "Переименование " + input, MessageBoxButton.YesNo, MessageBoxImage.Question);
+                return result;
+            }
         }
 
         public void DeleteElement()

@@ -11,9 +11,6 @@ using System.Windows.Media.Imaging;
 
 namespace DZNotepad
 {
-    /// <summary>
-    /// Логика взаимодействия для SecureFileDialog.xaml
-    /// </summary>
 
     public enum SecureFileDialogType
     {
@@ -21,6 +18,9 @@ namespace DZNotepad
         Save
     }
 
+    /// <summary>
+    /// Диалоговое окно открытия/сохранения файла, с возможностью ограничения доступа
+    /// </summary>
     public partial class SecureFileDialog : Window
     {
         private class Proxy
@@ -34,9 +34,15 @@ namespace DZNotepad
         }
 
         /// <summary>
-        /// В случае если DialogResult = true, содержит путь к выбранному файлу
+        /// В случае если <c>DialogResult = true</c>, содержит путь к выбранному файлу
         /// </summary>
         public string FileName { get; private set; }
+
+        /// <summary>
+        /// Фильтр для проверки расширения, и указания доступных расширений для сохранения (по умолчанию - все файлы)
+        /// <para>Формат: Описание|*.ext[;*.ext2]<c>[|Описание2|*.ext]</c></para>
+        /// <para>Для указания всех файлов следует использовать: Описание|*.*<c>[|Описание2|*.ext]</c></para>
+        /// </summary>
         public string Filter
         {
             set
@@ -44,6 +50,10 @@ namespace DZNotepad
                 ParseFilter(value);
             }
         }
+
+        /// <summary>
+        /// Указывает изначально выбранной значение в <c>Filter</c>
+        /// </summary>
         public int FilterIndex { get; set; } = 0;
 
         private readonly string RootPath;
@@ -60,7 +70,7 @@ namespace DZNotepad
         /// <param name="rootPath">Корневой путь, верхний предел иерархии, доступ выше него будет ограничен</param>
         /// <param name="name">Название окна</param>
         /// <param name="dialogType">Тип диалога, открытие или сохранение</param>
-        /// <param name="discardRoot">Если true - скрывает корневой путь в строке пути</param>
+        /// <param name="discardRoot">Если <c>true</c> - скрывает корневой путь в строке пути</param>
         public SecureFileDialog(string rootPath, string name, SecureFileDialogType dialogType, bool discardRoot=true)
         {
             InitializeComponent();
@@ -277,13 +287,13 @@ namespace DZNotepad
         {
             BarGrid.Visibility = Visibility.Collapsed;
             CurrentPathLabel.Text = GetCurrentPath();
-            Canvas.SetZIndex(CurrentPathLabel, 1);
+            Panel.SetZIndex(CurrentPathLabel, 1);
             CurrentPathLabel.Select(0, CurrentPathLabel.Text.Length);
         }
 
         private void CurrentPathLabel_LostFocus(object sender, RoutedEventArgs e)
         {
-            Canvas.SetZIndex(CurrentPathLabel, 0);
+            Panel.SetZIndex(CurrentPathLabel, 0);
             CurrentPathLabel.Text = string.Empty;
             SetupPathLine();
         }
@@ -295,8 +305,7 @@ namespace DZNotepad
 
         private void FilesEntries_MouseDoubleClick(object sender, MouseButtonEventArgs e)
         {
-            Proxy proxy = FilesEntries.SelectedItem as Proxy;
-            if (proxy != null)
+            if (FilesEntries.SelectedItem is Proxy proxy)
             {
                 if (Directory.Exists(proxy.Path))
                 {
@@ -319,6 +328,7 @@ namespace DZNotepad
                 }
 
                 Proxy proxy = FilesEntries.SelectedItem as Proxy;
+
                 if (Directory.Exists(proxy.Path))
                 {
                     CurrentPath = proxy.Path;
@@ -357,14 +367,16 @@ namespace DZNotepad
 
         private void CreateFolder_Click(object sender, RoutedEventArgs e)
         {
-            CreateFolder dlg = new CreateFolder();
+            OneFieldDialog dlg = new OneFieldDialog();
+            dlg.InputName = "Введите название папки";
+            //TODO: add validator callback
             dlg.ShowDialog();
 
             if (dlg.DialogResult == true)
             {
                 try
                 {
-                    Directory.CreateDirectory(Path.Combine(CurrentPath, dlg.Name));
+                    Directory.CreateDirectory(Path.Combine(CurrentPath, dlg.Result));
                     DisplayDirectory();
                 }
                 catch
@@ -405,14 +417,16 @@ namespace DZNotepad
 
         private void CreateFile_Click(object sender, RoutedEventArgs e)
         {
-            CreateFile dlg = new CreateFile();
+            OneFieldDialog dlg = new OneFieldDialog();
+            dlg.InputName = "Введите название файла";
+            //TODO: add validator callback
             dlg.ShowDialog();
 
             if (dlg.DialogResult == true)
             {
                 try
                 {
-                    string filePath = Path.Combine(CurrentPath, dlg.Name);
+                    string filePath = Path.Combine(CurrentPath, dlg.Result);
                     DBContext.Command($"INSERT INTO fileHistory (filePath, userId, changeTime) VALUES ('{filePath}', {UserSingleton.Get().LoginUser.UserId}, CURRENT_TIMESTAMP)");
                     File.CreateText(filePath).Close();
                     DisplayDirectory();
@@ -437,7 +451,6 @@ namespace DZNotepad
                 flags += Shell32.ShgfiLargeicon;
 
             uint attributeFlag;
-
 
             if (isDir == false)
                 attributeFlag = Shell32.FileAttributeNormal;

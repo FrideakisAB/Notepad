@@ -81,9 +81,30 @@ namespace DZNotepad
 
         private void AddItem_Click(object sender, RoutedEventArgs e)
         {
-            CreateStyle createStyle = new CreateStyle(this);
-            createStyle.Owner = this;
+            OneFieldDialog createStyle = new OneFieldDialog();
+            createStyle.InputName = "Введите название стиля";
+            createStyle.ValidatorCallback += ValidateNewStyle;
             createStyle.ShowDialog();
+
+            if (createStyle.DialogResult == true)
+            {
+                StyleList.Items.Add(new StyleItem(createStyle.Result, this));
+                DBContext.Command($"INSERT INTO stylesNames(styleName) VALUES('{createStyle.Result}');");
+
+                long id = (long)DBContext.CommandScalar($"SELECT styleNameId FROM stylesNames WHERE styleName = '{createStyle.Result}'");
+                DBContext.Command(string.Format(DBContext.LoadScriptFromResource("DZNotepad.SQLScripts.LightThemeSetup.sql"), id));
+            }
+        }
+
+        private MessageBoxResult ValidateNewStyle(string input)
+        {
+            if (string.IsNullOrWhiteSpace(input) || (long)DBContext.CommandScalar($"SELECT COUNT(styleNameId) FROM stylesNames WHERE styleName = '{input}'") != 0)
+            {
+                MessageBox.Show("Введите уникальное имя!");
+                return MessageBoxResult.No;
+            }
+
+            return MessageBoxResult.OK;
         }
 
         private void RenameStyle_Click(object sender, RoutedEventArgs e)
