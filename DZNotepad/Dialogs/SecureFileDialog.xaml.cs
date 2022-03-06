@@ -8,6 +8,8 @@ using System.Windows.Input;
 using System.Windows.Interop;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
+using System.Runtime.CompilerServices;
+using System.ComponentModel;
 
 namespace DZNotepad
 {
@@ -32,6 +34,37 @@ namespace DZNotepad
             }
             public string ChangeDate { get; set; } = string.Empty;
             public string FileSize { get; set; } = string.Empty;
+
+            public GridColumnsSize CurrentColumnsSize { get; set; }
+        }
+
+        private class GridColumnsSize : INotifyPropertyChanged
+        {
+            private string[] Sizes = new string[10];
+
+            public void Set(int i, string value)
+            {
+                Sizes[i] = value;
+                OnPropertyChanged("Get" + (i + 1).ToString());
+            }
+
+            public string Get1 { get => Sizes[0]; }
+            public string Get2 { get => Sizes[1]; }
+            public string Get3 { get => Sizes[2]; }
+            public string Get4 { get => Sizes[3]; }
+            public string Get5 { get => Sizes[4]; }
+            public string Get6 { get => Sizes[5]; }
+            public string Get7 { get => Sizes[6]; }
+            public string Get8 { get => Sizes[7]; }
+            public string Get9 { get => Sizes[8]; }
+            public string Get10 { get => Sizes[9]; }
+
+            public event PropertyChangedEventHandler PropertyChanged;
+            public void OnPropertyChanged([CallerMemberName] string prop = "")
+            {
+                if (PropertyChanged != null)
+                    PropertyChanged(this, new PropertyChangedEventArgs(prop));
+            }
         }
 
         /// <summary>
@@ -62,6 +95,7 @@ namespace DZNotepad
         private readonly bool DiscardRoot;
         private List<string> FilterExtensions = new List<string>();
         private string CurrentPath;
+        private GridColumnsSize CurrentColumnsSize = new GridColumnsSize();
 
         private static readonly string SecureRootName = "RDC:\\";
 
@@ -76,6 +110,7 @@ namespace DZNotepad
         /// <param name="discardRoot">Если <c>true</c> - скрывает корневой путь в строке пути</param>
         public SecureFileDialog(string rootPath, string name, SecureFileDialogType dialogType, bool discardRoot=true)
         {
+            DataContext = this;
             InitializeComponent();
 
             Title = name;
@@ -92,6 +127,7 @@ namespace DZNotepad
                 FileNameField.Visibility = Visibility.Collapsed;
             }
 
+            GridSplitter_DragDelta(null, null);
             DisplayDirectory();
         }
 
@@ -137,7 +173,7 @@ namespace DZNotepad
                 string changeDate = Directory.GetLastWriteTime(dir).ToString("g");
 
                 BitmapSource source = Imaging.CreateBitmapSourceFromHIcon(GetFileIcon(dir, true, true, false).Handle, Int32Rect.Empty, BitmapSizeOptions.FromEmptyOptions());
-                FilesEntries.Items.Add(new Proxy { Icon = source, Path = dir, ChangeDate = changeDate });
+                FilesEntries.Items.Add(new Proxy { Icon = source, Path = dir, ChangeDate = changeDate, CurrentColumnsSize = CurrentColumnsSize });
             }
 
             foreach (var file in Directory.EnumerateFiles(CurrentPath))
@@ -150,7 +186,7 @@ namespace DZNotepad
                     string fileSize = ConvertToReadableFileSize(fileInfo.Length);
 
                     BitmapSource source = Imaging.CreateBitmapSourceFromHIcon(GetFileIcon(file, false, true, false).Handle, Int32Rect.Empty, BitmapSizeOptions.FromEmptyOptions());
-                    FilesEntries.Items.Add(new Proxy { Icon = source, Path = file, ChangeDate = changeDate, FileSize = fileSize });
+                    FilesEntries.Items.Add(new Proxy { Icon = source, Path = file, ChangeDate = changeDate, FileSize = fileSize, CurrentColumnsSize = CurrentColumnsSize });
                 }
             }
         }
@@ -456,6 +492,16 @@ namespace DZNotepad
                 {
                     MessageBox.Show("При создании файла произошла ошибка, попробуйте другое имя", "Ошибка создания", MessageBoxButton.OK, MessageBoxImage.Error);
                 }
+            }
+        }
+
+        private void GridSplitter_DragDelta(object sender, System.Windows.Controls.Primitives.DragDeltaEventArgs e)
+        {
+            for (int i = 0; i < DragableGrid.ColumnDefinitions.Count; i++)
+            {
+                GridLength actualWidth = DragableGrid.ColumnDefinitions[i].Width;
+
+                CurrentColumnsSize.Set(i, actualWidth.ToString());
             }
         }
 
