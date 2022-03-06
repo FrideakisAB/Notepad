@@ -11,7 +11,6 @@ using System.Windows.Media.Imaging;
 
 namespace DZNotepad
 {
-
     public enum SecureFileDialogType
     {
         Open,
@@ -31,6 +30,8 @@ namespace DZNotepad
             {
                 get => System.IO.Path.GetFileName(Path);
             }
+            public string ChangeDate { get; set; } = string.Empty;
+            public string FileSize { get; set; } = string.Empty;
         }
 
         /// <summary>
@@ -63,6 +64,8 @@ namespace DZNotepad
         private string CurrentPath;
 
         private static readonly string SecureRootName = "RDC:\\";
+
+        private static readonly string[] SizePrefixs = { "Б", "КБ", "МБ", "ГБ", "ТБ", "ПБ", "ЭБ", "ЗБ", "ЙБ" };
 
         /// <summary>
         /// Конструктор диалога открытия/сохранения файла
@@ -131,18 +134,36 @@ namespace DZNotepad
 
             foreach (var dir in Directory.EnumerateDirectories(CurrentPath))
             {
+                string changeDate = Directory.GetLastWriteTime(dir).ToString("g");
+
                 BitmapSource source = Imaging.CreateBitmapSourceFromHIcon(GetFileIcon(dir, true, true, false).Handle, Int32Rect.Empty, BitmapSizeOptions.FromEmptyOptions());
-                FilesEntries.Items.Add(new Proxy { Icon = source, Path = dir });
+                FilesEntries.Items.Add(new Proxy { Icon = source, Path = dir, ChangeDate = changeDate });
             }
 
             foreach (var file in Directory.EnumerateFiles(CurrentPath))
             {
                 if (IsAvailabeFile(file))
                 {
+                    FileInfo fileInfo = new FileInfo(file);
+
+                    string changeDate = fileInfo.LastWriteTime.ToString("g");
+                    string fileSize = ConvertToReadableFileSize(fileInfo.Length);
+
                     BitmapSource source = Imaging.CreateBitmapSourceFromHIcon(GetFileIcon(file, false, true, false).Handle, Int32Rect.Empty, BitmapSizeOptions.FromEmptyOptions());
-                    FilesEntries.Items.Add(new Proxy { Icon = source, Path = file });
+                    FilesEntries.Items.Add(new Proxy { Icon = source, Path = file, ChangeDate = changeDate, FileSize = fileSize });
                 }
             }
+        }
+
+        private static string ConvertToReadableFileSize(long fileSize)
+        {
+            for (int i = 0; i < SizePrefixs.Length; i++)
+            {
+                if (fileSize <= (Math.Pow(1024, i + 1)))
+                    return (fileSize / Math.Pow(1024, i)) + " " + SizePrefixs[i];
+            }
+
+            return (fileSize / Math.Pow(1024, SizePrefixs.Length - 1)) + " " + SizePrefixs[^1];
         }
 
         private bool IsAvailabeFile(string path)

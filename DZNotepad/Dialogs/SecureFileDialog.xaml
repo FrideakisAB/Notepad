@@ -16,7 +16,7 @@
         <ScrollViewer x:Name="PathScroll" HorizontalScrollBarVisibility="Hidden" VerticalScrollBarVisibility="Disabled"  Margin="5, 5, 30, 5" MouseUp="PathScroll_MouseUp">
             <StackPanel x:Name="BarGrid" Orientation="Horizontal" />
         </ScrollViewer>
-        <ListBox x:Name="FilesEntries" Grid.Row="1" MouseDoubleClick="FilesEntries_MouseDoubleClick">
+        <ListBox x:Name="FilesEntries" Grid.Row="1" HorizontalContentAlignment="Stretch" MouseDoubleClick="FilesEntries_MouseDoubleClick">
             <ListBox.ContextMenu>
                 <ContextMenu>
                     <MenuItem x:Name="CreateFile" Header="Создать файл" Click="CreateFile_Click"/>
@@ -26,10 +26,18 @@
             </ListBox.ContextMenu>
             <ListBox.ItemTemplate>
                 <DataTemplate>
-                    <StackPanel Orientation="Horizontal">
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="18" />
+                            <ColumnDefinition Width="60*" />
+                            <ColumnDefinition Width="20*" />
+                            <ColumnDefinition Width="20*" />
+                        </Grid.ColumnDefinitions>
                         <Image Source="{Binding Path=Icon}" Height="16" />
-                        <TextBlock Text="{Binding Path=FullPath}" />
-                    </StackPanel>
+                        <TextBlock Grid.Column="1" Text="{Binding Path=FullPath}" />
+                        <TextBlock Grid.Column="2" Text="{Binding Path=ChangeDate}" />
+                        <TextBlock Grid.Column="3" Text="{Binding Path=FileSize}" />
+                    </Grid>
                 </DataTemplate>
             </ListBox.ItemTemplate>
         </ListBox>
