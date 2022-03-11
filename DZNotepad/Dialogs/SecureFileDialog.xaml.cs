@@ -426,7 +426,7 @@ namespace DZNotepad
         {
             OneFieldDialog dlg = new OneFieldDialog();
             dlg.InputName = "Введите название папки";
-            //TODO: add validator callback
+            dlg.ValidatorCallback += ValidateFolderCreate;
             dlg.ShowDialog();
 
             if (dlg.DialogResult == true)
@@ -438,9 +438,20 @@ namespace DZNotepad
                 }
                 catch
                 {
-                    MessageBox.Show("При создании папки произошла ошибка, попробуйте другое имя", "Ошибка создания", MessageBoxButton.OK, MessageBoxImage.Error);
+                    MessageBox.Show("При создании папки произошла ошибка, возможно отсутсвуют права доступа", "Ошибка создания", MessageBoxButton.OK, MessageBoxImage.Error);
                 }
             }
+        }
+
+        private MessageBoxResult ValidateFolderCreate(string input)
+        {
+            if (Directory.Exists(input))
+            {
+                MessageBox.Show("Данная папка уже существует, введите другое название!");
+                return MessageBoxResult.No;
+            }
+
+            return MessageBoxResult.OK;
         }
 
         private void DeleteElement_Click(object sender, RoutedEventArgs e)
@@ -476,7 +487,7 @@ namespace DZNotepad
         {
             OneFieldDialog dlg = new OneFieldDialog();
             dlg.InputName = "Введите название файла";
-            //TODO: add validator callback
+            dlg.ValidatorCallback += ValidateFileCreate;
             dlg.ShowDialog();
 
             if (dlg.DialogResult == true)
@@ -493,6 +504,17 @@ namespace DZNotepad
                     MessageBox.Show("При создании файла произошла ошибка, попробуйте другое имя", "Ошибка создания", MessageBoxButton.OK, MessageBoxImage.Error);
                 }
             }
+        }
+
+        private MessageBoxResult ValidateFileCreate(string input)
+        {
+            if (File.Exists(input))
+            {
+                MessageBox.Show("Данный файл уже существует, введите другое название!");
+                return MessageBoxResult.No;
+            }
+
+            return MessageBoxResult.OK;
         }
 
         private void GridSplitter_DragDelta(object sender, System.Windows.Controls.Primitives.DragDeltaEventArgs e)

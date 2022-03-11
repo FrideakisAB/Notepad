@@ -5,12 +5,8 @@ using System.Windows.Controls;
 using System.IO;
 using Microsoft.Data.Sqlite;
 
-namespace DZNotepad.UserElements
+namespace DZNotepad
 {
-    /// <summary>
-    /// Логика взаимодействия для EditableFile.xaml
-    /// </summary>
-
     public class FileInfoBlock
     {
         public TextBlock LineCount;
@@ -28,39 +24,39 @@ namespace DZNotepad.UserElements
         public bool IsAutoTranslate;
     }
 
+    /// <summary>
+    /// Логика взаимодействия для EditableFile.xaml
+    /// </summary>
     public partial class EditableFile : UserControl
     {
-        public string FileName { get => fileName; }
-        public TextBox TextSource { get => textSource; }
-        public bool IsEditable { get => isEditable; }
+        public string FileName { get; private set; } = string.Empty;
+        public bool IsEditable { get; private set; } = false;
 
+        private LastFiles lastFiles;
         private CloseableTab parentTab;
         private FileInfoBlock fileInfoBlock;
         private TranslateInfoBlock translateInfoBlock;
 
-        private static Encoding UTF32BE = new UTF32Encoding(true, true);
-        private string fileName = "";
         private string header = "Без имени";
         private bool isSupportedFormat = true;
-        private bool isEditable = false;
         private DateTime lastWriteAcces;
         private int translatePosition = 0;
+
         private string encoding = Encoding.Default.BodyName.ToUpper();
         private Encoding srcEncoding = Encoding.Default;
         private Encoding dstEncoding = Encoding.Default;
-        private LastFiles lastFiles;
 
-        public EditableFile(LastFiles lastFiles, CloseableTab tab, FileInfoBlock fileBblock, TranslateInfoBlock translateBlock)
+        public EditableFile(LastFiles lastFiles, CloseableTab tab, FileInfoBlock fileBlock, TranslateInfoBlock translateBlock)
         {
             InitializeComponent();
             DataContext = this;
             this.lastFiles = lastFiles;
 
             parentTab = tab;
-            parentTab.Closed += parentTab_TabClosed;
+            parentTab.Closed += ParentTab_TabClosed;
             parentTab.SetHeader(header);
 
-            fileInfoBlock = fileBblock;
+            fileInfoBlock = fileBlock;
             translateInfoBlock = translateBlock;
             UpdateState();
         }
@@ -72,14 +68,14 @@ namespace DZNotepad.UserElements
                 Path.GetExtension(path) != ".txt")
             {
                 isSupportedFormat = false;
-                textSource.IsReadOnly = true;
+                TextSource.IsReadOnly = true;
             }
 
-            fileName = path;
-            lastWriteAcces = File.GetLastWriteTime(fileName);
-            header = Path.GetFileName(fileName);
+            FileName = path;
+            lastWriteAcces = File.GetLastWriteTime(FileName);
+            header = Path.GetFileName(FileName);
 
-            using (FileStream fs = File.OpenRead(fileName))
+            using (FileStream fs = File.OpenRead(FileName))
             {
                 Ude.CharsetDetector detector = new Ude.CharsetDetector();
                 detector.Feed(fs);
@@ -88,84 +84,30 @@ namespace DZNotepad.UserElements
                     encoding = detector.Charset;
             }
 
-            srcEncoding = ToSystemEncoding(encoding);
+            srcEncoding = EncodingUtils.StringToSystemEncoding(encoding);
 
-            textSource.Text = File.ReadAllText(fileName, srcEncoding);
-            isEditable = false;
+            TextSource.Text = File.ReadAllText(FileName, srcEncoding);
+            IsEditable = false;
 
             parentTab.SetHeader(header);
             UpdateState();
-        }
-
-        private static Encoding ToSystemEncoding(string encoding)
-        {
-            Encoding sysEncoding = Encoding.Default;
-
-            switch (encoding)
-            {
-                case "ASCII":
-                    sysEncoding = Encoding.ASCII;
-                    break;
-                case "UTF-8":
-                    sysEncoding = Encoding.UTF8;
-                    break;
-                case "UTF-16LE":
-                    sysEncoding = Encoding.Unicode;
-                    break;
-                case "UTF-16BE":
-                    sysEncoding = Encoding.BigEndianUnicode;
-                    break;
-                case "UTF-32LE":
-                    sysEncoding = Encoding.UTF32;
-                    break;
-                case "UTF-32BE":
-                    sysEncoding = UTF32BE;
-                    break;
-                case "windows-1251":
-                    sysEncoding = Encoding.GetEncoding(1251);
-                    break;
-            }
-
-            return sysEncoding;
-        }
-
-        private static string SystemEncodingToString(Encoding encoding)
-        {
-            string sysEncoding = Encoding.Default.BodyName.ToUpper();
-
-            if (encoding.CodePage == Encoding.ASCII.CodePage)
-                sysEncoding = "ASCII";
-            else if (encoding.CodePage == Encoding.UTF8.CodePage)
-                sysEncoding = "UTF-8";
-            else if (encoding.CodePage == Encoding.Unicode.CodePage)
-                sysEncoding = "UTF-16LE";
-            else if (encoding.CodePage == Encoding.BigEndianUnicode.CodePage)
-                sysEncoding = "UTF-16BE";
-            else if (encoding.CodePage == Encoding.UTF32.CodePage)
-                sysEncoding = "UTF-32LE";
-            else if (encoding.CodePage == UTF32BE.CodePage)
-                sysEncoding = "UTF-32BE";
-            else if (encoding.CodePage == Encoding.GetEncoding(1251).CodePage)
-                sysEncoding = "windows-1251";
-
-            return sysEncoding;
         }
 
         private void UpdateState()
         {
             if (this == fileInfoBlock.CurrentFile)
             {
-                string[] lines = textSource.Text.Split('\n');
+                string[] lines = TextSource.Text.Split('\n');
 
                 fileInfoBlock.LineCount.Text = lines.Length.ToString();
-                fileInfoBlock.CharCount.Text = textSource.Text.Length.ToString();
+                fileInfoBlock.CharCount.Text = TextSource.Text.Length.ToString();
 
                 int totalCount = 0, line = 0, charIndex = 0;
                 for (int i = 0; i < lines.Length; i++)
                 {
-                    charIndex = textSource.CaretIndex - totalCount - i;
+                    charIndex = TextSource.CaretIndex - totalCount - i;
                     totalCount += lines[i].Length;
-                    if (totalCount >= textSource.CaretIndex - i)
+                    if (totalCount >= TextSource.CaretIndex - i)
                     {
                         line = i + 1;
                         break;
@@ -176,52 +118,6 @@ namespace DZNotepad.UserElements
                 fileInfoBlock.CurrentChar.Text = charIndex.ToString();
                 fileInfoBlock.CurrentEncode.Text = encoding;
             }
-        }
-
-        private void textSource_TextChanged(object sender, TextChangedEventArgs e)
-        {
-            isEditable = true;
-            parentTab.SetHeader(header + "*");
-            UpdateState();
-
-            int changeOffset = -1;
-            foreach (var change in e.Changes)
-                changeOffset = change.Offset;
-
-            if (translateInfoBlock.IsAutoTranslate)
-            {
-                int indexComma = textSource.Text.LastIndexOf('.');
-                int indexExclamation = textSource.Text.LastIndexOf('!');
-                int indexQuestion = textSource.Text.LastIndexOf('?');
-
-                if (indexComma != -1 || indexExclamation != -1 || indexQuestion != -1)
-                {
-                    int index = -1;
-                    if (indexComma != -1) index = indexComma;
-                    if (indexExclamation != -1 && indexExclamation > index) index = indexExclamation;
-                    if (indexQuestion != -1 && indexQuestion > index) index = indexQuestion;
-
-                    if (index != -1 && (index > translatePosition || changeOffset != -1 && changeOffset < translatePosition))
-                    {
-                        int relativeCursor = textSource.CaretIndex - index;
-                        string translateSuggestion = translateInfoBlock.LocalTranslator.Translate("russian", translateInfoBlock.Language, textSource.Text.Substring(0, index));
-                        textSource.Text = translateSuggestion + textSource.Text.Substring(index);
-                        translatePosition = translateSuggestion.Length;
-                        textSource.CaretIndex = translatePosition + relativeCursor;
-                    }
-                }
-            }
-        }
-
-        private void parentTab_TabClosed(object sender, EventTabClosedArgs e)
-        {
-            if (isEditable)
-                e.PreventDefault = SaveChangesDialog(GetSaveMessage());
-        }
-
-        private void textSource_SelectionChanged(object sender, RoutedEventArgs e)
-        {
-            UpdateState();
         }
 
         private bool SaveChangesDialog(string text)
@@ -238,25 +134,107 @@ namespace DZNotepad.UserElements
             return false;
         }
 
-        internal bool OnWindowCLosing()
+        private void TextSource_TextChanged(object sender, TextChangedEventArgs e)
         {
-            if (isEditable)
-               return SaveChangesDialog(GetSaveMessage());
+            IsEditable = true;
+            parentTab.SetHeader(header + "*");
+            UpdateState();
 
-            return false;
+            int changeOffset = -1;
+            foreach (var change in e.Changes)
+                changeOffset = change.Offset;
+
+            if (translateInfoBlock.IsAutoTranslate)
+            {
+                int indexComma = TextSource.Text.LastIndexOf('.');
+                int indexExclamation = TextSource.Text.LastIndexOf('!');
+                int indexQuestion = TextSource.Text.LastIndexOf('?');
+
+                if (indexComma != -1 || indexExclamation != -1 || indexQuestion != -1)
+                {
+                    int index = -1;
+                    if (indexComma != -1) index = indexComma;
+                    if (indexExclamation != -1 && indexExclamation > index) index = indexExclamation;
+                    if (indexQuestion != -1 && indexQuestion > index) index = indexQuestion;
+
+                    if (index != -1 && (index > translatePosition || changeOffset != -1 && changeOffset < translatePosition))
+                    {
+                        int relativeCursor = TextSource.CaretIndex - index;
+                        string translateSuggestion = translateInfoBlock.LocalTranslator.Translate("russian", translateInfoBlock.Language, TextSource.Text.Substring(0, index));
+                        TextSource.Text = translateSuggestion + TextSource.Text.Substring(index);
+                        translatePosition = translateSuggestion.Length;
+                        TextSource.CaretIndex = translatePosition + relativeCursor;
+                    }
+                }
+            }
+        }
+
+        private void TextSource_SelectionChanged(object sender, RoutedEventArgs e)
+        {
+            UpdateState();
+        }
+
+        private void ParentTab_TabClosed(object sender, EventTabClosedArgs e)
+        {
+            if (IsEditable)
+                e.PreventDefault = SaveChangesDialog(GetSaveMessage());
         }
 
         private string GetSaveMessage()
         {
-            if (string.IsNullOrWhiteSpace(fileName))
+            if (string.IsNullOrWhiteSpace(FileName))
                 return $"Сохранить новый файл?";
             else
                 return $"Сохранить изменения ({header})?";
         }
 
+        private void SaveFile()
+        {
+            if (UserSingleton.Get().LoginUser != null)
+            {
+                DBContext.Command($"INSERT INTO fileHistory (filePath, userId, changeTime) VALUES ('{FileName}', {UserSingleton.Get().LoginUser.UserId}, CURRENT_TIMESTAMP)");
+
+                long value = (long)DBContext.CommandScalar($"SELECT COUNT(*) FROM mainFiles WHERE path = '{FileName}';");
+
+                if (value == 0)
+                {
+                    long id;
+                    try
+                    {
+                        id = (long)DBContext.CommandScalar($"SELECT MAX(fileId) FROM mainFiles") + 1;
+                    }
+                    catch
+                    {
+                        id = 1;
+                    }
+
+                    DBContext.Command($"INSERT INTO mainFiles VALUES ({id},'{FileName}');");
+                }
+            }
+
+            IsEditable = false;
+            File.WriteAllText(FileName, TextSource.Text, dstEncoding);
+            lastFiles.RegisterNewFile(FileName);
+            lastWriteAcces = File.GetLastWriteTime(FileName);
+            parentTab.SetHeader(header);
+
+            srcEncoding = dstEncoding;
+            encoding = EncodingUtils.SystemEncodingToString(srcEncoding);
+            UpdateState();
+        }
+
+        // Menu events
+        internal bool OnWindowClosing()
+        {
+            if (IsEditable)
+               return SaveChangesDialog(GetSaveMessage());
+
+            return false;
+        }
+
         internal bool OnClose()
         {
-            if (isEditable)
+            if (IsEditable)
                 return SaveChangesDialog(GetSaveMessage());
 
             return false;
@@ -266,7 +244,7 @@ namespace DZNotepad.UserElements
         {
             if (isSupportedFormat)
             {
-                if (string.IsNullOrWhiteSpace(fileName))
+                if (string.IsNullOrWhiteSpace(FileName))
                     OnSaveAs();
                 else
                     SaveFile();
@@ -296,80 +274,45 @@ namespace DZNotepad.UserElements
 
             if (result == true)
             {
-                File.WriteAllText(dlgFileName, textSource.Text);
+                File.WriteAllText(dlgFileName, TextSource.Text);
 
-                if (string.IsNullOrWhiteSpace(fileName))
+                if (string.IsNullOrWhiteSpace(FileName))
                 {
-                    fileName = dlgFileName;
-                    header = Path.GetFileName(fileName);
+                    FileName = dlgFileName;
+                    header = Path.GetFileName(FileName);
 
                     SaveFile();
                 }
             }
         }
 
-        private void SaveFile()
-        {
-            if (UserSingleton.Get().LoginUser != null)
-            {
-                DBContext.Command($"INSERT INTO fileHistory (filePath, userId, changeTime) VALUES ('{fileName}', {UserSingleton.Get().LoginUser.UserId}, CURRENT_TIMESTAMP)");
-
-                long value = (long)DBContext.CommandScalar($"SELECT COUNT(*) FROM mainFiles WHERE path = '{fileName}';");
-
-                if (value == 0)
-                {
-                    long id;
-                    try
-                    {
-                        id = (long)DBContext.CommandScalar($"SELECT MAX(fileId) FROM mainFiles") + 1;
-                    }
-                    catch 
-                    {
-                        id = 1;
-                    }
-
-                    DBContext.Command($"INSERT INTO mainFiles VALUES ({id},'{fileName}');");
-                }
-            }
-
-            isEditable = false;
-            File.WriteAllText(fileName, textSource.Text, dstEncoding);
-            lastFiles.RegisterNewFile(fileName);
-            lastWriteAcces = File.GetLastWriteTime(fileName);
-            parentTab.SetHeader(header);
-
-            srcEncoding = dstEncoding;
-            encoding = SystemEncodingToString(srcEncoding);
-            UpdateState();
-        }
-
         internal void OnReOpen()
         {
-            if (isEditable)
+            if (IsEditable)
             {
                 bool isCancel = SaveChangesDialog("Есть не сохранённые изменения (" + header + "), вы хотите их сохранить прежде чем открыть файл заново?");
                 if (!isCancel)
-                    textSource.Text = File.ReadAllText(fileName);
+                    TextSource.Text = File.ReadAllText(FileName);
             }
         }
 
         internal void OnCopyCommand()
         {
-            Clipboard.SetText(textSource.SelectedText);
+            Clipboard.SetText(TextSource.SelectedText);
         }
 
         internal void OnPasteCommand()
         {
             if (isSupportedFormat)
             {
-                int insertPosition = textSource.CaretIndex;
-                if (textSource.SelectionLength != 0)
+                int insertPosition = TextSource.CaretIndex;
+                if (TextSource.SelectionLength != 0)
                 {
-                    insertPosition = textSource.SelectionStart;
-                    textSource.Text = textSource.Text.Remove(insertPosition, textSource.SelectionLength);
+                    insertPosition = TextSource.SelectionStart;
+                    TextSource.Text = TextSource.Text.Remove(insertPosition, TextSource.SelectionLength);
                 }
 
-                textSource.Text.Insert(insertPosition, Clipboard.GetText());
+                TextSource.Text.Insert(insertPosition, Clipboard.GetText());
             }
         }
 
@@ -377,47 +320,47 @@ namespace DZNotepad.UserElements
         {
             if (isSupportedFormat)
             {
-                if (textSource.SelectionLength != 0)
+                if (TextSource.SelectionLength != 0)
                 {
-                    Clipboard.SetText(textSource.SelectedText);
-                    textSource.Text = textSource.Text.Remove(textSource.SelectionStart, textSource.SelectionLength);
+                    Clipboard.SetText(TextSource.SelectedText);
+                    TextSource.Text = TextSource.Text.Remove(TextSource.SelectionStart, TextSource.SelectionLength);
                 }
             }
         }
 
         internal void OnChangeFontSize(int fontSize)
         {
-            textSource.FontSize = fontSize;
+            TextSource.FontSize = fontSize;
         }
 
         internal void OnActivated()
         {
-            if (!string.IsNullOrWhiteSpace(fileName))
+            if (!string.IsNullOrWhiteSpace(FileName))
             {
-                if (!File.Exists(fileName))
+                if (!File.Exists(FileName))
                 {
                     MessageBox.Show("Файл был удалён", "Файл", MessageBoxButton.OK, MessageBoxImage.Information);
-                    isEditable = true;
-                    fileName = "";
+                    IsEditable = true;
+                    FileName = "";
                     parentTab.SetHeader(header + "*");
                     header = "Без имени";
                 }
-                else if (File.GetLastWriteTime(fileName) > lastWriteAcces)
+                else if (File.GetLastWriteTime(FileName) > lastWriteAcces)
                 {
                     MessageBoxResult result = MessageBox.Show("Файл был изменён вне, вы хотите его обноаить (текущие изменения потеряются)?", "Файл", MessageBoxButton.YesNo, MessageBoxImage.Information);
                     if (result == MessageBoxResult.Yes)
                     {
-                        textSource.Text = File.ReadAllText(fileName);
-                        isEditable = false;
+                        TextSource.Text = File.ReadAllText(FileName);
+                        IsEditable = false;
                         parentTab.SetHeader(header);
                     }
                     else
                     {
-                        isEditable = true;
+                        IsEditable = true;
                         parentTab.SetHeader(header + "*");
                     }
 
-                    lastWriteAcces = File.GetLastWriteTime(fileName);
+                    lastWriteAcces = File.GetLastWriteTime(FileName);
                 }
             }
             UpdateState();
@@ -425,19 +368,19 @@ namespace DZNotepad.UserElements
 
         internal void OnTranslateRequest()
         {
-            if (translatePosition != textSource.Text.Length)
+            if (translatePosition != TextSource.Text.Length)
             {
                 if (UserSingleton.Get().LoginUser != null)
                 {
                     try
                     {
-                        string filePath = fileName.Replace("russian", translateInfoBlock.Language);
+                        string filePath = FileName.Replace("russian", translateInfoBlock.Language);
 
-                        SqliteDataReader reader = DBContext.CommandReader($"SELECT fileId FROM mainFiles WHERE path = '{fileName}'");
+                        SqliteDataReader reader = DBContext.CommandReader($"SELECT fileId FROM mainFiles WHERE path = '{FileName}'");
                         if (reader.HasRows)
                         {
-                            string translate = translateInfoBlock.LocalTranslator.Translate("russian", translateInfoBlock.Language, textSource.Text);
-                            translatePosition = textSource.Text.Length;
+                            string translate = translateInfoBlock.LocalTranslator.Translate("russian", translateInfoBlock.Language, TextSource.Text);
+                            translatePosition = TextSource.Text.Length;
                             File.WriteAllText(filePath, translate);
                             reader.Read();
                             DBContext.Command($"INSERT INTO translateFiles (fileId, translatePath, language) VALUES ({reader.GetInt64(0)}, '{filePath}', '{translateInfoBlock.Language}')");
@@ -450,24 +393,19 @@ namespace DZNotepad.UserElements
                 }
                 else
                 {
-                    textSource.Text = translateInfoBlock.LocalTranslator.Translate("russian", translateInfoBlock.Language, textSource.Text);
-                    translatePosition = textSource.Text.Length;
+                    TextSource.Text = translateInfoBlock.LocalTranslator.Translate("russian", translateInfoBlock.Language, TextSource.Text);
+                    translatePosition = TextSource.Text.Length;
                 }
             }
         }
 
-        internal void OnStyleChange(Style style)
-        {
-            textSource.Style = style;
-        }
-
         internal void OnChangeEncoding(string encoding)
         {
-            Encoding sysEncoding = ToSystemEncoding(encoding);
+            Encoding sysEncoding = EncodingUtils.StringToSystemEncoding(encoding);
             if (dstEncoding.CodePage != sysEncoding.CodePage && isSupportedFormat)
             {
                 dstEncoding = sysEncoding;
-                isEditable = true;
+                IsEditable = true;
                 parentTab.SetHeader(header + "*");
             }
         }

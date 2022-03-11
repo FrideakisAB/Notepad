@@ -34,16 +34,35 @@ namespace DZNotepad
             dockPanel.Children.Add(closeButton);
 
             Header = dockPanel;
+
+            SelectStyle.UpdateStyleObservers += UpdateStyleObservers;
+
+            ResourceDictionary themeDictionary = new ResourceDictionary();
+            themeDictionary.Source = new Uri("/DZNotepad;component/Dictionary/Theme.xaml", UriKind.RelativeOrAbsolute);
+            Resources.MergedDictionaries.Add(themeDictionary);
+
+            ResourceDictionary anyStyleDictionary = new ResourceDictionary();
+            anyStyleDictionary.Source = new Uri("/DZNotepad;component/Dictionary/AnyStyle.xaml", UriKind.RelativeOrAbsolute);
+            Resources.MergedDictionaries.Add(anyStyleDictionary);
+
+            DictionaryProvider.ApplyDictionary(Resources, SelectStyle.CurrentDictionary);
+
+            Style = (Resources["AnyStyleTabItem"] as Style);
+        }
+
+        ~CloseableTab()
+        {
+            SelectStyle.UpdateStyleObservers -= UpdateStyleObservers;
+        }
+
+        private void UpdateStyleObservers(ResourceDictionary dictionary)
+        {
+            DictionaryProvider.ApplyDictionary(Resources, dictionary);
         }
 
         public void SetHeader(string header)
         {
             headerElement.Text = header;
-        }
-
-        public void SetStyle(Style style)
-        {
-            this.Style = style;
         }
     }
 }

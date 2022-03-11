@@ -27,6 +27,8 @@ namespace DZNotepad
         PerformanceAnalyser analyser;
         LastFiles lastFiles;
 
+        private FileTabManager TabManager;
+
         public ChartValues<double> CPUUsage { get; set; }
         public ChartValues<double> MemoryUsage { get; set; }
         public ChartValues<double> NetworkUsage { get; set; }
@@ -62,7 +64,8 @@ namespace DZNotepad
 
             SelectStyle.UpdateStyleObservers += UpdateStyleObservers;
 
-            CreateNewTab();
+            TabManager = new FileTabManager(tabsContainer, lastFiles, fileInfoBlock, translateInfoBlock);
+            TabManager.CreateNewTab();
 
             // Создание подпапок
             Directory.CreateDirectory(Path.Combine(UserSingleton.RootPath, "russian"));
@@ -95,7 +98,7 @@ namespace DZNotepad
             string path = item.Header as string;
 
             if (path.Contains(UserSingleton.RootPath) || UserSingleton.Get().LoginUser == null)
-                CreateNewTab(path);
+                TabManager.CreateNewTab(path);
         }
 
         ~MainWindow()
@@ -105,49 +108,7 @@ namespace DZNotepad
 
         private void UpdateStyleObservers(ResourceDictionary dictionary)
         {
-            DictionaryProvider.ApplyDictionary(this.Resources, dictionary);
-            foreach (var tab in tabsContainer.Items)
-                (tab as CloseableTab)?.SetStyle(this.Resources["AnyStyleTabItem"] as Style);
-        }
-
-        private void CreateNewTab(string path = null)
-        {
-            if (string.IsNullOrWhiteSpace(path))
-            {
-                CloseableTab item = new CloseableTab();
-                item.SetStyle(this.Resources["AnyStyleTabItem"] as Style);
-                tabsContainer.Items.Add(item);
-                EditableFile editableFile = new EditableFile(lastFiles, item, fileInfoBlock, translateInfoBlock);
-                item.Content = editableFile;
-                tabsContainer.SelectedItem = item;
-            }
-            else
-            {
-                CloseableTab targetTab = null;
-                foreach (var tab in tabsContainer.Items)
-                {
-                    var closeableTab = tab as CloseableTab;
-                    if (closeableTab != null && ((EditableFile)closeableTab.Content).FileName == path)
-                        targetTab = closeableTab;
-                }
-
-                if (targetTab == null)
-                {
-                    CloseableTab item = new CloseableTab();
-                    item.SetStyle(this.Resources["AnyStyleTabItem"] as Style);
-                    tabsContainer.Items.Add(item);
-                    EditableFile editableFile = new EditableFile(lastFiles, item, fileInfoBlock, translateInfoBlock, path);
-                    item.Content = editableFile;
-                    tabsContainer.SelectedItem = item;
-
-                    lastFiles.RegisterNewFile(path);
-                }
-                else
-                {
-                    ((EditableFile)targetTab.Content).OnReOpen();
-                    tabsContainer.SelectedItem = targetTab;
-                }
-            }
+            DictionaryProvider.ApplyDictionary(Resources, dictionary);
         }
 
         private void aboutProgram_Click(object sender, RoutedEventArgs e)
@@ -178,10 +139,9 @@ namespace DZNotepad
 
         private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
         {
-            foreach (var tab in tabsContainer.Items)
+            foreach (EditableFile file in TabManager)
             {
-                var closeableTab = tab as CloseableTab;
-                if (closeableTab != null && ((EditableFile)closeableTab.Content).OnWindowCLosing())
+                if (file.OnWindowClosing())
                 {
                     e.Cancel = true;
                     break;
@@ -214,29 +174,28 @@ namespace DZNotepad
             if (result == true)
             {
                 bool isEmpty = false;
-                EditableFile editableFile = ((EditableFile)(tabsContainer.SelectedItem as CloseableTab)?.Content);
-                if (tabsContainer.Items.Count == 1 && editableFile.FileName == "" && !editableFile.IsEditable)
+                if (tabsContainer.Items.Count == 1 && TabManager.SelectedFile.FileName == "" && !TabManager.SelectedFile.IsEditable)
                     isEmpty = true;
 
-                CreateNewTab(fileName);
+                TabManager.CreateNewTab(fileName);
                 if (isEmpty)
-                    tabsContainer.Items.Remove(editableFile);
+                    tabsContainer.Items.Remove(TabManager.SelectedFile);
             }
         }
 
         private void saveFile_Executed(object sender, ExecutedRoutedEventArgs e)
         {
-            ((EditableFile)(tabsContainer.SelectedItem as CloseableTab)?.Content).OnSave();
+            TabManager.SelectedFile.OnSave();
         }
 
         private void saveAsFile_Executed(object sender, ExecutedRoutedEventArgs e)
         {
-            ((EditableFile)(tabsContainer.SelectedItem as CloseableTab)?.Content).OnSaveAs();
+            TabManager.SelectedFile.OnSaveAs();
         }
 
         private void newFileCommand_Executed(object sender, ExecutedRoutedEventArgs e)
         {
-            CreateNewTab();
+            TabManager.CreateNewTab();
         }
 
         private void findCommand_Executed(object sender, ExecutedRoutedEventArgs e)
@@ -259,65 +218,57 @@ namespace DZNotepad
 
         private void copyItem_Click(object sender, RoutedEventArgs e)
         {
-            ((EditableFile)(tabsContainer.SelectedItem as CloseableTab)?.Content).OnCopyCommand();
+            TabManager.SelectedFile.OnCopyCommand();
         }
 
         private void pasteItem_Click(object sender, RoutedEventArgs e)
         {
-            ((EditableFile)(tabsContainer.SelectedItem as CloseableTab)?.Content).OnPasteCommand();
+            TabManager.SelectedFile.OnPasteCommand();
         }
 
         private void changeSize_Click(object sender, RoutedEventArgs e)
         {
             MenuItem item = (MenuItem)sender;
-            ((EditableFile)(tabsContainer.SelectedItem as CloseableTab)?.Content).OnChangeFontSize(int.Parse((string)item.Header));
+            TabManager.SelectedFile.OnChangeFontSize(int.Parse((string)item.Header));
         }
 
         private void tabsContainer_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            if (tabsContainer.Items.IsEmpty)
-            {
-                CreateNewTab();
-                tabsContainer.SelectedItem = tabsContainer.Items.GetItemAt(0);
-            }
+            findWindow?.ChangeEditableFile(TabManager.SelectedFile);
+            replaceWindow?.ChangeEditableFile(TabManager.SelectedFile);
 
-            findWindow?.ChangeEditableFile(((EditableFile)(tabsContainer.SelectedItem as CloseableTab).Content));
-            replaceWindow?.ChangeEditableFile(((EditableFile)(tabsContainer.SelectedItem as CloseableTab).Content));
+            TabManager.SelectedFile?.OnActivated();
 
-            ((EditableFile)(tabsContainer.SelectedItem as CloseableTab)?.Content)?.OnActivated();
-
-            fileInfoBlock.CurrentFile = (EditableFile)(tabsContainer.SelectedItem as CloseableTab)?.Content;
+            fileInfoBlock.CurrentFile = TabManager.SelectedFile;
         }
 
         private void cutItem_Click(object sender, RoutedEventArgs e)
         {
-            ((EditableFile)(tabsContainer.SelectedItem as CloseableTab)?.Content).OnCutCommand();
+            TabManager.SelectedFile.OnCutCommand();
         }
 
         private void closeFileCommand_Executed(object sender, ExecutedRoutedEventArgs e)
         {
-            if (!((EditableFile)(tabsContainer.SelectedItem as CloseableTab)?.Content).OnClose())
-                tabsContainer.Items.Remove(tabsContainer.SelectedItem);
+            if (!TabManager.SelectedFile.OnClose())
+                TabManager.RemoveFileTab(TabManager.SelectedFile);
         }
 
         private void closeAll_Click(object sender, RoutedEventArgs e)
         {
-            foreach (var tab in tabsContainer.Items)
+            foreach (EditableFile file in TabManager)
             {
-                var closeableTab = tab as CloseableTab;
-                if (closeableTab != null && ((EditableFile)closeableTab.Content).OnWindowCLosing())
+                if (file.OnWindowClosing())
                     return;
             }
 
-            tabsContainer.Items.Clear();
+            TabManager.Clear();
         }
 
         private void exitCommand_Executed(object sender, ExecutedRoutedEventArgs e)
         {
-            foreach (var tab in tabsContainer.Items)
+            foreach (EditableFile file in TabManager)
             {
-                var closeableTab = tab as CloseableTab;
-                if (closeableTab != null && ((EditableFile)closeableTab.Content).OnWindowCLosing())
+                if (file.OnWindowClosing())
                     return;
             }
 
@@ -326,7 +277,7 @@ namespace DZNotepad
 
         private void Window_Activated(object sender, EventArgs e)
         {
-            ((EditableFile)(tabsContainer.SelectedItem as CloseableTab)?.Content).OnActivated();
+            TabManager.SelectedFile.OnActivated();
         }
 
         private void stateLineItem_Click(object sender, RoutedEventArgs e)
@@ -411,7 +362,7 @@ namespace DZNotepad
 
         private void translateManual_Click(object sender, RoutedEventArgs e)
         {
-            ((EditableFile)(tabsContainer.SelectedItem as CloseableTab)?.Content).OnTranslateRequest();
+            TabManager.SelectedFile.OnTranslateRequest();
         }
 
         private void languagesCombo_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -435,12 +386,8 @@ namespace DZNotepad
 
         private void SaveAll_Click(object sender, RoutedEventArgs e)
         {
-            foreach (var tab in tabsContainer.Items)
-            {
-                var closeableTab = tab as CloseableTab;
-                if (closeableTab != null)
-                    ((EditableFile)closeableTab.Content).OnSave();
-            }
+            foreach (EditableFile file in TabManager)
+                file.OnSave();
         }
 
         private void styleItem_Click(object sender, RoutedEventArgs e)
@@ -464,7 +411,7 @@ namespace DZNotepad
         private void ChangeEncoding_Click(object sender, RoutedEventArgs e)
         {
             MenuItem item = (MenuItem)sender;
-            ((EditableFile)(tabsContainer.SelectedItem as CloseableTab)?.Content).OnChangeEncoding((string)item.Header);
+            TabManager.SelectedFile.OnChangeEncoding((string)item.Header);
         }
 
         private void btnSingIn_Click(object sender, RoutedEventArgs e)
