@@ -13,9 +13,9 @@ namespace DZNotepad
         private const int maxCharCount = 2500;
         // Google support all languages in this dictionary
 
-        public Dictionary<string, string> LanguagesWithISO { get => nameLanguageToISO; }
+        public static Dictionary<string, string> LanguagesWithISO { get => nameLanguageToISO; }
 
-        Dictionary<string, string> nameLanguageToISO = new Dictionary<string, string>()
+        static Dictionary<string, string> nameLanguageToISO = new Dictionary<string, string>()
         {
             { "afrikaans", "af" },
             { "albanian", "sq" },
@@ -127,7 +127,7 @@ namespace DZNotepad
 
         HttpClient client = new HttpClient();
 
-        public bool IsValidLanguage(string language) => nameLanguageToISO.ContainsKey(language.ToLower());
+        public static bool IsValidLanguage(string language) => nameLanguageToISO.ContainsKey(language.ToLower());
 
         public string Translate(string sourceLanguage, string destinationLanguage, string text)
         {
