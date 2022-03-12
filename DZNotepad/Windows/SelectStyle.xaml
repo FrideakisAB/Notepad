@@ -31,20 +31,20 @@
         </Grid.ColumnDefinitions>
         <ListBox Style="{DynamicResource AnyStyle}" Grid.Column="0" Grid.Row="0" x:Name="StyleList" Grid.RowSpan="2" SelectionChanged="StyleList_SelectionChanged" />
         <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center" Orientation="Horizontal" Grid.Row="3">
-            <Button Style="{DynamicResource AnyStyleButton}" Content="Переименовать" Margin="5" x:Name="renameStyle" Click="RenameStyle_Click"/>
+            <Button Style="{DynamicResource AnyStyleButton}" Content="Переименовать" Margin="5" x:Name="RenameStyle" Click="RenameStyle_Click"/>
         </StackPanel>
         <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center" Orientation="Horizontal" Grid.Row="2">
             <Button Style="{DynamicResource AnyStyleButton}" Content="Удалить" x:Name="DropItem" Margin="5" Click="DropItem_Click"/>
             <Button Style="{DynamicResource AnyStyleButton}" Content="Добавить" x:Name="AddItem" Margin="5" Click="AddItem_Click"/>
         </StackPanel>
         <Border BorderThickness="0.25" BorderBrush="Black" Grid.Row="2" Grid.Column="0" Grid.RowSpan="2"/>
-        <Frame x:Name="previewFrame" Grid.Row="0" Grid.Column="1" Grid.ColumnSpan="2" Grid.RowSpan="1"/>
-        <Frame NavigationUIVisibility="Hidden"  x:Name="changeFrame" Grid.Column="2" Grid.ColumnSpan="2" Grid.Row="1" Grid.RowSpan="2"/>
+        <Frame x:Name="PreviewFrame" Grid.Row="0" Grid.Column="1" Grid.ColumnSpan="2" Grid.RowSpan="1"/>
+        <Frame NavigationUIVisibility="Hidden"  x:Name="ChangeFrame" Grid.Column="2" Grid.ColumnSpan="2" Grid.Row="1" Grid.RowSpan="2"/>
         <StackPanel HorizontalAlignment="Right" VerticalAlignment="Center" Orientation="Horizontal" Grid.Column="2" Grid.Row="3">
             <Button Style="{DynamicResource AnyStyleButton}" Content="Применить" Margin="5" x:Name="ApplyChangedStyle" Click="ApplyChangedStyle_Click"/>
             <Button Style="{DynamicResource AnyStyleButton}" Content="Сохранить" Margin="5" x:Name="SaveChangedStyle" Click="SaveChangedStyle_Click"/>
         </StackPanel>
-        <ComboBox Style="{DynamicResource AnyStyleComboBox}" x:Name="editableItem" HorizontalAlignment="Stretch" Margin="5" Grid.Row="1" VerticalAlignment="Top" Grid.Column="1" SelectionChanged="EditableItem_SelectionChanged">
+        <ComboBox Style="{DynamicResource AnyStyleComboBox}" x:Name="EditableItem" HorizontalAlignment="Stretch" Margin="5" Grid.Row="1" VerticalAlignment="Top" Grid.Column="1" SelectionChanged="EditableItem_SelectionChanged">
             <ComboBoxItem Content="Фон"/>
             <ComboBoxItem Content="Поле ввода"/>
             <ComboBoxItem Content="Кнопка"/>

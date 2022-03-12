@@ -12,7 +12,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace DZNotepad.UserElements
+namespace DZNotepad
 {
     /// <summary>
     /// Логика взаимодействия для StyleItem.xaml
@@ -37,14 +37,14 @@ namespace DZNotepad.UserElements
             }
         }
 
-        SelectStyle selectStyle;
+        private SelectStyle SelectStyleObject;
 
         public StyleItem(string label, SelectStyle selectStyleWin)
         {
             InitializeComponent();
             DataContext = this;
 
-            selectStyle = selectStyleWin;
+            SelectStyleObject = selectStyleWin;
             Text = label;
         }
 
@@ -114,7 +114,7 @@ namespace DZNotepad.UserElements
             var result = MessageBox.Show("Вы хотите удалить стиль " + Text, "Удаление " + Text, MessageBoxButton.YesNo, MessageBoxImage.Question);
             if (result == MessageBoxResult.Yes)
             {
-                selectStyle.StyleList.Items.Remove(this);
+                SelectStyleObject.StyleList.Items.Remove(this);
                 DBContext.Command($"DELETE FROM stylesNames WHERE styleNameId = (SELECT styleNameId FROM stylesNames WHERE styleName = '{text}')");
             }
         }
@@ -123,7 +123,7 @@ namespace DZNotepad.UserElements
         {
             ResourceDictionary dictionary = new ResourceDictionary();
             DictionaryProvider.LoadStyleFromDB(dictionary, text);
-            selectStyle.Notify(dictionary);
+            SelectStyleObject.Notify(dictionary);
         }
     }
 }

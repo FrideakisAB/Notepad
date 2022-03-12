@@ -1,17 +1,5 @@
-﻿using DZNotepad.UserElements;
-using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.Linq;
-using System.Text;
-using System.Windows;
+﻿using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
 using Microsoft.Data.Sqlite;
 using DZNotepad.Pages;
 
@@ -22,9 +10,7 @@ namespace DZNotepad
     /// </summary>
     public partial class SelectStyle : Window
     {
-        PreviewPage preview = new PreviewPage();
-
-        public StyleItem Item
+        public StyleItem SelectedItem
         {
             get
             {
@@ -36,13 +22,14 @@ namespace DZNotepad
         public static event UpdateStyle UpdateStyleObservers;
         public static ResourceDictionary CurrentDictionary;
 
-        private IEditorPage currentEditor = null;
+        private IEditorPage CurrentEditor = null;
+        private PreviewPage Preview = new PreviewPage();
 
         public SelectStyle()
         {
             InitializeComponent();
 
-            previewFrame.Navigate(preview);
+            PreviewFrame.Navigate(Preview);
 
             SqliteDataReader reader = DBContext.CommandReader("SELECT styleName FROM stylesNames");
 
@@ -61,7 +48,7 @@ namespace DZNotepad
             UpdateStyleObservers += SelectStyle_UpdateStyleObservers;
             DictionaryProvider.ApplyDictionary(this.Resources, CurrentDictionary);
 
-            editableItem.SelectedIndex = 0;
+            EditableItem.SelectedIndex = 0;
         }
 
         ~SelectStyle()
@@ -76,7 +63,7 @@ namespace DZNotepad
 
         private void DropItem_Click(object sender, RoutedEventArgs e)
         {
-            Item?.DeleteElement();
+            SelectedItem?.DeleteElement();
         }
 
         private void AddItem_Click(object sender, RoutedEventArgs e)
@@ -109,7 +96,7 @@ namespace DZNotepad
 
         private void RenameStyle_Click(object sender, RoutedEventArgs e)
         {
-            Item?.RequestRename();
+            SelectedItem?.RequestRename();
         }
 
         public void Notify(ResourceDictionary dictionary)
@@ -120,60 +107,60 @@ namespace DZNotepad
 
         private void StyleList_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            if (Item != null)
+            if (SelectedItem != null)
             {
-                DictionaryProvider.LoadStyleFromDB(preview.Resources, Item.Text);
-                currentEditor?.ChangePreview();
+                DictionaryProvider.LoadStyleFromDB(Preview.Resources, SelectedItem.Text);
+                CurrentEditor?.ChangePreview();
             }
         }
 
         private void ApplyChangedStyle_Click(object sender, RoutedEventArgs e)
         {
-            if (Item != null)
+            if (SelectedItem != null)
             {
                 ResourceDictionary dictionary = new ResourceDictionary();
-                DictionaryProvider.ApplyDictionary(dictionary, preview.Resources);
+                DictionaryProvider.ApplyDictionary(dictionary, Preview.Resources);
                 Notify(dictionary);
             }
         }
 
         private void SaveChangedStyle_Click(object sender, RoutedEventArgs e)
         {
-            if (Item != null)
+            if (SelectedItem != null)
             {
-                DBContext.Command($"DELETE FROM styles WHERE styleNameId = (SELECT styleNameId FROM stylesNames WHERE styleName = '{Item.Text}')");
-                DictionaryProvider.SaveStyleInDB(preview.Resources, Item.Text);
+                DBContext.Command($"DELETE FROM styles WHERE styleNameId = (SELECT styleNameId FROM stylesNames WHERE styleName = '{SelectedItem.Text}')");
+                DictionaryProvider.SaveStyleInDB(Preview.Resources, SelectedItem.Text);
             }
         }
 
         private void EditableItem_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            changeFrame.NavigationService.RemoveBackEntry();
-            switch ((string)(editableItem.SelectedItem as ComboBoxItem).Content)
+            ChangeFrame.NavigationService.RemoveBackEntry();
+            switch ((string)(EditableItem.SelectedItem as ComboBoxItem).Content)
             {
                 case "Фон":
-                    currentEditor = new BackgroundEditor(preview);
-                    changeFrame.Navigate(currentEditor);
+                    CurrentEditor = new BackgroundEditor(Preview);
+                    ChangeFrame.Navigate(CurrentEditor);
                     break;
 
                 case "Поле ввода":
-                    currentEditor = new TextBoxEditor(preview);
-                    changeFrame.Navigate(currentEditor);
+                    CurrentEditor = new TextBoxEditor(Preview);
+                    ChangeFrame.Navigate(CurrentEditor);
                     break;
 
                 case "Кнопка":
-                    currentEditor = new ButtonEditor(preview);
-                    changeFrame.Navigate(currentEditor);
+                    CurrentEditor = new ButtonEditor(Preview);
+                    ChangeFrame.Navigate(CurrentEditor);
                     break;
 
                 case "Вкладка":
-                    currentEditor = new TabItemEditor(preview);
-                    changeFrame.Navigate(currentEditor);
+                    CurrentEditor = new TabItemEditor(Preview);
+                    ChangeFrame.Navigate(CurrentEditor);
                     break;
 
                 case "Список":
-                    currentEditor = new ComboBoxEditor(preview);
-                    changeFrame.Navigate(currentEditor);
+                    CurrentEditor = new ComboBoxEditor(Preview);
+                    ChangeFrame.Navigate(CurrentEditor);
                     break;
             }
         }
